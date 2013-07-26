@@ -12,6 +12,8 @@ if [ -f ~/.profile ]; then
   source ~/.profile
 fi 
 
+shopt -s globstar
+
 # colors!
 export CLICOLOR=1
 
