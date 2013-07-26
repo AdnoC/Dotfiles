@@ -1,0 +1,21 @@
+echo "bash_prompt_classic"
+#Prompt
+PS1="
+\t-\h:\u[\w]
+\$"
+PS2='==>'
+
+<<COMMENT1
+Notes:
+\h is the host name, \w is the working directory and \$ is either "#" or "$", depending on your UID. \W is also something.
+\$? = status of last command
+\t = time in hh:mm:ss
+\e[ = indicates beginning of color prompt
+\e[m = indicates end of color prompt
+x;ym = indicates color code
+\s = name of shell
+\# = command number of command
+COMMENT1
+
+
+
