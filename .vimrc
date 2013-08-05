@@ -66,7 +66,6 @@ nnoremap <leader><space> :noh<cr>
 
 " Show hidden chars
 set list
-set listchars=tab:▸\ ,eol:¬
 
 " Forces use of 'hjkl' for movement and fixes up and down movement
 nnoremap <up> <nop>
