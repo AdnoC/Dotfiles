@@ -66,7 +66,6 @@ nnoremap <leader><space> :noh<cr>
 
 " Show hidden chars
 set list
-set listchars=tab:▸\ ,eol:¬
 
 " Allows one to switch buffers without having to save or undo changes first.
 set hidden
