@@ -46,7 +46,7 @@ set pastetoggle=<F2>            " when in insert mode, press <F2> to go to
 set wrap
 set textwidth=79
 set formatoptions=qrn1
-set colorcolumn=80      " Show column at 80 chars so that there is no lines to long
+set colorcolumn=100      " Show column at 80 chars so that there is no lines to long
                                
                             
 "Searching
@@ -68,15 +68,9 @@ nnoremap <leader><space> :noh<cr>
 set list
 set listchars=tab:▸\ ,eol:¬
 
-" Forces use of 'hjkl' for movement and fixes up and down movement
-nnoremap <up> <nop>
-nnoremap <down> <nop>
-nnoremap <left> <nop>
-nnoremap <right> <nop>
-inoremap <up> <nop>
-inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
+" Allows one to switch buffers without having to save or undo changes first.
+set hidden
+
 nnoremap j gj
 nnoremap k gk
 
@@ -89,6 +83,17 @@ inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
+" Turn off arrow keys in insert mode. Having them on can mess up typing once in a while.
+inoremap <Up> <nop>
+inoremap <Down> <nop>
+inoremap <Left> <nop>
+inoremap <Right> <nop>
+
+" Make window navigation easier.
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
 
 " Auto-save on focus loss
 au FocusLost * :wa

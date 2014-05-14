@@ -24,3 +24,7 @@ cp_p () {
 eject() {
 	sudo umount -f "/Volumes/$@"
 }
+
+glfwcc() {
+  x86_64-w64-mingw32-g++.exe -static "$@" -L /usr/local/lib -I /usr/local/include/  -lglfw3  -lopengl32 -lgdi32
+}

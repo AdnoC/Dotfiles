@@ -1,6 +1,7 @@
 echo "bash_exports"
 #exports
 
+export caen_ssh='arcutler@login.engin.umich.edu'
 #Different tools' homes
 export ANT_HOME="/cygdrive/d/ProgrammingTools/apache-ant-1.9.2"
 export JAVA_HOME="/cygdrive/d/Program Files/Java/jdk1.7.0_25"
