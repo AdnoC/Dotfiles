@@ -28,3 +28,6 @@ export LC_CTYPE=en_US.UTF-8
 
 #This is a Windows computer after all, not a pure POSIX
 export USER_HOME="/cygdrive/c/Users/Adam"
+
+#Set the display for X11
+export DISPLAY=:0.0
