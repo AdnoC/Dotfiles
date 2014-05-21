@@ -1,9 +1,39 @@
 set nocompatible
+
+execute pathogen#infect()
+filetype plugin indent on
+
+"Syntastic
+"let g:syntastic_javascript_checkers = ['jslint']
+
 if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
 	  syntax on
 	  set hlsearch
 endif
 
+"POWERLINE (hopefully)
+"set encoding=utf-8
+set guifont=Consolas\ for\ Powerline\ FixedD
+"let g:Powerline_symbols="fancy"
+
+"vim-airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+
+let g:promptline_preset = {
+        \'a' : [ '\u', '\t' ],
+        \'b' : [ promptline#slices#host() ],
+        \'c' : [ promptline#slices#vcs_branch(),  promptline#slices#git_status() ],
+        \'z' : [ '\w' ], 
+        \'warn' : [ promptline#slices#last_exit_code() ]}
+
+"colorschemes
+set background=dark
+"let g:lightline = {
+"      \'colorscheme': 'darkblue',
+"      \}
+"colorscheme slate
+colorscheme darkblue
 "Remap leader
 let mapleader=","
 
@@ -17,7 +47,12 @@ set modelines=0
 
 set shiftwidth=2
 
-set relativenumber         " show how many lines away from current, for easier shortcut use.
+"set relativenumber         " show how many lines away from current, for easier shortcut use.
+" Use relative line numbers
+if exists("&relativenumber")
+  set relativenumber
+  au BufReadPost * set relativenumber
+endif
 set tabstop=2
 
 " Slightly broken set cursorline
@@ -25,6 +60,7 @@ set ttyfast
 set expandtab
 set ruler                  " show the cursor position all the time
 set noshowcmd              " don't display incomplete commands
+set cursorline             " Highlight current line
 set nolazyredraw           " turn off lazy redraw
 "set number                 " line numbers
 set wildmenu               " turn on wild menu
@@ -48,6 +84,12 @@ set textwidth=79
 set formatoptions=qrn1
 set colorcolumn=100      " Show column at 80 chars so that there is no lines to long
                                
+" Centralize backups, swapfiles and undo history
+set backupdir=~/.vim/backups
+set directory=~/.vim/swaps
+if exists("&undodir")
+  set undodir=~/.vim/undo
+endif
                             
 "Searching
 set ignorecase             " ignore case when searching
@@ -82,17 +124,21 @@ inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
-" Turn off arrow keys in insert mode. Having them on can mess up typing once in a while.
-inoremap <Up> <nop>
-inoremap <Down> <nop>
-inoremap <Left> <nop>
-inoremap <Right> <nop>
+" Get off my lawn
+" (Turn off arrow keys in insert mode. Having them on can mess up typing once in a while.)
+inoremap <Left> :echoe "Use h"<CR>
+inoremap <Right> :echoe "Use l"<CR>
+inoremap <Up> :echoe "Use k"<CR>
+inoremap <Down> :echoe "Use j"<CR>
 
 " Make window navigation easier.
 map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+" Open new split windows to right and bottom, which feels more natural
+set splitbelow
+set splitright
 
 " Auto-save on focus loss
 au FocusLost * :wa
