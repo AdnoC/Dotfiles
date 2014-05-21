@@ -3,15 +3,20 @@ echo "bash_prompt"
 #source ~/.bash_prompt_color
 #fi
 
-if [ -f ~/.bash_prompt_classic ]; then
-	source ~/.bash_prompt_classic
+#if [ -f ~/.bash_prompt_classic ]; then
+# source ~/.bash_prompt_classic
+#fi
+
+
+if [ -f ~/.bash_prompt_airline ]; then
+  source ~/.bash_prompt_airline
 fi
 
 #functions
 prompt_awesome(){
-source ~/.bash_prompt_awesome
+  source ~/.bash_prompt_awesome
 }
 
 prompt_classic(){
-source ~/.bash_prompt_classic
+  source ~/.bash_prompt_classic
 }
