@@ -1,4 +1,3 @@
-echo "profile"
 export PATH=/usr/games:$PATH:/usr/custom
 
 

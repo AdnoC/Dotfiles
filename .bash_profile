@@ -1,4 +1,3 @@
-echo "bash_profile"
 for file in ~/.bash_{prompt,aliases,functions}; do
 	[ -r "$file" ] && source "$file"
 done

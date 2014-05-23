@@ -1,4 +1,3 @@
-echo "bash_prompt"
 #if [ -f ~/.bash_prompt_color ]; then
 #source ~/.bash_prompt_color
 #fi

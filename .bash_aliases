@@ -1,4 +1,3 @@
-echo "bash_aliases"
 #aliases
 
 #Ensure that ls always shows color
@@ -23,6 +22,7 @@ alias javaps='java -agentlib:hprof=cpu=samples'
 alias javapt='java -agentlib:hprof=cpu=times'
 alias fn='find . -name'
 alias sudo='sudo '
+alias path='echo -e ${PATH//:/\\n}'
 #My habbit is to just type "vi"
 alias vi='vim'
 

@@ -1,4 +1,3 @@
-echo "bash_functions"
 findhosts(){
   nmap -sP -n -oG - "$1"/24 | grep "Up" | awk '{print $2}' -
   echo "To scan those do: nmap $1-254" 
@@ -27,4 +26,9 @@ eject() {
 
 glfwcc() {
   x86_64-w64-mingw32-g++.exe -static "$@" -L /usr/local/lib -I /usr/local/include/  -lglfw3  -lopengl32 -lgdi32
+}
+
+# Search all subdirectories for files containing a string
+search() {
+  grep -Rnis $@ **
 }
