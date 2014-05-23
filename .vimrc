@@ -124,7 +124,6 @@ nnoremap k gk
 " Remap ';' to ':' for easier commands
 nnoremap ; :
 
-
 " Get rid of the help key
 inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
@@ -132,10 +131,10 @@ vnoremap <F1> <ESC>
 
 " Get off my lawn
 " (Turn off arrow keys in insert mode. Having them on can mess up typing once in a while.)
-inoremap <Left> :echoe "Use h"<CR>
-inoremap <Right> :echoe "Use l"<CR>
-inoremap <Up> :echoe "Use k"<CR>
-inoremap <Down> :echoe "Use j"<CR>
+inoremap <Left> <C-o>:echom "Use h"<CR>
+inoremap <Right> <C-o>:echom "Use l"<CR>
+inoremap <Up> <C-o>:echom "Use k"<CR>
+inoremap <Down> <C-o>:echom "Use j"<CR>
 
 " Make buffer navigation quicker
 :map <Leader>] :bnext<CR>
@@ -152,6 +151,11 @@ set splitright
 
 " Auto-save on focus loss
 au FocusLost * :wa
+
+" Change vim pwd to dir of file to easily open other files in dir
+nnoremap <leader>cd :cd %:p:h
+
+
 
 nnoremap <leader>b :b!#<CR>
 "Strips excess whitespace from file
