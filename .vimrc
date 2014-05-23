@@ -53,11 +53,12 @@ if exists("&relativenumber")
   set relativenumber
   au BufReadPost * set relativenumber
 endif
-set tabstop=2
+set tabstop=2              " Set tabs to x characters long
 
 " Slightly broken set cursorline
 set ttyfast
-set expandtab
+set expandtab              " Use soft tabs (tabs are made up of spaces) instead of hard tabs
+set smarttab               " At start of line, <Tab> inserts shiftwidth spaces, <Bs> deletes shiftwidth spaces.
 set ruler                  " show the cursor position all the time
 set noshowcmd              " don't display incomplete commands
 set cursorline             " Highlight current line
@@ -71,18 +72,21 @@ set visualbell             " shut the fuck up
 set completeopt=longest,menu
 set wildmode=list:longest,list:full
 set complete=.,t
-set whichwrap=b,s,h,l,<,>,[,]
 " show current vim mode
 set showmode
 set scrolloff=4                 " keep 4 lines off the edges of the screen when scrolling
 set laststatus=2
-set pastetoggle=<F2>            " when in insert mode, press <F2> to go to
-                                "    paste mode, where you can paste mass data
+set pastetoggle=<leader>p            " when in insert mode, press <F2> to go to
+                                " paste mode, where you can paste mass data
+"set t_ti= t_te=                 " Don't clear the screen when exiting vim (http://www.shallowsky.com/linux/noaltscreen.html)
 " Line handling
 set wrap
+set whichwrap=b,s,h,l,<,>,[,]
 set textwidth=79
 set formatoptions=qrn1
-set colorcolumn=100      " Show column at 80 chars so that there is no lines to long
+set colorcolumn=100      " Show column at x chars so that there is no lines to long
+set report=0             " Show the number of changes made when doing substitutions
+set undofile             " Persistent undo
                                
 " Centralize backups, swapfiles and undo history
 set backupdir=~/.vim/backups
@@ -108,6 +112,8 @@ nnoremap <leader><space> :noh<cr>
 
 " Show hidden chars
 set list
+" Show tabs and trailing spaces
+set lcs=tab:›\ ,trail:·,eol:¬,nbsp:_
 
 " Allows one to switch buffers without having to save or undo changes first.
 set hidden
@@ -130,6 +136,10 @@ inoremap <Left> :echoe "Use h"<CR>
 inoremap <Right> :echoe "Use l"<CR>
 inoremap <Up> :echoe "Use k"<CR>
 inoremap <Down> :echoe "Use j"<CR>
+
+" Make buffer navigation quicker
+:map <Leader>] :bnext<CR>
+:map <Leader>[ :bprev<CR>
 
 " Make window navigation easier.
 map <C-h> <C-w>h
