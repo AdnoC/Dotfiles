@@ -12,8 +12,7 @@
 
 
 """""""""""""""""""""""""""""""" NO COMPATIBLE """"""""""""""""""""""""""""""""
-" Normal vi sucks, lets let it die in the corner and use the better vim
-" settings
+" This isn't Vi, it is Vi IMproved. So lets not cling to old Vi settings
 set nocompatible
 
 """"""""""""""""""""""""""""""""""" Plugins """""""""""""""""""""""""""""""""""
