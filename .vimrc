@@ -19,20 +19,22 @@ set nocompatible
 execute pathogen#infect()
 filetype plugin indent on
 
-"Syntastic
+"""" Syntastic
 "let g:syntastic_javascript_checkers = ['jslint']
 
 """" vim-airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
-let g:promptline_preset = {
-  \'a' : [ '\u', '\t' ],
-  \'b' : [ promptline#slices#host() ],
-  \'c' : [ promptline#slices#vcs_branch(),  promptline#slices#git_status() ],
-  \'z' : [ '\w' ],
-  \'warn' : [ promptline#slices#last_exit_code() ]}
-""" Lightline
+"""" promptline
+"let g:promptline_preset = {
+"  \'a' : [ '\u', '\t' ],
+"  \'b' : [ promptline#slices#host() ],
+"  \'c' : [ promptline#slices#vcs_branch(),  promptline#slices#git_status() ],
+"  \'z' : [ '\w' ],
+"  \'warn' : [ promptline#slices#last_exit_code() ]}
+
+""" lightline
 "let g:lightline = {
 "      \'colorscheme': 'darkblue',
 "      \}
@@ -49,7 +51,7 @@ set pastetoggle=<leader>p
 " Makes the switch to paste mode immediately shown                           }{
 map <leader>p :set invpaste paste?<CR>
 " Change vim pwd to dir of file to easily open other files in dir            }{
-nnoremap <leader>cd :cd %:p:h
+nnoremap <leader>cd :cd %:p:h<CR>
 " Open the current directory in a new tab
 nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<CR>/
 
@@ -194,23 +196,26 @@ set scrolloff=4
 " Allow keys to move left or right to the prev/next line
 set whichwrap=b,s,h,l,<,>,[,]
 
-" Get off my lawn (Turn off left and right arrow key, and give some friendly
-" advice)                                                                    }{
+" Get off my lawn (Turn off arrow keys, and give some friendly advice)       }{
+" Note: May wish to remove nmap for up/down because the commands slightly bleed 
+" over to insert mode for a time after the switch.
 inoremap <Left> <C-o>:echom "Use h"<CR>
 inoremap <Right> <C-o>:echom "Use l"<CR>
-nnoremap <Left> <C-o>:echom "Use h"<CR>
-nnoremap <Right> <C-o>:echom "Use l"<CR>
-vnoremap <Left> <C-o>:echom "Use h"<CR>
-vnoremap <Right> <C-o>:echom "Use l"<CR>
+vnoremap <Left> <Esc>:echom "Use h"<CR>
+vnoremap <Right> <Esc>:echom "Use l"<CR>
+vnoremap <Up> <Esc>:echom "Use k"<CR>
+vnoremap <Down> <Esc>:echom "Use j"<CR>
+nnoremap <Left> :echom "Use h"<CR>
+nnoremap <Right> :echom "Use l"<CR>
+nnoremap <Up> :echom "Use k"<CR>
+nnoremap <Down> :echom "Use j"<CR>
 
-" Turn off up and down arrows completely, as the mouse scroll is interpreted as
-" scroll and gets past any other mapping and goes back to default behavior   }{
-nnoremap <Up> <nop>
-nnoremap <Down> <nop>
+" Turn off up and down arrows completely in insert mode, as the mouse scroll 
+" is interpreted as scroll and gets past any other mapping and goes back to 
+" default behavior. Also preceding command with <Esc> isn't ideal.           }{
 inoremap <Up> <nop>
 inoremap <Down> <nop>
-vnoremap <Up> <nop>
-vnoremap <Down> <nop>
+
 " Allows one to switch buffers without having to save or undo changes first.
 set hidden
 
