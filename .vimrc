@@ -43,6 +43,9 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_check_on_open = 1
 " Set location list window height
 let g:syntastic_loc_list_height = 5
+" Shortcuts to prev/next errors                                              }{
+nnoremap <leader>sn :lnext<CR>
+nnoremap <leader>sp :lprevious<CR>
 
 """" vim-airline
 let g:airline#extensions#tabline#enabled = 1
@@ -98,12 +101,20 @@ nnoremap <leader>ev <c-w><c-v><c-l>:e $MYVIMRC<CR>
 """" Meta files
 " Store undo data in a file for persistence between sessions
 set undofile
+" Create backup, swap, and undo  folders if they do not exist
+ if ! isdirectory(expand('$HOME/.vim/backups'))
+  call mkdir(expand('$HOME/.vim/backups'))
+endif
+ if ! isdirectory(expand('$HOME/.vim/swaps'))
+  call mkdir(expand('$HOME/.vim/swaps'))
+endif
+ if ! isdirectory(expand('$HOME/.vim/undo'))
+  call mkdir(expand('$HOME/.vim/undo'))
+endif
 " Centralize backups, swapfiles and undo history
 set backupdir=~/.vim/backups
 set directory=~/.vim/swaps
-if exists("&undodir")
-  set undodir=~/.vim/undo
-endif
+set undodir=~/.vim/undo
 
 """""""""""""""""""""""""""""""""""" Looks """"""""""""""""""""""""""""""""""""
 """" Color Schemes
@@ -200,7 +211,7 @@ set incsearch   " Search incrementally
 " Remove the Windows ^M - when the encodings gets messed up                  }{
 noremap <Leader>m mmHmt:%s/<C-V><CR>//ge<CR>'tzt'm
 " Allow backspacing over everything in insert mode (:h bs)
-set backspace=indent,eol,start  
+set backspace=indent,eol,start
 " Specify how keyword completion works
 set complete=.,t
 set completeopt=longest,menu
@@ -217,7 +228,7 @@ set scrolloff=4
 set whichwrap=b,s,h,l,<,>,[,]
 
 " Get off my lawn (Turn off arrow keys, and give some friendly advice)       }{
-" Note: May wish to remove nmap for up/down because the commands slightly bleed 
+" Note: May wish to remove nmap for up/down because the commands slightly bleed
 " over to insert mode for a time after the switch.
 inoremap <Left> <C-o>:echom "Use h"<CR>
 inoremap <Right> <C-o>:echom "Use l"<CR>
@@ -230,8 +241,8 @@ nnoremap <Right> :echom "Use l"<CR>
 nnoremap <Up> :echom "Use k"<CR>
 nnoremap <Down> :echom "Use j"<CR>
 
-" Turn off up and down arrows completely in insert mode, as the mouse scroll 
-" is interpreted as scroll and gets past any other mapping and goes back to 
+" Turn off up and down arrows completely in insert mode, as the mouse scroll
+" is interpreted as scroll and gets past any other mapping and goes back to
 " default behavior. Also preceding command with <Esc> isn't ideal.           }{
 inoremap <Up> <nop>
 inoremap <Down> <nop>
