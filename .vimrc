@@ -11,16 +11,38 @@
 " Note: Mappings have a }{ symbol at the end of the line
 
 
-"""""""""""""""""""""""""""""""" NO COMPATIBLE """"""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""" Initial """""""""""""""""""""""""""""""""""
 " This isn't Vi, it is Vi IMproved. So lets not cling to old Vi settings
 set nocompatible
+" Remap leader. Needs to be done before any mappings involving the leader.   }{
+let mapleader=","
 
 """"""""""""""""""""""""""""""""""" Plugins """""""""""""""""""""""""""""""""""
+filetype off
 execute pathogen#infect()
+Helptags
 filetype plugin indent on
 
 """" Syntastic
-"let g:syntastic_javascript_checkers = ['jslint']
+" Turn it on by default, so far no filetypes where it needs to be off.
+let g:syntastic_mode_map = { 'mode': 'active',
+  \ 'active_filetypes': [],
+  \ 'passive_filetypes': [] }
+" Better :sign interface symbols
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '!'
+" Aggregate errors from multiple checkers
+let g:syntastic_aggregate_errors = 1
+" Automatically open location window if there are errors
+let g:syntastic_auto_loc_list=1
+" Show current error in command window
+let g:syntastic_echo_current_error = 1
+" Populate loclist with errors
+let g:syntastic_always_populate_loc_list = 1
+" Enable on open file
+let g:syntastic_check_on_open = 1
+" Set location list window height
+let g:syntastic_loc_list_height = 5
 
 """" vim-airline
 let g:airline#extensions#tabline#enabled = 1
@@ -40,8 +62,6 @@ let g:airline_powerline_fonts = 1
 "      \}
 
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
-" Remap leader                                                               }{
-let mapleader=","
 " Remap ';' to ':' for easier commands                                       }{
 nnoremap ; :
 " Use Control-a to move to normal mode                                       }{
@@ -74,7 +94,7 @@ autocmd bufreadpost *
      \   exe "normal! g`\"" |
      \ endif
 " Open .vimrc                                                                }{
-nnoremap <leader>ev <c-w><c-v><c-l>:e $myvimrc<cr>
+nnoremap <leader>ev <c-w><c-v><c-l>:e $MYVIMRC<CR>
 """" Meta files
 " Store undo data in a file for persistence between sessions
 set undofile
@@ -168,7 +188,7 @@ nnoremap <leader>q gqip
 
 """""""""""""""""""""""""""""""""" Searching """"""""""""""""""""""""""""""""""
 " Clears  the search by pressing <leader> SPACE                              }{
-nnoremap <leader><space> :noh<cr>
+nnoremap <leader><space> :noh<CR>
 set ignorecase             " ignore case when searching
 set smartcase
 " Allows for better regex when searching
@@ -178,7 +198,7 @@ set incsearch   " Search incrementally
 
 """""""""""""""""""""""""""""""""""" Msc. """""""""""""""""""""""""""""""""""""
 " Remove the Windows ^M - when the encodings gets messed up                  }{
-noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+noremap <Leader>m mmHmt:%s/<C-V><CR>//ge<CR>'tzt'm
 " Allow backspacing over everything in insert mode (:h bs)
 set backspace=indent,eol,start  
 " Specify how keyword completion works
@@ -221,9 +241,9 @@ set hidden
 
 " Make tab navigation quicker                                                }{
 nnoremap <Leader>] :bnext<CR>
-nnoremap <leader>[ :bprev<cr>
+nnoremap <leader>[ :bprev<CR>
 " switch to last used tab                                                    }{
-nnoremap <leader>b :b#<cr>
+nnoremap <leader>b :b#<CR>
 " make window navigation easier.                                             }{
 map <c-h> <c-w>h
 map <c-j> <c-w>j
