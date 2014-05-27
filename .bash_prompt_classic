@@ -1,4 +1,3 @@
-echo "bash_prompt_classic"
 #Prompt
 PS1="
 \t-\h:\u[\w]
