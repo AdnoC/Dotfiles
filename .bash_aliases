@@ -49,5 +49,4 @@ alias pumpitup="osascript -e 'set volume 7'"
 alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
 
 alias restartService="service memcached restart && service mysql restart && service apache2 restart"
-alias drb="drush -l bz.localhost"
-
+alias drb="drush -l bz.bz"
