@@ -254,7 +254,7 @@ set hidden
 nnoremap <Leader>] :bnext<CR>
 nnoremap <leader>[ :bprev<CR>
 " switch to last used tab                                                    }{
-nnoremap <leader>b :b#<CR>
+nnoremap tt :b#<CR>
 " make window navigation easier.                                             }{
 map <c-h> <c-w>h
 map <c-j> <c-w>j
