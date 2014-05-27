@@ -127,10 +127,12 @@ set colorcolumn=100
 set report=0
 " When closing a parenthesis or bracket (etc) briefly move cursor to its match
 set showmatch
-" Set hidden chars to show (Show tabs and trailing spaces)
-set lcs=tab:›\ ,trail:·,eol:¬,nbsp:_
+" Use utf-8 encoding. Needs to be set before listchars on some systems.
+set encoding=utf-8
 " Show hidden chars
 set list
+" Set hidden chars to show (Show tabs and trailing spaces)
+set listchars=tab:›\ ,trail:·,eol:¬,nbsp:_
 " Turn off lazy redraw
 set nolazyredraw
 " We are using a fairly fast terminal connection most times
