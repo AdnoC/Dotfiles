@@ -16,6 +16,6 @@
 [submodule ".vim/bundle/vim-bufferline"]
 	path = .vim/bundle/vim-bufferline
 	url = git@github.com:bling/vim-bufferline.git
-[submodule ".vim/bundle/vim-signify"]
-	path = .vim/bundle/vim-signify
-	url = git@github.com:mhinz/vim-signify.git
+[submodule ".vim/bundle/vim-gitgutter"]
+	path = .vim/bundle/vim-gitgutter
+	url = git@github.com:airblade/vim-gitgutter.git

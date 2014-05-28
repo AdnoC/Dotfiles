@@ -51,6 +51,18 @@ nnoremap <leader>sp :lprevious<CR>
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
+"""" vim-gitgutter
+" Tell gitgutter not to set any keybinds by itself. They will all be rebound.
+let g:gitgutter_map_keys = 0
+" Move from to the next/prev change                                          }{
+nmap <leader>gn <Plug>GitGutterNextHunk
+nmap <leader>gp <Plug>GitGutterPrevHunk
+" Stage or revert the lines the cursor is on                                 }{
+nmap <Leader>gs <Plug>GitGutterStageHunk
+nmap <Leader>gr <Plug>GitGutterRevertHunk
+" Preview the changes                                                        }{
+nmap <Leader>gh <Plug>GitGutterPreviewHunk
+
 """" promptline
 "let g:promptline_preset = {
 "  \'a' : [ '\u', '\t' ],
