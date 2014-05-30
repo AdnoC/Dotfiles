@@ -7,8 +7,10 @@
 "   -> Searching
 "   -> Msc
 "   -> Movement
+"   -> Key List
 "
 " Note: Mappings have a }{ symbol at the end of the line
+"
 
 
 """"""""""""""""""""""""""""""""""" Initial """""""""""""""""""""""""""""""""""
@@ -87,7 +89,7 @@ set pastetoggle=<leader>p
 map <leader>p :set invpaste paste?<CR>
 " Change vim pwd to dir of file to easily open other files in dir            }{
 nnoremap <leader>cd :cd %:p:h<CR>
-" Open the current directory in a new tab
+" Open the current directory in a new tab                                    }{
 nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<CR>/
 
 " We aren't going to have any vim variables at the beginning or end of files
@@ -230,6 +232,8 @@ set completeopt=longest,menu
 " Open new split windows to right and bottom, which feels more natural
 set splitbelow
 set splitright
+" Replace a word with yanked text                                            }{
+nnoremap <leader>rp viw"0p
 
 """""""""""""""""""""""""""""""""" Movement """""""""""""""""""""""""""""""""""
 " Number of lines to use for the command line
@@ -272,3 +276,32 @@ map <c-h> <c-w>h
 map <c-j> <c-w>j
 map <c-k> <c-w>k
 map <c-l> <c-w>l
+
+""""""""""""""""""""""""""""""""""" Key List"""""""""""""""""""""""""""""""""""
+" List of mapped keys:
+" ,
+" <leader>sn
+" <leader>sp
+" <leader>gp
+" <leader>gn
+" <leader>gs
+" <leader>gr
+" <leader>gh
+" <leader>p
+" jj
+" <leader>cd
+" <leader>te
+" <leader>ev
+" <leader>w
+" <leader>t
+" <leader>q
+" <leader>m
+" <leader><space>
+" <leader>[
+" <leader>]
+" tt
+" <c-h>
+" <c-j>
+" <c-k>
+" <c-l>
+" <leader>rp
