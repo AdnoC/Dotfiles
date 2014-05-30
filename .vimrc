@@ -1,5 +1,6 @@
 " Vim preferneces file
 " Sections:
+"   -> Initial
 "   -> Plugins
 "   -> Meta
 "   -> Looks
@@ -7,7 +8,7 @@
 "   -> Searching
 "   -> Msc
 "   -> Movement
-"   -> Key List
+"   -> Key List and other things
 "
 " Note: Mappings have a }{ symbol at the end of the line
 "
@@ -305,3 +306,9 @@ map <c-l> <c-w>l
 " <c-k>
 " <c-l>
 " <leader>rp
+
+
+"""" If there is a local vim configuration file, run it
+if filereadable(".vimrc.local")
+  so .vimrc.local
+endif
