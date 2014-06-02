@@ -1,6 +1,7 @@
 #Prompt
+source ~/git-prompt.sh
 PS1="
-\t-\h:\u[\w]
+\t-\h:\[\e[0;33m\]\u\[\e[0m\][\[\e[0;31m\]\w\[\e[0m\]]    \$(__git_ps1)
 \$"
 PS2='==>'
 
