@@ -32,3 +32,8 @@ glfwcc() {
 search() {
   grep -Rnis $@ **
 }
+
+# Clear Apple’s System Logs
+function dstore-clean() {
+  find $@ -type f -name .DS_Store -print0 | xargs -0 rm
+}
