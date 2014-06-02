@@ -66,14 +66,6 @@ nmap <Leader>gr <Plug>GitGutterRevertHunk
 " Preview the changes                                                        }{
 nmap <Leader>gh <Plug>GitGutterPreviewHunk
 
-"""" promptline
-"let g:promptline_preset = {
-"  \'a' : [ '\u', '\t' ],
-"  \'b' : [ promptline#slices#host() ],
-"  \'c' : [ promptline#slices#vcs_branch(),  promptline#slices#git_status() ],
-"  \'z' : [ '\w' ],
-"  \'warn' : [ promptline#slices#last_exit_code() ]}
-
 """ lightline
 "let g:lightline = {
 "      \'colorscheme': 'darkblue',

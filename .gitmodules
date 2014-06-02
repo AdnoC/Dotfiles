@@ -4,9 +4,6 @@
 [submodule ".vim/bundle/lightline.vim"]
 	path = .vim/bundle/lightline.vim
 	url = git@github.com:itchyny/lightline.vim.git
-[submodule ".vim/bundle/promptline.vim"]
-	path = .vim/bundle/promptline.vim
-	url = git@github.com:edkolev/promptline.vim.git
 [submodule ".vim/bundle/syntastic"]
 	path = .vim/bundle/syntastic
 	url = git@github.com:scrooloose/syntastic.git
