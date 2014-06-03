@@ -58,15 +58,15 @@ function __promptline_git_status {
       M*) modified_count=$(( $modified_count + 1 )) ;;
       U*) unmerged_count=$(( $unmerged_count + 1 )) ;;
     esac
-  done < <(git diff --name-status)
+  done < <(git diff --name-status 2> /dev/null)
 
   while read line; do
     case "$line" in
       *) added_count=$(( $added_count + 1 )) ;;
     esac
-  done < <(git diff --name-status --cached)
+  done < <(git diff --name-status --cached 2> /dev/null)
 
-  if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+  if [ -n "$(git ls-files --others --exclude-standard 2>/dev/null)" ]; then
     has_untracked_files=1
   fi
 
