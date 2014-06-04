@@ -3,14 +3,6 @@ for file in ~/.bash_{prompt,aliases,functions}; do
 done
 unset file
 
-if [ "$RANPROFILE" == "" ]; then
-  export RANPROFILE="true";
-  if [ -f ~/.bashrc ]; then
-    source ~/.bashrc
-  fi 
-fi
-
-
 if [ -f ~/.profile ]; then 
   source ~/.profile
 fi 
