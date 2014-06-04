@@ -1,6 +1,11 @@
 [user]
   name = AdnoC
   email = adam.r.cutler@gmail.com
+[alias]
+  co = checkout
+  ci = commit -v
+  ca = commit --amend
+  st = status
 [apply]
 # Detect whitespace errors when applying a patch
   whitespace = fix
