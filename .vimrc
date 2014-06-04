@@ -128,6 +128,10 @@ set undodir=~/.vim/undo
 set background=dark
 "colorscheme slate
 colorscheme darkblue
+" If using vimdiff, use a colorscheme that is actually readable.
+if &diff
+  colorscheme blue
+endif
 
 " Don't turn syntax or highlight searching on unless there are enough colors
 " to make them look good
