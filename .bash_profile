@@ -1,7 +1,10 @@
-for file in ~/.bash_{prompt,aliases,functions}; do
-	[ -r "$file" ] && source "$file"
-done
-unset file
+if [ -f ~/.bashrc ]; then
+  source ~/.bashrc
+fi 
+
+if [ -f ~/.bash_prompt ]; then
+  source ~/.bash_prompt
+fi 
 
 if [ -f ~/.profile ]; then 
   source ~/.profile
