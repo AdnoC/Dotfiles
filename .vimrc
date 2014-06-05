@@ -35,6 +35,8 @@ Plugin 'bling/vim-airline'
 Plugin 'bling/vim-bufferline'
 Plugin 'mhinz/vim-signify'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'altercation/vim-colors-solarized'
+
 " Brief help
 " :PluginInstal
 " :PluginList          - list configured plugins
