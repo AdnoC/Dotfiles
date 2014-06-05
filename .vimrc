@@ -88,6 +88,22 @@ nmap <Leader>gr <Plug>GitGutterRevertHunk
 " Preview the changes                                                        }{
 nmap <Leader>gh <Plug>GitGutterPreviewHunk
 
+let g:solarized_termcolors=256
+let w:bg='dark'
+call togglebg#map("<F5>")
+function! ToggleBackground()
+  if (w:bg=="light")
+    set background=dark
+    let w:bg='dark'
+    colorscheme solarized
+  else
+    set background=light
+    let w:bg='light'
+    colorscheme solarized
+endif
+endfunction
+map <F5> :call ToggleBackground()<CR>
+
 """ lightline
 "let g:lightline = {
 "      \'colorscheme': 'darkblue',
@@ -146,10 +162,9 @@ set directory=~/.vim/swaps
 set undodir=~/.vim/undo
 
 """""""""""""""""""""""""""""""""""" Looks """"""""""""""""""""""""""""""""""""
-"""" Color Schemes
+"""" Color Scheme
 set background=dark
-"colorscheme slate
-colorscheme darkblue
+colorscheme solarized
 " If using vimdiff, use a colorscheme that is actually readable.
 if &diff
   colorscheme blue
@@ -188,7 +203,7 @@ set laststatus=2
 " Wrap lines of text that are too long around to the next line
 set wrap
 " Show column at x chars so that there is no lines to long
-set colorcolumn=100
+set colorcolumn=80
 " Show the number of changes made when doing substitutions
 set report=0
 " When closing a parenthesis or bracket (etc) briefly move cursor to its match
