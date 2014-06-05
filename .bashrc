@@ -1,13 +1,5 @@
-#Run for non-interactive shells
-if [ -f ~/.bash_exports ]; then
-  source ~/.bash_exports
-fi 
-
-if [ "$RANPROFILE" == "" ]; then
-  export RANPROFILE="true";
-  if [ -f ~/.bash_profile ]; then
-    source ~/.bash_profile
-  fi 
-fi
-
-
+#Run for non-login shells
+for file in ~/.bash_{aliases,functions,exports}; do
+	[ -r "$file" ] && source "$file"
+done
+unset file
