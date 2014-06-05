@@ -22,8 +22,28 @@ let mapleader=","
 
 """"""""""""""""""""""""""""""""""" Plugins """""""""""""""""""""""""""""""""""
 filetype off
-execute pathogen#infect()
-Helptags
+" Set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" Let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+Plugin 'kien/ctrlp.vim'
+Plugin 'itchyny/lightline.vim'
+Plugin 'edkolev/promptline.vim'
+Plugin 'scrooloose/syntastic'
+Plugin 'bling/vim-airline'
+Plugin 'bling/vim-bufferline'
+Plugin 'mhinz/vim-signify'
+Plugin 'airblade/vim-gitgutter'
+" Brief help
+" :PluginInstal
+" :PluginList          - list configured plugins
+" :PluginInstall(!)    - install (update) plugins
+" :PluginSearch(!) foo - search (or refresh cache first) for foo
+" :PluginClean(!)      - confirm (or auto-approve) removal of unused plugins
+
+" All of your Plugins must be added before the following line
+call vundle#end()
 filetype plugin indent on
 
 """" Syntastic
