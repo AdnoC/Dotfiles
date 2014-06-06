@@ -14,7 +14,13 @@ export CLASSPATH="$CLASSPATH;$LD_LIBRARY_PATH/lib/ext/j3dcore.jar;$LD_LIBRARY_PA
 
 
 #Add to the path: Java, RabbitMQ, MongoDB, Ant, java3d libraries
-export PATH="$JAVA_HOME/bin":"$RABBITMQ_HOME"/sbin:"$MONGO_HOME"/bin:/usr/local/sbin:"$ANT_HOME"/bin:"$LD_LIBRARY_PATH"/bin:/cygdrive/d/Program\ Files/Oracle/VirtualBox:"$PATH"
+export PATH="$JAVA_HOME/bin":$PATH
+export PATH="$RABBITMQ_HOME"/sbin:$PATH
+export PATH="$MONGO_HOME"/bin:$PATH
+export PATH=/usr/local/sbin:$PATH
+export PATH="$ANT_HOME"/bin:$PATH
+export PATH="$LD_LIBRARY_PATH"/bin:$PATH
+export PATH=/cygdrive/d/Program\ Files/Oracle/VirtualBox:$PATH
 
 export VBOX_INSTALL_PATH=$VBOX_MSI_INSTALL_PATH
 
