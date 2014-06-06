@@ -277,6 +277,10 @@ set scrolloff=4
 " Allow keys to move left or right to the prev/next line
 set whichwrap=b,s,h,l,<,>,[,]
 
+" Use sane movement along wrapped lines                                      }{
+nnoremap j gj
+nnoremap k gk
+
 " Get off my lawn (Turn off arrow keys, and give some friendly advice)       }{
 " Note: May wish to remove nmap for up/down because the commands slightly bleed
 " over to insert mode for a time after the switch.
@@ -342,6 +346,6 @@ map <c-l> <c-w>l
 
 
 """" If there is a local vim configuration file, run it
-if filereadable(".vimrc.local")
+if filereadable("~/.vimrc.local")
   so .vimrc.local
 endif
