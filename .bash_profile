@@ -18,6 +18,9 @@ for option in autocd globstar; do
   shopt -s "$option" 2> /dev/null
 done
 
+# Set a default umask
+umask 0022
+
 # colors!
 export CLICOLOR=1
 
