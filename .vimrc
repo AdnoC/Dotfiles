@@ -80,13 +80,13 @@ let g:airline_powerline_fonts = 1
 " Tell gitgutter not to set any keybinds by itself. They will all be rebound.
 let g:gitgutter_map_keys = 0
 " Move from to the next/prev change                                          }{
-nmap <leader>gn <Plug>GitGutterNextHunk
-nmap <leader>gp <Plug>GitGutterPrevHunk
+nmap <leader>j <Plug>GitGutterNextHunk
+nmap <leader>k <Plug>GitGutterPrevHunk
 " Stage or revert the lines the cursor is on                                 }{
 nmap <Leader>gs <Plug>GitGutterStageHunk
 nmap <Leader>gr <Plug>GitGutterRevertHunk
 " Preview the changes                                                        }{
-nmap <Leader>gh <Plug>GitGutterPreviewHunk
+nmap <Leader>gp <Plug>GitGutterPreviewHunk
 
 let g:solarized_termcolors=256
 let w:bg='dark'
@@ -208,6 +208,8 @@ set colorcolumn=80
 set report=0
 " When closing a parenthesis or bracket (etc) briefly move cursor to its match
 set showmatch
+" How long in 1/10s of a second to show the match
+set matchtime=5
 " Use utf-8 encoding. Needs to be set before listchars on some systems.
 set encoding=utf-8
 " Show hidden chars
@@ -280,6 +282,8 @@ set whichwrap=b,s,h,l,<,>,[,]
 " Use sane movement along wrapped lines                                      }{
 nnoremap j gj
 nnoremap k gk
+vnoremap j gj
+vnoremap k gk
 
 " Get off my lawn (Turn off arrow keys, and give some friendly advice)       }{
 " Note: May wish to remove nmap for up/down because the commands slightly bleed
@@ -320,11 +324,11 @@ map <c-l> <c-w>l
 " ,
 " <leader>sn
 " <leader>sp
-" <leader>gp
-" <leader>gn
+" <leader>k
+" <leader>j
 " <leader>gs
 " <leader>gr
-" <leader>gh
+" <leader>gp
 " <leader>p
 " jj
 " <leader>cd
@@ -344,7 +348,9 @@ map <c-l> <c-w>l
 " <c-l>
 " <leader>rp
 
-
+" How to set filetypes: (an example of setting one as ruby)
+" au BufRead,BufNewFile *.rpdf       set ft=ruby
+"
 """" If there is a local vim configuration file, run it
 if filereadable("~/.vimrc.local")
   so .vimrc.local
