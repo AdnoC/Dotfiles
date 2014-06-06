@@ -36,6 +36,10 @@ Plugin 'bling/vim-bufferline'
 Plugin 'mhinz/vim-signify'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'tpope/vim-surround'
+Plugin 'wikitopian/hardmode'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
 
 " Brief help
 " :PluginInstal
