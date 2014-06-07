@@ -44,6 +44,12 @@ Plugin 'kien/rainbow_parentheses.vim'
 if (executable('ctags'))
   Plugin 'majutsushi/tagbar'
 endif
+Plugin 'sjl/gundo.vim'
+Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'edsono/vim-matchit'
+Plugin 'tpope/vim-abolish'
+Plugin 'tpope/vim-repeat'
 
 " Brief help
 " :PluginInstal
@@ -112,6 +118,7 @@ endif
 call LoadRainbow()
 endfunction
 map <F5> :call ToggleBackground()<CR>
+au VimEnter * AirlineTheme solarized
 
 """" rainbow_parentheses
 function! LoadRainbow()
@@ -131,7 +138,32 @@ if !has('win32unix')
   au Syntax * RainbowParenthesesLoadChevrons
 endif
 
-nmap <F8> :TagbarToggle<CR>
+if (executable('ctags'))
+  nnoremap <F7> :TagbarToggle<CR>
+endif
+
+nnoremap <F8> :NERDTreeToggle<CR>
+let g:NERDTreeDirArrows=0
+let NERDTreeShowHidden = 1
+
+nnoremap <F9> :GundoToggle<CR>
+
+" The default bind, just here so I remember
+nnoremap <leader>ig :IndentGuidesToggle
+let g:indent_guides_start_level=2
+let g:indent_guides_guide_size=1
+
+
+"nmap <leader> <Plug>(easymotion-prefix)
+
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+nmap <leader>l <Plug>(easymotion-lineforward)
+nmap <leader>h <Plug>(easymotion-linebackward)
+nmap <leader>j <Plug>(easymotion-j)
+nmap <leader>k <Plug>(easymotion-k)
+nmap <leader>s <Plug>(easymotion-s2)
+nmap <leader><ENTER> <Plug>(easymotion-sn)
+let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 
 
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
