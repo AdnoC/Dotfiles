@@ -9,4 +9,4 @@ I don't take credit for any well written sections of the files here.
     git update --init
 Then in vim:
 
-    PluginInstall
+    :PluginInstall
