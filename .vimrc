@@ -89,6 +89,9 @@ nnoremap <leader>sp :lprevious<CR>
 """" vim-airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
+if !exists('g:airline_theme')
+  let g:airline_theme = 'solarized'
+endif
 
 """" vim-gitgutter
 " Tell gitgutter not to set any keybinds by itself. They will all be rebound.
@@ -118,7 +121,6 @@ endif
 call LoadRainbow()
 endfunction
 map <F5> :call ToggleBackground()<CR>
-au VimEnter * AirlineTheme solarized
 
 """" rainbow_parentheses
 function! LoadRainbow()
@@ -209,19 +211,19 @@ nnoremap <leader>ev <c-w><c-v><c-l>:e $MYVIMRC<CR>
 " Store undo data in a file for persistence between sessions
 set undofile
 " Create backup, swap, and undo  folders if they do not exist
+" Centralize backups, swapfiles and undo history
  if ! isdirectory(expand('$HOME/.vim/backups'))
   call mkdir(expand('$HOME/.vim/backups'))
 endif
  if ! isdirectory(expand('$HOME/.vim/swaps'))
   call mkdir(expand('$HOME/.vim/swaps'))
 endif
- if ! isdirectory(expand('$HOME/.vim/undo'))
+ if has('persistent_undo') && ! isdirectory(expand('$HOME/.vim/undo'))
   call mkdir(expand('$HOME/.vim/undo'))
+  set undodir=~/.vim/undo
 endif
-" Centralize backups, swapfiles and undo history
 set backupdir=~/.vim/backups
 set directory=~/.vim/swaps
-set undodir=~/.vim/undo
 
 """""""""""""""""""""""""""""""""""" Looks """"""""""""""""""""""""""""""""""""
 """" Color Scheme
