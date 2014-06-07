@@ -165,6 +165,11 @@ nmap <leader>s <Plug>(easymotion-s2)
 nmap <leader><ENTER> <Plug>(easymotion-sn)
 let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 
+let g:NERDCreateDefaultMappings=0
+nmap <leader>cc <Plug>NERDCommenterComment
+nmap <leader>cu <Plug>NERDCommenterUncomment
+
+
 
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
 " Remap ';' to ':' for easier commands                                       }{
