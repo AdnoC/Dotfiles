@@ -40,6 +40,7 @@ Plugin 'tpope/vim-surround'
 Plugin 'wikitopian/hardmode'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
+Plugin 'kien/rainbow_parentheses.vim'
 
 " Brief help
 " :PluginInstal
@@ -105,8 +106,27 @@ function! ToggleBackground()
     let w:bg='light'
     colorscheme solarized
 endif
+call LoadRainbow()
 endfunction
 map <F5> :call ToggleBackground()<CR>
+
+"""" rainbow_parentheses
+function! LoadRainbow()
+  RainbowParenthesesLoadRound
+  RainbowParenthesesLoadSquare
+  RainbowParenthesesLoadBraces
+  RainbowParenthesesLoadChevrons
+  RainbowParenthesesActivate
+endfunction
+map <F6> :call LoadRainbow()<CR>
+" Keep it always on if this isn't cygwin
+if !has('win32unix')
+  au VimEnter * RainbowParenthesesActivate
+  au Syntax * RainbowParenthesesLoadRound
+  au Syntax * RainbowParenthesesLoadSquare
+  au Syntax * RainbowParenthesesLoadBraces
+  au Syntax * RainbowParenthesesLoadChevrons
+endif
 
 """ lightline
 "let g:lightline = {
@@ -167,8 +187,9 @@ set undodir=~/.vim/undo
 
 """""""""""""""""""""""""""""""""""" Looks """"""""""""""""""""""""""""""""""""
 """" Color Scheme
-set background=dark
-colorscheme solarized
+" Start vim with dark solarized theme
+au VimEnter * set background=dark
+au VimEnter * colorscheme solarized
 " If using vimdiff, use a colorscheme that is actually readable.
 if &diff
   colorscheme blue
