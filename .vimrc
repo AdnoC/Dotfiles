@@ -28,7 +28,6 @@ call vundle#begin()
 " Let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 Plugin 'kien/ctrlp.vim'
-Plugin 'itchyny/lightline.vim'
 Plugin 'edkolev/promptline.vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'bling/vim-airline'
@@ -41,6 +40,10 @@ Plugin 'wikitopian/hardmode'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'kien/rainbow_parentheses.vim'
+" Ctags are a dependancy of tagbar
+if (executable('ctags'))
+  Plugin 'majutsushi/tagbar'
+endif
 
 " Brief help
 " :PluginInstal
@@ -128,10 +131,8 @@ if !has('win32unix')
   au Syntax * RainbowParenthesesLoadChevrons
 endif
 
-""" lightline
-"let g:lightline = {
-"      \'colorscheme': 'darkblue',
-"      \}
+nmap <F8> :TagbarToggle<CR>
+
 
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
 " Remap ';' to ':' for easier commands                                       }{
