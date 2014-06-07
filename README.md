@@ -5,7 +5,7 @@ A lot of stuff here was taken from other dotfile repositories on github,
 I don't take credit for any well written sections of the files here.
 
 ## Instalation Instructions
-    git clone https://github.com/AdnoC/dotfiles.git
+    git clone https://github.com/AdnoC/Dotfiles.git
     git update --init
 Then in vim:
 
