@@ -145,11 +145,11 @@ map <F5> :call ToggleBackground()<CR>
 
 """" rainbow_parentheses
 function! LoadRainbow()
+  RainbowParenthesesActivate
   RainbowParenthesesLoadRound
   RainbowParenthesesLoadSquare
   RainbowParenthesesLoadBraces
   RainbowParenthesesLoadChevrons
-  RainbowParenthesesActivate
 endfunction
 map <F6> :call LoadRainbow()<CR>
 " Keep it always on if this isn't cygwin
@@ -197,7 +197,13 @@ nmap <leader>cc <Plug>NERDCommenterComment
 nmap <leader>cu <Plug>NERDCommenterUncomment
 
 
-
+function! FixGUI()
+  set background=dark
+  colorscheme solarized
+  call LoadRainbow()
+endfunction
+map <F9> :call FixGUI()<CR>
+let a=(((((5)))))
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
 " Remap ';' to ':' for easier commands                                       }{
 nnoremap ; :
@@ -255,8 +261,10 @@ set directory=~/.vim/swaps
 """""""""""""""""""""""""""""""""""" Looks """"""""""""""""""""""""""""""""""""
 """" Color Scheme
 " Start vim with dark solarized theme
-au VimEnter * set background=dark
+"au VimEnter * set background=dark
 au VimEnter * colorscheme solarized
+set background=dark
+"colorscheme solarized
 " If using vimdiff, use a colorscheme that is actually readable.
 if &diff
   colorscheme blue
