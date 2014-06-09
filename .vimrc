@@ -227,8 +227,6 @@ autocmd bufreadpost *
 " Open .vimrc                                                                }{
 nnoremap <leader>ev <c-w><c-v><c-l>:e $MYVIMRC<CR>
 """" Meta files
-" Store undo data in a file for persistence between sessions
-set undofile
 " Create backup, swap, and undo  folders if they do not exist
 " Centralize backups, swapfiles and undo history
  if ! isdirectory(expand('$HOME/.vim/backups'))
@@ -237,8 +235,12 @@ endif
  if ! isdirectory(expand('$HOME/.vim/swaps'))
   call mkdir(expand('$HOME/.vim/swaps'))
 endif
- if has('persistent_undo') && ! isdirectory(expand('$HOME/.vim/undo'))
-  call mkdir(expand('$HOME/.vim/undo'))
+ if has('persistent_undo') 
+  " Store undo data in a file for persistence between sessions
+  set undofile
+  if ! isdirectory(expand('$HOME/.vim/undo'))
+    call mkdir(expand('$HOME/.vim/undo'))
+  endif
   set undodir=~/.vim/undo
 endif
 set backupdir=~/.vim/backups
