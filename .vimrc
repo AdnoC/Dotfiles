@@ -8,6 +8,7 @@
 "   -> Searching
 "   -> Msc
 "   -> Movement
+"   -> File Types
 "   -> Key List and other things
 "
 " Note: Mappings have a }{ symbol at the end of the line
@@ -64,6 +65,7 @@ filetype off
     Plugin 'edsono/vim-matchit'
     Plugin 'tpope/vim-abolish'
     Plugin 'tpope/vim-repeat'
+    Plugin 'StanAngeloff/php.vim'
         "...All your other bundles...
     if iCanHazVundle == 0
         echo "Installing Plugins, please ignore key map error messages"
@@ -405,7 +407,13 @@ map <c-j> <c-w>j
 map <c-k> <c-w>k
 map <c-l> <c-w>l
 
-""""""""""""""""""""""""""""""""""" Key List"""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
+" How to set filetypes: (an example of setting one as ruby)
+" au BufRead,BufNewFile *.rpdf       set ft=ruby
+autocmd BufRead,BufNewFile *.inc set filetype=php
+autocmd BufRead,BufNewFile *.inc syntax on
+
+"""""""""""""""""""""""""""""""""" Key List """""""""""""""""""""""""""""""""""
 " List of mapped keys:
 " ,
 " <leader>sn
@@ -434,10 +442,8 @@ map <c-l> <c-w>l
 " <c-l>
 " <leader>rp
 
-" How to set filetypes: (an example of setting one as ruby)
-" au BufRead,BufNewFile *.rpdf       set ft=ruby
-"
+
 """" If there is a local vim configuration file, run it
-if filereadable("~/.vimrc.local")
-  so .vimrc.local
+if filereadable(expand("~/.vimrc.local"))
+  so ~/.vimrc.local
 endif
