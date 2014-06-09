@@ -22,34 +22,55 @@ let mapleader=","
 
 """"""""""""""""""""""""""""""""""" Plugins """""""""""""""""""""""""""""""""""
 filetype off
-" Set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" Let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
-Plugin 'kien/ctrlp.vim'
-Plugin 'edkolev/promptline.vim'
-Plugin 'scrooloose/syntastic'
-Plugin 'bling/vim-airline'
-Plugin 'bling/vim-bufferline'
-Plugin 'mhinz/vim-signify'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'tpope/vim-surround'
-Plugin 'wikitopian/hardmode'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'scrooloose/nerdtree'
-Plugin 'kien/rainbow_parentheses.vim'
-" Ctags are a dependancy of tagbar
-if (executable('ctags'))
-  Plugin 'majutsushi/tagbar'
-endif
-Plugin 'sjl/gundo.vim'
-Plugin 'nathanaelkane/vim-indent-guides'
-Plugin 'Lokaltog/vim-easymotion'
-Plugin 'edsono/vim-matchit'
-Plugin 'tpope/vim-abolish'
-Plugin 'tpope/vim-repeat'
+" Auto vundle install, taken from (before being slightly edited):
+" http://erikzaadi.com/2012/03/19/auto-installing-vundle-from-your-vimrc/
+" Setting up Vundle - the vim plugin bundler
+    let iCanHazVundle=1
+    let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
+    if !filereadable(vundle_readme)
+        echo "Installing Vundle.."
+        echo ""
+        silent !mkdir -p ~/.vim/bundle
+        silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/Vundle.vim
+        let iCanHazVundle=0
+    endif
+    set rtp+=~/.vim/bundle/Vundle.vim/
+    call vundle#rc()
+    " Let Vundle manage Vundle, required
+    Plugin 'gmarik/vundle'
+    "Add your bundles here
+    Plugin 'kien/ctrlp.vim'
+    Plugin 'edkolev/promptline.vim'
+    Plugin 'scrooloose/syntastic'
+    Plugin 'bling/vim-airline'
+    Plugin 'bling/vim-bufferline'
+    Plugin 'mhinz/vim-signify'
+    Plugin 'airblade/vim-gitgutter'
+    Plugin 'altercation/vim-colors-solarized'
+    Plugin 'tpope/vim-surround'
+    Plugin 'wikitopian/hardmode'
+    Plugin 'scrooloose/nerdcommenter'
+    Plugin 'scrooloose/nerdtree'
+    Plugin 'kien/rainbow_parentheses.vim'
+    " Ctags are a dependancy of tagbar
+    if (executable('ctags'))
+      Plugin 'majutsushi/tagbar'
+    else
+      echo "Could not find ctags. Not installing tagbar."
+    endif
+    Plugin 'sjl/gundo.vim'
+    Plugin 'nathanaelkane/vim-indent-guides'
+    Plugin 'Lokaltog/vim-easymotion'
+    Plugin 'edsono/vim-matchit'
+    Plugin 'tpope/vim-abolish'
+    Plugin 'tpope/vim-repeat'
+        "...All your other bundles...
+    if iCanHazVundle == 0
+        echo "Installing Plugins, please ignore key map error messages"
+        echo ""
+        :PluginInstall
+    endif
+" Setting up Vundle - the vim plugin bundler end
 
 " Brief help
 " :PluginInstal
@@ -58,8 +79,6 @@ Plugin 'tpope/vim-repeat'
 " :PluginSearch(!) foo - search (or refresh cache first) for foo
 " :PluginClean(!)      - confirm (or auto-approve) removal of unused plugins
 
-" All of your Plugins must be added before the following line
-call vundle#end()
 filetype plugin indent on
 
 """" Syntastic
