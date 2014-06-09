@@ -38,13 +38,13 @@ filetype off
     set rtp+=~/.vim/bundle/Vundle.vim/
     call vundle#rc()
     " Let Vundle manage Vundle, required
-    Plugin 'gmarik/vundle'
+    Plugin 'gmarik/Vundle.vim'
     "Add your bundles here
     Plugin 'kien/ctrlp.vim'
     Plugin 'edkolev/promptline.vim'
     Plugin 'scrooloose/syntastic'
     Plugin 'bling/vim-airline'
-    Plugin 'bling/vim-bufferline'
+    "Plugin 'bling/vim-bufferline'
     Plugin 'mhinz/vim-signify'
     Plugin 'airblade/vim-gitgutter'
     Plugin 'altercation/vim-colors-solarized'
@@ -241,7 +241,7 @@ endif
  if ! isdirectory(expand('$HOME/.vim/swaps'))
   call mkdir(expand('$HOME/.vim/swaps'))
 endif
- if has('persistent_undo') 
+ if has('persistent_undo')
   " Store undo data in a file for persistence between sessions
   set undofile
   if ! isdirectory(expand('$HOME/.vim/undo'))
