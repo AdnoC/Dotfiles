@@ -118,8 +118,8 @@ endif
 " Tell gitgutter not to set any keybinds by itself. They will all be rebound.
 let g:gitgutter_map_keys = 0
 " Move from to the next/prev change                                          }{
-nmap <leader>j <Plug>GitGutterNextHunk
-nmap <leader>k <Plug>GitGutterPrevHunk
+nmap <leader>gj <Plug>GitGutterNextHunk
+nmap <leader>gk <Plug>GitGutterPrevHunk
 " Stage or revert the lines the cursor is on                                 }{
 nmap <Leader>gs <Plug>GitGutterStageHunk
 nmap <Leader>gr <Plug>GitGutterRevertHunk
@@ -162,14 +162,17 @@ if !has('win32unix')
 endif
 
 if (executable('ctags'))
-  nnoremap <F7> :TagbarToggle<CR>
+  " Bind a button to open the tagbar                                         }{
+  nnoremap <leader>tg :TagbarToggle<CR>
 endif
 
-nnoremap <F8> :NERDTreeToggle<CR>
+" Bind a button to open NERD Tree                                            }{
+nnoremap <leader>nt :NERDTreeToggle<CR>
 let g:NERDTreeDirArrows=0
 let NERDTreeShowHidden = 1
 
-nnoremap <F9> :GundoToggle<CR>
+" Bind a button to open Gundo                                                }{
+nnoremap <leader>gu :GundoToggle<CR>
 
 " The default bind, just here so I remember
 nnoremap <leader>ig :IndentGuidesToggle
@@ -180,6 +183,7 @@ let g:indent_guides_guide_size=1
 "nmap <leader> <Plug>(easymotion-prefix)
 
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
+" Make some easymotion binds
 nmap <leader>l <Plug>(easymotion-lineforward)
 nmap <leader>h <Plug>(easymotion-linebackward)
 nmap <leader>j <Plug>(easymotion-j)
@@ -260,7 +264,7 @@ endif
 
 " Don't turn syntax or highlight searching on unless there are enough colors
 " to make them look good
-if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
+if (&t_Co > 2 || has("gui_running")) && exists("syntax_on")
     " Turn on syntax coloring
     syntax on                         "
     " Highlight search matches
@@ -411,15 +415,14 @@ map <c-l> <c-w>l
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
 autocmd BufRead,BufNewFile *.inc set filetype=php
-autocmd BufRead,BufNewFile *.inc syntax on
 
 """""""""""""""""""""""""""""""""" Key List """""""""""""""""""""""""""""""""""
 " List of mapped keys:
 " ,
 " <leader>sn
 " <leader>sp
-" <leader>k
-" <leader>j
+" <leader>gk
+" <leader>gj
 " <leader>gs
 " <leader>gr
 " <leader>gp
@@ -441,6 +444,15 @@ autocmd BufRead,BufNewFile *.inc syntax on
 " <c-k>
 " <c-l>
 " <leader>rp
+" <leaer>gu
+" <leader>tg
+" <leader>nt
+" <leader>l
+" <leader>k
+" <leader>j
+" <leader>h
+" <leader>s
+" <leader><ENTER>
 
 
 """" If there is a local vim configuration file, run it
