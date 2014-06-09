@@ -1,14 +1,14 @@
 if [ -f ~/.bashrc ]; then
   source ~/.bashrc
-fi 
+fi
 
 if [ -f ~/.bash_prompt ]; then
   source ~/.bash_prompt
-fi 
+fi
 
-if [ -f ~/.profile ]; then 
+if [ -f ~/.profile ]; then
   source ~/.profile
-fi 
+fi
 
 shopt -s globstar
 # Enable some Bash 4 features when possible:
@@ -40,7 +40,7 @@ if [ "$SHELL" = "/bin/bash" ]; then
       pwd > ~/.cdpath
   }
   alias cd="pathed_cd"
- 
+
   if [ -f ~/.cdpath ]; then
     cd "$(cat ~/.cdpath)"
   fi
