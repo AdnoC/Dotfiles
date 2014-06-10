@@ -211,7 +211,7 @@ let a=(((((5)))))
 " Remap ';' to ':' for easier commands                                       }{
 nnoremap ; :
 " Use Control-a to move to normal mode                                       }{
-inoremap jj <Esc>
+inoremap jk <Esc>
 " Toggle paste mode.
 set pastetoggle=<leader>p
 " Makes the switch to paste mode immediately shown                           }{
@@ -444,7 +444,7 @@ autocmd BufRead,BufNewFile *.inc set filetype=php
 " <leader>gr
 " <leader>gp
 " <leader>p
-" jj
+" jk
 " <leader>cd
 " <leader>te
 " <leader>ev
