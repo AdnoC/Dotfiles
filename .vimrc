@@ -66,6 +66,7 @@ filetype off
     Plugin 'tpope/vim-abolish'
     Plugin 'tpope/vim-repeat'
     Plugin 'StanAngeloff/php.vim'
+    Plugin 'Valloric/MatchTagAlways'
         "...All your other bundles...
     if iCanHazVundle == 0
         echo "Installing Plugins, please ignore key map error messages"
@@ -177,7 +178,7 @@ let NERDTreeShowHidden = 1
 nnoremap <leader>gu :GundoToggle<CR>
 
 " The default bind, just here so I remember
-nnoremap <leader>ig :IndentGuidesToggle
+nnoremap <leader>ig :IndentGuidesToggle<CR>
 let g:indent_guides_start_level=2
 let g:indent_guides_guide_size=1
 
@@ -275,7 +276,9 @@ endif
 
 " Don't turn syntax or highlight searching on unless there are enough colors
 " to make them look good
-if (&t_Co > 2 || has("gui_running")) && exists("syntax_on")
+if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && exists("syntax_on")
+    " Use 256 colors
+    set t_Co=256
     " Turn on syntax coloring
     syntax on                         "
     " Highlight search matches
@@ -306,7 +309,9 @@ set laststatus=2
 " Wrap lines of text that are too long around to the next line
 set wrap
 " Show column at x chars so that there is no lines to long
-set colorcolumn=80
+if exists('+colorcolumn')
+  set colorcolumn=80
+endif
 " Show the number of changes made when doing substitutions
 set report=0
 " When closing a parenthesis or bracket (etc) briefly move cursor to its match
@@ -352,7 +357,7 @@ nnoremap <leader>q gqip
 
 """""""""""""""""""""""""""""""""" Searching """"""""""""""""""""""""""""""""""
 " Clears  the search by pressing <leader> SPACE                              }{
-nnoremap <leader><space> :noh<CR>
+nnoremap <silent><leader><space> :noh<CR>
 set ignorecase             " ignore case when searching
 set smartcase
 " Allows for better regex when searching
@@ -375,6 +380,24 @@ set splitright
 nnoremap Y y$
 " Replace a word with yanked text                                            }{
 nnoremap <leader>rp viw"0p
+" Displays a list of maps that include the leader
+function! ListLeaders()
+  silent! redir @b
+  silent! nmap <LEADER>
+  silent! redir END
+  silent! new
+  silent! set buftype=nofile
+  silent! set bufhidden=hide
+  silent! setlocal noswapfile
+  silent! put! b
+  silent! g/^s*$/d
+  silent! %s/^.*,//
+  silent! normal ggVg
+  silent! sort
+  silent! let lines = getline(1,"$")
+  silent! normal <esc>
+endfunction
+command! ListLeaders :call ListLeaders()
 
 """""""""""""""""""""""""""""""""" Movement """""""""""""""""""""""""""""""""""
 " Number of lines to use for the command line
