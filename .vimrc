@@ -127,6 +127,8 @@ nmap <Leader>gr <Plug>GitGutterRevertHunk
 nmap <Leader>gp <Plug>GitGutterPreviewHunk
 
 let g:solarized_termcolors=256
+let g:solarized_termtrans=1
+let g:solarized_visibility='high'
 let w:bg='dark'
 call togglebg#map("<F5>")
 function! ToggleBackground()
@@ -201,6 +203,7 @@ function! FixGUI()
   set background=dark
   colorscheme solarized
   call LoadRainbow()
+  syntax on
 endfunction
 map <F9> :call FixGUI()<CR>
 let a=(((((5)))))
@@ -377,9 +380,13 @@ nnoremap <leader>rp viw"0p
 " Number of lines to use for the command line
 set cmdheight=2
 " The minimum number of line to keep above and below the cursor.
-set scrolloff=4
+set scrolloff=10
 " Allow keys to move left or right to the prev/next line
 set whichwrap=b,s,h,l,<,>,[,]
+
+" Move to the beginning and end of lines easier                              }{
+nnoremap H ^
+nnoremap L $
 
 " Use sane movement along wrapped lines                                      }{
 nnoremap j gj
@@ -464,6 +471,8 @@ autocmd BufRead,BufNewFile *.inc set filetype=php
 " <leader>s
 " <leader><ENTER>
 " Y (kinda)
+" H
+" L
 
 
 """" If there is a local vim configuration file, run it
