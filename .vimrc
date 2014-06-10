@@ -368,6 +368,8 @@ set completeopt=longest,menu
 " Open new split windows to right and bottom, which feels more natural
 set splitbelow
 set splitright
+" Make Y behave like other capitals                                          }{
+nnoremap Y y$
 " Replace a word with yanked text                                            }{
 nnoremap <leader>rp viw"0p
 
@@ -461,6 +463,7 @@ autocmd BufRead,BufNewFile *.inc set filetype=php
 " <leader>h
 " <leader>s
 " <leader><ENTER>
+" Y (kinda)
 
 
 """" If there is a local vim configuration file, run it
