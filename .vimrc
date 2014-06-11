@@ -62,8 +62,12 @@ filetype off
     " Ctags are a dependancy of tagbar
     if (executable('ctags'))
       Plugin 'majutsushi/tagbar'
-      Plugin 'vim-php/phpctags'
-      Plugin 'vim-php/tagbar-phpctags.vim'
+      if (executable('php')) 
+        Plugin 'vim-php/phpctags'
+        Plugin 'vim-php/tagbar-phpctags.vim'
+      else
+        echo "Could not find PHP. Not installing PHP ctags."
+      endif
     else
       echo "Could not find ctags. Not installing tagbar."
     endif
@@ -73,7 +77,7 @@ filetype off
     Plugin 'edsono/vim-matchit'
     Plugin 'tpope/vim-abolish'
     Plugin 'tpope/vim-repeat'
-    Plugin 'StanAngeloff/php.vim'
+    Plugin 'sheerun/vim-polyglot'
     Plugin 'Valloric/MatchTagAlways'
         "...All your other bundles...
     if iCanHazVundle == 0
@@ -368,6 +372,9 @@ set textwidth=100
 set formatoptions=qrno
 " Set line ending preferences (CR LR stuff)
 set ffs=unix,dos,mac
+z" Reselect visual block after indent/outdent                                }{
+vnoremap < <gv
+vnoremap > >gv
 " Re-hardwrap paragraph                                                      }{
 nnoremap <leader>q gqip
 
@@ -376,9 +383,13 @@ nnoremap <leader>q gqip
 nnoremap <silent><leader><space> :noh<CR>
 set ignorecase             " ignore case when searching
 set smartcase
-" Allows for better regex when searching
-nnoremap ? /\v
-vnoremap ? /\v
+" Use sane regexes                                                           }{
+nnoremap / /\v
+vnoremap / /\v
+cnoremap s/ s/\v
+nnoremap ? ?\v
+vnoremap ? ?\v
+cnoremap s? s?\v
 set incsearch   " Search incrementally
 
 """""""""""""""""""""""""""""""""""" Msc. """""""""""""""""""""""""""""""""""""
@@ -396,6 +407,9 @@ set splitright
 nnoremap Y y$
 " Replace a word with yanked text                                            }{
 nnoremap <leader>rp viw"0p
+" Source the vimrc file after saving it
+autocmd BufWritePost $MYVIMRC source $MYVIMRC
+autocmd BufWritePost $MYVIMRC NeoBundleClean
 " Displays a list of maps that include the leader
 function! ListLeaders()
   silent! redir @b
