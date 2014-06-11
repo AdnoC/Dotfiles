@@ -44,6 +44,9 @@ filetype off
     Plugin 'kien/ctrlp.vim'
     Plugin 'JulesWang/css.vim'
     Plugin 'cakebaker/scss-syntax.vim'
+    " So that gitv can work
+    Plugin 'tpope/vim-fugitive'
+    Plugin 'gregsexton/gitv'
     Plugin 'edkolev/promptline.vim'
     Plugin 'scrooloose/syntastic'
     Plugin 'bling/vim-airline'
@@ -59,6 +62,8 @@ filetype off
     " Ctags are a dependancy of tagbar
     if (executable('ctags'))
       Plugin 'majutsushi/tagbar'
+      Plugin 'vim-php/phpctags'
+      Plugin 'vim-php/tagbar-phpctags.vim'
     else
       echo "Could not find ctags. Not installing tagbar."
     endif
@@ -147,6 +152,18 @@ map <F6> :call LoadRainbow()<CR>
 if (executable('ctags'))
   " Bind a button to open the tagbar                                         }{
   nnoremap <leader>tg :TagbarToggle<CR>
+  let g:tagbar_autoclose=1
+  let g:tagbar_autofocus=1
+    "let g:tagbar_type_php  = {
+    "\ 'ctagstype' : 'php',
+    "\ 'kinds'     : [
+        "\ 'i:interfaces',
+        "\ 'c:classes',
+        "\ 'd:constant definitions',
+        "\ 'f:functions',
+        "\ 'j:javascript functions:1'
+    "\ ]
+  "\ }
 endif
 
 " Bind a button to open NERD Tree                                            }{
@@ -176,8 +193,10 @@ nmap <leader><ENTER> <Plug>(easymotion-sn)
 let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 
 let g:NERDCreateDefaultMappings=0
-nmap <leader>cc <Plug>NERDCommenterComment
-nmap <leader>cu <Plug>NERDCommenterUncomment
+nmap <leader>cv <Plug>NERDCommenterComment
+vmap <leader>cv <Plug>NERDCommenterComment
+nmap <leader>cx <Plug>NERDCommenterUncomment
+vmap <leader>cx <Plug>NERDCommenterUncomment
 
 " Make rainbow parentheses an acual rainbow
 let g:rbpt_colorpairs = [
