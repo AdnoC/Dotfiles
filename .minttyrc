@@ -1,0 +1,12 @@
+BoldAsFont=no
+Term=xterm-256color
+Columns=102
+Rows=60
+FontHeight=10
+PgUpDnScroll=yes
+Transparency=low
+CursorType=block
+AllowBlinking=yes
+Font=Inconsolata for Powerline
+OpaqueWhenFocused=no
+ScrollbackLines=1000000
