@@ -40,7 +40,10 @@ filetype off
     " Let Vundle manage Vundle, required
     Plugin 'gmarik/Vundle.vim'
     "Add your bundles here
+    Plugin 'othree/html5.vim'
     Plugin 'kien/ctrlp.vim'
+    Plugin 'JulesWang/css.vim'
+    Plugin 'cakebaker/scss-syntax.vim'
     Plugin 'edkolev/promptline.vim'
     Plugin 'scrooloose/syntastic'
     Plugin 'bling/vim-airline'
