@@ -17,7 +17,9 @@
 
 """"""""""""""""""""""""""""""""""" Initial """""""""""""""""""""""""""""""""""
 " This isn't Vi, it is Vi IMproved. So lets not cling to old Vi settings
-set nocompatible
+if has('vim_starting')
+  set nocompatible
+endif
 " Remap leader. Needs to be done before any mappings involving the leader.   }{
 let mapleader=","
 
@@ -26,66 +28,74 @@ filetype off
 " Auto vundle install, taken from (before being slightly edited):
 " http://erikzaadi.com/2012/03/19/auto-installing-vundle-from-your-vimrc/
 " Setting up Vundle - the vim plugin bundler
-    let iCanHazVundle=1
-    let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
-    if !filereadable(vundle_readme)
-        echo "Installing Vundle.."
+    let iCanHazNeobundle=1
+    let neobundle_readme=expand('~/.vim/bundle/neobundle.vim/README.md')
+    if !filereadable(neobundle_readme)
+        echo "Installing Neobundle.."
         echo ""
         silent !mkdir -p ~/.vim/bundle
-        silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/Vundle.vim
-        let iCanHazVundle=0
+        silent !git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+        let iCanHazNeobundle=0
     endif
-    set rtp+=~/.vim/bundle/Vundle.vim/
-    call vundle#rc()
-    " Let Vundle manage Vundle, required
-    Plugin 'gmarik/Vundle.vim'
+    if has('vim_starting')
+      "required
+      set runtimepath+=~/.vim/bundle/neobundle.vim/
+    endif
+    " Required:
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    " Let NeoBundle manage NeoBundle
+    " Required:
+    NeoBundleFetch 'Shougo/neobundle.vim'
     "Add your bundles here
-    Plugin 'othree/html5.vim'
-    Plugin 'kien/ctrlp.vim'
-    Plugin 'JulesWang/css.vim'
-    Plugin 'cakebaker/scss-syntax.vim'
+    NeoBundle 'othree/html5.vim'
+    NeoBundle 'kien/ctrlp.vim'
+    NeoBundle 'JulesWang/css.vim'
+    NeoBundle 'cakebaker/scss-syntax.vim'
     " So that gitv can work
-    Plugin 'tpope/vim-fugitive'
-    Plugin 'gregsexton/gitv'
-    Plugin 'edkolev/promptline.vim'
-    Plugin 'scrooloose/syntastic'
-    Plugin 'bling/vim-airline'
-    "Plugin 'bling/vim-bufferline'
-    Plugin 'mhinz/vim-signify'
-    Plugin 'airblade/vim-gitgutter'
-    Plugin 'altercation/vim-colors-solarized'
-    Plugin 'tpope/vim-surround'
-    Plugin 'wikitopian/hardmode'
-    Plugin 'scrooloose/nerdcommenter'
-    Plugin 'scrooloose/nerdtree'
-    Plugin 'kien/rainbow_parentheses.vim'
+    NeoBundle 'tpope/vim-fugitive'
+    NeoBundle 'gregsexton/gitv'
+    NeoBundle 'edkolev/promptline.vim'
+    NeoBundle 'scrooloose/syntastic'
+    NeoBundle 'bling/vim-airline'
+    "NeoBundle 'bling/vim-bufferline'
+    NeoBundle 'mhinz/vim-signify'
+    NeoBundle 'airblade/vim-gitgutter'
+    NeoBundle 'altercation/vim-colors-solarized'
+    NeoBundle 'tpope/vim-surround'
+    NeoBundle 'wikitopian/hardmode'
+    NeoBundle 'scrooloose/nerdcommenter'
+    NeoBundle 'scrooloose/nerdtree'
+    NeoBundle 'kien/rainbow_parentheses.vim'
     " Ctags are a dependancy of tagbar
     if (executable('ctags'))
-      Plugin 'majutsushi/tagbar'
+      NeoBundle 'majutsushi/tagbar'
       if (executable('php')) 
-        Plugin 'vim-php/phpctags'
-        Plugin 'vim-php/tagbar-phpctags.vim'
+        NeoBundle 'vim-php/phpctags'
+        NeoBundle 'vim-php/tagbar-phpctags.vim'
       else
         echo "Could not find PHP. Not installing PHP ctags."
       endif
     else
       echo "Could not find ctags. Not installing tagbar."
     endif
-    Plugin 'sjl/gundo.vim'
-    Plugin 'nathanaelkane/vim-indent-guides'
-    Plugin 'Lokaltog/vim-easymotion'
-    Plugin 'edsono/vim-matchit'
-    Plugin 'tpope/vim-abolish'
-    Plugin 'tpope/vim-repeat'
-    Plugin 'sheerun/vim-polyglot'
-    Plugin 'Valloric/MatchTagAlways'
+    NeoBundle 'sjl/gundo.vim'
+    NeoBundle 'nathanaelkane/vim-indent-guides'
+    NeoBundle 'Lokaltog/vim-easymotion'
+    NeoBundle 'edsono/vim-matchit'
+    NeoBundle 'tpope/vim-abolish'
+    NeoBundle 'tpope/vim-repeat'
+    NeoBundle 'sheerun/vim-polyglot'
+    NeoBundle 'Valloric/MatchTagAlways'
+    call neobundle#end()
         "...All your other bundles...
-    if iCanHazVundle == 0
-        echo "Installing Plugins, please ignore key map error messages"
-        echo ""
-        :PluginInstall
+    if iCanHazNeobundle == 0
+      echo "Installing Plugins, please ignore key map error messages"
+      echo ""
+      NeoBundleInstall
+    else
+      NeoBundleCheck
     endif
-" Setting up Vundle - the vim plugin bundler end
+" Setting up Neobundle - the vim plugin bundler end
 
 " Brief help
 " :PluginInstal
@@ -407,9 +417,6 @@ set splitright
 nnoremap Y y$
 " Replace a word with yanked text                                            }{
 nnoremap <leader>rp viw"0p
-" Source the vimrc file after saving it
-autocmd BufWritePost $MYVIMRC source $MYVIMRC
-autocmd BufWritePost $MYVIMRC NeoBundleClean
 " Displays a list of maps that include the leader
 function! ListLeaders()
   silent! redir @b
