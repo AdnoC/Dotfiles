@@ -66,6 +66,7 @@ filetype off
     Plugin 'tpope/vim-abolish'
     Plugin 'tpope/vim-repeat'
     Plugin 'StanAngeloff/php.vim'
+    Plugin 'Valloric/MatchTagAlways'
         "...All your other bundles...
     if iCanHazVundle == 0
         echo "Installing Plugins, please ignore key map error messages"
@@ -127,6 +128,8 @@ nmap <Leader>gr <Plug>GitGutterRevertHunk
 nmap <Leader>gp <Plug>GitGutterPreviewHunk
 
 let g:solarized_termcolors=256
+let g:solarized_termtrans=1
+let g:solarized_visibility='high'
 let w:bg='dark'
 call togglebg#map("<F5>")
 function! ToggleBackground()
@@ -167,7 +170,7 @@ let NERDTreeShowHidden = 1
 nnoremap <leader>gu :GundoToggle<CR>
 
 " The default bind, just here so I remember
-nnoremap <leader>ig :IndentGuidesToggle
+nnoremap <leader>ig :IndentGuidesToggle<CR>
 let g:indent_guides_start_level=2
 let g:indent_guides_guide_size=1
 
@@ -208,8 +211,7 @@ function! FixGUI()
     call LoadRainbow()
   endif
 endfunction
-map <F9> :call FixGU I()<CR>
-let a=((( ((( ((( (((5))) ))) ))) )))
+map <F9> :call FixGUI()<CR>
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
@@ -220,7 +222,7 @@ autocmd BufRead,BufNewFile *.module set filetype=php
 " Remap ';' to ':' for easier commands                                       }{
 nnoremap ; :
 " Use Control-a to move to normal mode                                       }{
-inoremap jj <Esc>
+inoremap jk <Esc>
 " Toggle paste mode.
 set pastetoggle=<leader>p
 " Makes the switch to paste mode immediately shown                           }{
@@ -272,8 +274,6 @@ set directory=~/.vim/swaps
 
 """""""""""""""""""""""""""""""""""" Looks """"""""""""""""""""""""""""""""""""
 """" Color Scheme
-" Start vim with dark solarized theme
-au VimEnter * call FixGUI()
 " If using vimdiff, use a colorscheme that is actually readable.
 if &diff
   colorscheme blue
@@ -281,9 +281,11 @@ endif
 
 " Don't turn syntax or highlight searching on unless there are enough colors
 " to make them look good
-if (&t_Co > 2 || has("gui_running")) && exists("syntax_on")
-    " Turn on syntax coloring
-    "syntax on
+if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
+    " Use 256 colors
+    set t_Co=256
+    " Start vim with dark solarized theme
+    au VimEnter * call FixGUI()
     " Highlight search matches
     set hlsearch
 endif
@@ -312,7 +314,9 @@ set laststatus=2
 " Wrap lines of text that are too long around to the next line
 set wrap
 " Show column at x chars so that there is no lines to long
-set colorcolumn=80
+if exists('+colorcolumn')
+  set colorcolumn=80
+endif
 " Show the number of changes made when doing substitutions
 set report=0
 " When closing a parenthesis or bracket (etc) briefly move cursor to its match
@@ -358,7 +362,7 @@ nnoremap <leader>q gqip
 
 """""""""""""""""""""""""""""""""" Searching """"""""""""""""""""""""""""""""""
 " Clears  the search by pressing <leader> SPACE                              }{
-nnoremap <leader><space> :noh<CR>
+nnoremap <silent><leader><space> :noh<CR>
 set ignorecase             " ignore case when searching
 set smartcase
 " Allows for better regex when searching
@@ -377,16 +381,40 @@ set completeopt=longest,menu
 " Open new split windows to right and bottom, which feels more natural
 set splitbelow
 set splitright
+" Make Y behave like other capitals                                          }{
+nnoremap Y y$
 " Replace a word with yanked text                                            }{
 nnoremap <leader>rp viw"0p
+" Displays a list of maps that include the leader
+function! ListLeaders()
+  silent! redir @b
+  silent! nmap <LEADER>
+  silent! redir END
+  silent! new
+  silent! set buftype=nofile
+  silent! set bufhidden=hide
+  silent! setlocal noswapfile
+  silent! put! b
+  silent! g/^s*$/d
+  silent! %s/^.*,//
+  silent! normal ggVg
+  silent! sort
+  silent! let lines = getline(1,"$")
+  silent! normal <esc>
+endfunction
+command! ListLeaders :call ListLeaders()
 
 """""""""""""""""""""""""""""""""" Movement """""""""""""""""""""""""""""""""""
 " Number of lines to use for the command line
 set cmdheight=2
 " The minimum number of line to keep above and below the cursor.
-set scrolloff=4
+set scrolloff=10
 " Allow keys to move left or right to the prev/next line
 set whichwrap=b,s,h,l,<,>,[,]
+
+" Move to the beginning and end of lines easier                              }{
+nnoremap H ^
+nnoremap L $
 
 " Use sane movement along wrapped lines                                      }{
 nnoremap j gj
@@ -439,7 +467,7 @@ map <c-l> <c-w>l
 " <leader>gr
 " <leader>gp
 " <leader>p
-" jj
+" jk
 " <leader>cd
 " <leader>te
 " <leader>ev
@@ -465,6 +493,9 @@ map <c-l> <c-w>l
 " <leader>h
 " <leader>s
 " <leader><ENTER>
+" Y (kinda)
+" H
+" L
 
 
 """" If there is a local vim configuration file, run it
