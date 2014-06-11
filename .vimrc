@@ -2,13 +2,13 @@
 " Sections:
 "   -> Initial
 "   -> Plugins
+"   -> File Types
 "   -> Meta
 "   -> Looks
 "   -> Formatting
 "   -> Searching
 "   -> Msc
 "   -> Movement
-"   -> File Types
 "   -> Key List and other things
 "
 " Note: Mappings have a }{ symbol at the end of the line
@@ -152,14 +152,6 @@ function! LoadRainbow()
   RainbowParenthesesLoadChevrons
 endfunction
 map <F6> :call LoadRainbow()<CR>
-" Keep it always on if this isn't cygwin
-if !has('win32unix')
-  au VimEnter * RainbowParenthesesActivate
-  au Syntax * RainbowParenthesesLoadRound
-  au Syntax * RainbowParenthesesLoadSquare
-  au Syntax * RainbowParenthesesLoadBraces
-  au Syntax * RainbowParenthesesLoadChevrons
-endif
 
 if (executable('ctags'))
   " Bind a button to open the tagbar                                         }{
@@ -196,14 +188,34 @@ let g:NERDCreateDefaultMappings=0
 nmap <leader>cc <Plug>NERDCommenterComment
 nmap <leader>cu <Plug>NERDCommenterUncomment
 
+" Make rainbow parentheses an acual rainbow
+let g:rbpt_colorpairs = [
+  \ [ '13', '#6c71c4'],
+  \ [ '5',  '#d33682'],
+  \ [ '1',  '#dc322f'],
+  \ [ '9',  '#cb4b16'],
+  \ [ '3',  '#b58900'],
+  \ [ '2',  '#859900'],
+  \ [ '6',  '#2aa198'],
+  \ [ '4',  '#268bd2'],
+  \ ]
 
 function! FixGUI()
+  syntax enable
   set background=dark
   colorscheme solarized
-  call LoadRainbow()
+  if &filetype!='php'
+    call LoadRainbow()
+  endif
 endfunction
-map <F9> :call FixGUI()<CR>
-let a=(((((5)))))
+map <F9> :call FixGU I()<CR>
+let a=((( ((( ((( (((5))) ))) ))) )))
+"""""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
+" How to set filetypes: (an example of setting one as ruby)
+" au BufRead,BufNewFile *.rpdf       set ft=ruby
+autocmd BufRead,BufNewFile *.inc set filetype=php
+autocmd BufRead,BufNewFile *.module set filetype=php
+
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
 " Remap ';' to ':' for easier commands                                       }{
 nnoremap ; :
@@ -261,10 +273,7 @@ set directory=~/.vim/swaps
 """""""""""""""""""""""""""""""""""" Looks """"""""""""""""""""""""""""""""""""
 """" Color Scheme
 " Start vim with dark solarized theme
-"au VimEnter * set background=dark
-au VimEnter * colorscheme solarized
-set background=dark
-"colorscheme solarized
+au VimEnter * call FixGUI()
 " If using vimdiff, use a colorscheme that is actually readable.
 if &diff
   colorscheme blue
@@ -274,7 +283,7 @@ endif
 " to make them look good
 if (&t_Co > 2 || has("gui_running")) && exists("syntax_on")
     " Turn on syntax coloring
-    syntax on                         "
+    "syntax on
     " Highlight search matches
     set hlsearch
 endif
@@ -418,11 +427,6 @@ map <c-h> <c-w>h
 map <c-j> <c-w>j
 map <c-k> <c-w>k
 map <c-l> <c-w>l
-
-"""""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
-" How to set filetypes: (an example of setting one as ruby)
-" au BufRead,BufNewFile *.rpdf       set ft=ruby
-autocmd BufRead,BufNewFile *.inc set filetype=php
 
 """""""""""""""""""""""""""""""""" Key List """""""""""""""""""""""""""""""""""
 " List of mapped keys:
