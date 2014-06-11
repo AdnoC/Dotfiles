@@ -46,4 +46,5 @@ function solChange() {
     source ~/sol.light
   fi
   source ~/.bash_prompt
+  source ~/.bash_exports
 }
