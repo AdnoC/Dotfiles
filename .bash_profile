@@ -2,12 +2,16 @@ if [ -f ~/.bashrc ]; then
   source ~/.bashrc
 fi
 
-if [ -f ~/.bash_prompt ]; then
-  source ~/.bash_prompt
-fi
-
 if [ -f ~/.profile ]; then
   source ~/.profile
+fi
+
+if [ -f ~/sol.dark ]; then
+  source ~/sol.dark
+fi
+
+if [ -f ~/.bash_prompt ]; then
+  source ~/.bash_prompt
 fi
 
 shopt -s globstar

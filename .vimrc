@@ -130,21 +130,6 @@ nmap <Leader>gp <Plug>GitGutterPreviewHunk
 let g:solarized_termcolors=256
 let g:solarized_termtrans=1
 let g:solarized_visibility='high'
-let w:bg='dark'
-call togglebg#map("<F5>")
-function! ToggleBackground()
-  if (w:bg=="light")
-    set background=dark
-    let w:bg='dark'
-    colorscheme solarized
-  else
-    set background=light
-    let w:bg='light'
-    colorscheme solarized
-endif
-call LoadRainbow()
-endfunction
-map <F5> :call ToggleBackground()<CR>
 
 """" rainbow_parentheses
 function! LoadRainbow()
@@ -205,7 +190,11 @@ let g:rbpt_colorpairs = [
 
 function! FixGUI()
   syntax enable
-  set background=dark
+  if expand("$SOL_FLAVOR") == 'light'
+    set background="light"
+  else
+    set background="dark"
+  endif
   colorscheme solarized
   if &filetype!='php'
     call LoadRainbow()

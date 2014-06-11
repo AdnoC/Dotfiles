@@ -9,11 +9,23 @@ fi
 if tput setaf 1 &> /dev/null; then
     tput sgr0
     if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
-      MAGENTA=$(tput setaf 9)
-      ORANGE=$(tput setaf 172)
-      GREEN=$(tput setaf 190)
-      PURPLE=$(tput setaf 141)
-      WHITE=$(tput setaf 256)
+      if [ $SOL_FLAVOR = "light" ]; then
+        GREEN=$(tput setaf 22)
+        PURPLE=$(tput setaf 57)
+        MAGENTA=$(tput setaf 88)
+        ORANGE=$(tput setaf 202)
+        WHITE=$(tput setaf 233)
+      else
+        GREEN=$(tput setaf 190)
+        PURPLE=$(tput setaf 141)
+        MAGENTA=$(tput setaf 9)
+        ORANGE=$(tput setaf 172)
+        if [ $SOL_FLAVOR = "dark" ]; then
+          WHITE=$(tput setaf 244)
+        else
+          WHITE=$(tput setaf 256)
+        fi
+      fi
     else
       MAGENTA=$(tput setaf 5)
       ORANGE=$(tput setaf 4)
@@ -115,5 +127,5 @@ function __promptline_vcs_branch {
 # before the prompt shows up again.
 export PRINT_GIT_CHANGES='true'
 
-PS1="\n\[${BOLD}${MAGENTA}\]\t[\u] \[$WHITE\]at \[$ORANGE\]\h \[$WHITE\]in \[$GREEN\]\w\[$WHITE\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$PURPLE\]\$(__promptline_vcs_branch)\[$WHITE\]\n\$ \[$RESET\]"
+PS1="\n\[${BOLD}${MAGENTA}\]\t[\u] \[$WHITE\]at \[$ORANGE\]\h \[$WHITE\]in \[${BOLD}${GREEN}\]\w\[$WHITE\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$PURPLE\]\$(__promptline_vcs_branch)\[$WHITE\]\n\$ \[$RESET\]"
 

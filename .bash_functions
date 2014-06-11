@@ -37,3 +37,13 @@ search() {
 function dstore-clean() {
   find $@ -type f -name .DS_Store -print0 | xargs -0 rm
 }
+
+# Change colorscheme
+function solChange() {
+  if [ $SOL_FLAVOR = "light" ]; then
+    source ~/sol.dark
+  else
+    source ~/sol.light
+  fi
+  source ~/.bash_prompt
+}
