@@ -32,7 +32,8 @@ if [ "$SHLVL" = 1 ]; then
     [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
 fi
 
-if [ "$SHELL" = "/bin/bash" ]; then
+# If we are using bash and have not already created this function (cuases crashes)
+if [ "$SHELL" = "/bin/bash" ] && [ "$(type -t pathed_cd)" != "function" ]; then
   #magical new tab to last directory trick
   #source: http://gist.github.com/132456
   function pathed_cd () {
