@@ -164,8 +164,8 @@ let g:airline_powerline_fonts = 1
 " Tell gitgutter not to set any keybinds by itself. They will all be rebound.
 let g:gitgutter_map_keys = 0
 " Move from to the next/prev change                                          }{
-nmap <leader>gj <Plug>GitGutterNextHunk
-nmap <leader>gk <Plug>GitGutterPrevHunk
+nmap <leader>]g <Plug>GitGutterNextHunk
+nmap <leader>[g <Plug>GitGutterPrevHunk
 " Stage or revert the lines the cursor is on                                 }{
 nmap <Leader>gs <Plug>GitGutterStageHunk
 nmap <Leader>gr <Plug>GitGutterRevertHunk
@@ -538,8 +538,8 @@ map <c-l> <c-w>l
 " ,
 " <leader>]s
 " <leader>[s
-" <leader>gk
-" <leader>gj
+" <leader>[g
+" <leader>]g
 " <leader>gs
 " <leader>gr
 " <leader>gp
