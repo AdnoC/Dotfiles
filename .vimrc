@@ -59,8 +59,6 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
       \ })
     NeoBundle 'othree/html5.vim'
     NeoBundle 'kien/ctrlp.vim'
-    NeoBundle 'JulesWang/css.vim'
-    NeoBundle 'cakebaker/scss-syntax.vim'
     " So that gitv can work
     NeoBundle 'tpope/vim-fugitive'
     NeoBundle 'gregsexton/gitv', {
@@ -104,13 +102,17 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     NeoBundle 'tpope/vim-repeat'
     NeoBundle 'sheerun/vim-polyglot'
     NeoBundle 'Valloric/MatchTagAlways'
+    NeoBundle 'tpope/vim-endwise'
+    NeoBundle 'thinca/vim-ref'
+    NeoBundle 'jiangmiao/auto-pairs'
+    if executable('w3m')
+      NeoBundle 'yuratomo/w3m.vim'
+    endif
     call neobundle#end()
         "...All your other bundles...
     if iCanHazNeobundle == 0
       echo "Installing Plugins, please ignore key map error messages"
       echo ""
-      NeoBundleInstall
-    else
       NeoBundleCheck
     endif
 " Setting up Neobundle - the vim plugin bundler end
