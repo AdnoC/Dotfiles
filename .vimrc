@@ -150,8 +150,8 @@ let g:syntastic_check_on_open = 1
 " Set location list window height
 let g:syntastic_loc_list_height = 5
 " Shortcuts to prev/next errors                                              }{
-nnoremap <leader>]s :lnext<CR>
-nnoremap <leader>[s :lprevious<CR>
+nnoremap <leader>s] :lnext<CR>
+nnoremap <leader>s[ :lprevious<CR>
 
 """" vim-airline
 let g:airline#extensions#tabline#enabled = 1
@@ -164,8 +164,8 @@ let g:airline_powerline_fonts = 1
 " Tell gitgutter not to set any keybinds by itself. They will all be rebound.
 let g:gitgutter_map_keys = 0
 " Move from to the next/prev change                                          }{
-nmap <leader>]g <Plug>GitGutterNextHunk
-nmap <leader>[g <Plug>GitGutterPrevHunk
+nmap <leader>g] <Plug>GitGutterNextHunk
+nmap <leader>g[ <Plug>GitGutterPrevHunk
 " Stage or revert the lines the cursor is on                                 }{
 nmap <Leader>gs <Plug>GitGutterStageHunk
 nmap <Leader>gr <Plug>GitGutterRevertHunk
@@ -258,7 +258,7 @@ function! FixGUI()
     set background="dark"
   endif
   colorscheme solarized
-  autocmd BufEnter *\(.php\)\@<! call LoadRainbow()
+  autocmd BufRead *\(.php\)\@<! call LoadRainbow()
 endfunction
 map <F9> :call FixGUI()<CR>
 
@@ -355,7 +355,7 @@ endif
 " Use relative line numbers if we can
 if exists("&relativenumber")
   set relativenumber
-  au BufReadPost * set relativenumber
+  "au BufReadPost * set relativenumber
 else
   " If there is no relative numbering on the system, use static numbers
   set number
@@ -536,10 +536,10 @@ map <c-l> <c-w>l
 """""""""""""""""""""""""""""""""" Key List """""""""""""""""""""""""""""""""""
 " List of mapped keys:
 " ,
-" <leader>]s
-" <leader>[s
-" <leader>[g
-" <leader>]g
+" <leader>s]
+" <leader>s[
+" <leader>g[
+" <leader>g]
 " <leader>gs
 " <leader>gr
 " <leader>gp
