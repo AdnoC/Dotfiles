@@ -49,3 +49,7 @@ if [[ "$OSTYPE" == darwin* ]]; then
   alias pumpitup="osascript -e 'set volume 7'"
   alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
 fi
+
+if [[ "$OSTYPE" == cygwin ]]; then
+  alias cygsetup="cygstart -- $CYGW_SETUP -K http://cygwinports.org/ports.gpg"
+fi

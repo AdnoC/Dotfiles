@@ -46,6 +46,7 @@ export LC_CTYPE=en_US.UTF-8
 # If this is cygwin, set a shortcut to my home dir.
 if [[ "$OSTYPE" == cygwin ]]; then
   export USER_HOME="/cygdrive/c/Users/Adam"
+  export CYG_SETUP="$USER_HOME"/Downloads/CygwinSetup.exe
 fi
 
 # Use passive ftp mode by default
