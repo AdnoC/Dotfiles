@@ -47,17 +47,27 @@ filetype off
     " Required:
     NeoBundleFetch 'Shougo/neobundle.vim'
     "Add your bundles here
+    let vimproc_updcmd = has('win64') ?
+      \ 'tools\\update-dll-mingw 64' : 'tools\\update-dll-mingw 32'
+execute "NeoBundle 'Shougo/vimproc.vim'," . string({
+      \ 'build' : {
+      \     'windows' : vimproc_updcmd,
+      \     'cygwin' : 'make -f make_cygwin.mak',
+      \     'mac' : 'make -f make_mac.mak',
+      \     'unix' : 'make -f make_unix.mak',
+      \    },
+      \ })
     NeoBundle 'othree/html5.vim'
     NeoBundle 'kien/ctrlp.vim'
     NeoBundle 'JulesWang/css.vim'
     NeoBundle 'cakebaker/scss-syntax.vim'
     " So that gitv can work
     NeoBundle 'tpope/vim-fugitive'
-    NeoBundle 'gregsexton/gitv'
+    NeoBundle 'gregsexton/gitv', {
+      \ 'depends' : 'vim-fugitive' }
     NeoBundle 'edkolev/promptline.vim'
     NeoBundle 'scrooloose/syntastic'
     NeoBundle 'bling/vim-airline'
-    "NeoBundle 'bling/vim-bufferline'
     NeoBundle 'mhinz/vim-signify'
     NeoBundle 'airblade/vim-gitgutter'
     NeoBundle 'altercation/vim-colors-solarized'
@@ -67,17 +77,25 @@ filetype off
     NeoBundle 'scrooloose/nerdtree'
     NeoBundle 'kien/rainbow_parentheses.vim'
     " Ctags are a dependancy of tagbar
-    if (executable('ctags'))
+    if executable('ctags')
       NeoBundle 'majutsushi/tagbar'
-      if (executable('php')) 
-        NeoBundle 'vim-php/phpctags'
-        NeoBundle 'vim-php/tagbar-phpctags.vim'
-      else
-        echo "Could not find PHP. Not installing PHP ctags."
-      endif
     else
-      echo "Could not find ctags. Not installing tagbar."
+      echo 'Cannot find ctags. Not installing tagbar.'
     endif
+    NeoBundle 'vim-php/phpctags', {
+      \ 'depends' : 'tagbar',
+      \ 'build' : {
+        \ 'cygwin' : 'make -f Makefile',
+        \ 'unix' : 'make -f Makefile',
+        \ 'mac' : 'make -f Makefile'
+      \ }}
+    NeoBundle 'vim-php/tagbar-phpctags.vim', {
+      \ 'depends' : 'phpctags',
+      \ 'build' : {
+        \ 'cygwin' : 'make -f Makefile',
+        \ 'unix' : 'make -f Makefile',
+        \ 'mac' : 'make -f Makefile'
+      \ }}
     NeoBundle 'sjl/gundo.vim'
     NeoBundle 'nathanaelkane/vim-indent-guides'
     NeoBundle 'Lokaltog/vim-easymotion'
@@ -473,6 +491,8 @@ nnoremap <Down> :echom "Use j"<CR>
 " default behavior. Also preceding command with <Esc> isn't ideal.           }{
 inoremap <Up> <nop>
 inoremap <Down> <nop>
+nnoremap <Up> <nop>
+nnoremap <Down> <nop>
 
 " Allows one to switch buffers without having to save or undo changes first.
 set hidden
