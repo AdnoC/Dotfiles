@@ -105,6 +105,9 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     NeoBundle 'tpope/vim-endwise'
     NeoBundle 'thinca/vim-ref'
     NeoBundle 'jiangmiao/auto-pairs'
+    if executable('tmux')
+      NeoBundle 'benmills/vimux'
+    endif
     if executable('w3m')
       NeoBundle 'yuratomo/w3m.vim'
     endif
@@ -152,10 +155,10 @@ nnoremap <leader>[s :lprevious<CR>
 
 """" vim-airline
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts = 1
 if !exists('g:airline_theme')
   let g:airline_theme = 'solarized'
 endif
+let g:airline_powerline_fonts = 1
 
 """" vim-gitgutter
 " Tell gitgutter not to set any keybinds by itself. They will all be rebound.
@@ -255,11 +258,10 @@ function! FixGUI()
     set background="dark"
   endif
   colorscheme solarized
-  if &filetype!='php'
-    call LoadRainbow()
-  endif
+  autocmd BufEnter *\(.php\)\@<! call LoadRainbow()
 endfunction
 map <F9> :call FixGUI()<CR>
+
 """" W3m
 " Bind w3m to an easy key and add http so it doesn't search.                 }{
 nnoremap <leader>w3 :W3m http://
@@ -345,7 +347,7 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
     " Use 256 colors
     set t_Co=256
     " Start vim with dark solarized theme
-    au VimEnter * call FixGUI()
+    call FixGUI()
     " Highlight search matches
     set hlsearch
 endif
