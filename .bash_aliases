@@ -51,5 +51,5 @@ if [[ "$OSTYPE" == darwin* ]]; then
 fi
 
 if [[ "$OSTYPE" == cygwin ]]; then
-  alias cygsetup="cygstart -- $CYGW_SETUP -K http://cygwinports.org/ports.gpg"
+  alias cygsetup="cygstart -- $CYG_SETUP -K http://cygwinports.org/ports.gpg"
 fi
