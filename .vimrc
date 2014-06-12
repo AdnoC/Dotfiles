@@ -274,6 +274,12 @@ let g:ctrlp_custom_ignore = {
   \ 'dir':  '\.git$\|\.yardoc\|public$|log\|tmp$',
   \ 'file': '\.so$\|\.dat$|\.DS_Store$'
   \ }
+"""" Vimux
+map <leader>vp :VimuxPromptCommand<CR>
+map <leader>vr :VimuxRunLastCommand<CR>
+map <leader>vo :VimuxInspectRunner<CR>
+map <leader>vq :VimuxCloseRunner<CR>
+
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
