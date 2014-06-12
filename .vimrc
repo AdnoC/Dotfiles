@@ -147,8 +147,8 @@ let g:syntastic_check_on_open = 1
 " Set location list window height
 let g:syntastic_loc_list_height = 5
 " Shortcuts to prev/next errors                                              }{
-nnoremap <leader>sn :lnext<CR>
-nnoremap <leader>sp :lprevious<CR>
+nnoremap <leader>]s :lnext<CR>
+nnoremap <leader>[s :lprevious<CR>
 
 """" vim-airline
 let g:airline#extensions#tabline#enabled = 1
@@ -221,8 +221,11 @@ let g:EasyMotion_do_mapping = 0 " Disable default mappings
 nmap <leader>l <Plug>(easymotion-lineforward)
 nmap <leader>h <Plug>(easymotion-linebackward)
 nmap <leader>j <Plug>(easymotion-j)
+vmap <leader>j <Plug>(easymotion-j)
 nmap <leader>k <Plug>(easymotion-k)
+vmap <leader>k <Plug>(easymotion-k)
 nmap <leader>s <Plug>(easymotion-s2)
+vmap <leader>s <Plug>(easymotion-s2)
 nmap <leader><ENTER> <Plug>(easymotion-sn)
 let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 
@@ -257,6 +260,18 @@ function! FixGUI()
   endif
 endfunction
 map <F9> :call FixGUI()<CR>
+"""" W3m
+" Bind w3m to an easy key and add http so it doesn't search.                 }{
+nnoremap <leader>w3 :W3m http://
+autocmd filetype w3m nnoremap q :W3mClose<CR>
+autocmd filetype w3m nnoremap <buffer>o :W3mAddressBar<CR>
+
+"""" CtrlP
+" Ignore some folders and files for CtrlP indexing
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\.git$\|\.yardoc\|public$|log\|tmp$',
+  \ 'file': '\.so$\|\.dat$|\.DS_Store$'
+  \ }
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
@@ -416,10 +431,8 @@ set smartcase
 " Use sane regexes                                                           }{
 nnoremap / /\v
 vnoremap / /\v
-cnoremap s/ s/\v
 nnoremap ? ?\v
 vnoremap ? ?\v
-cnoremap s? s?\v
 set incsearch   " Search incrementally
 
 """""""""""""""""""""""""""""""""""" Msc. """""""""""""""""""""""""""""""""""""
@@ -437,6 +450,14 @@ set splitright
 nnoremap Y y$
 " Replace a word with yanked text                                            }{
 nnoremap <leader>rp viw"0p
+"""" Help
+" Press Enter to follow a help tag
+au filetype help nnoremap <buffer><CR> <c-]>
+" Press Backspace to go back to the location of the previous tag
+au filetype help nnoremap <buffer><BS> <c-T>
+" Press q to exit the help
+au filetype help nnoremap <buffer>q :q<CR>
+au filetype help set nonumber
 " Displays a list of maps that include the leader
 function! ListLeaders()
   silent! redir @b
@@ -513,8 +534,8 @@ map <c-l> <c-w>l
 """""""""""""""""""""""""""""""""" Key List """""""""""""""""""""""""""""""""""
 " List of mapped keys:
 " ,
-" <leader>sn
-" <leader>sp
+" <leader>]s
+" <leader>[s
 " <leader>gk
 " <leader>gj
 " <leader>gs
@@ -551,6 +572,9 @@ map <c-l> <c-w>l
 " H
 " L
 
+"""" Notes
+":bro ol (AKA :browse oldfiles) lists previously opened files and allows you to open one
+"<c-o> Returns you to locations before jumps. <c-i> (also tab) moves you forward
 
 """" If there is a local vim configuration file, run it
 if filereadable(expand("~/.vimrc.local"))
