@@ -186,22 +186,19 @@ function! LoadRainbow()
   RainbowParenthesesLoadChevrons
 endfunction
 map <F6> :call LoadRainbow()<CR>
+" Wrapper function that only lets RainbowParens run if it works with the file
+" type
+function! MaybeRainbow()
+  if &ft != "php"
+    call LoadRainbow()
+  endif
+endfunction
 
 if (executable('ctags'))
   " Bind a button to open the tagbar                                         }{
   nnoremap <leader>tg :TagbarToggle<CR>
   let g:tagbar_autoclose=1
   let g:tagbar_autofocus=1
-    "let g:tagbar_type_php  = {
-    "\ 'ctagstype' : 'php',
-    "\ 'kinds'     : [
-        "\ 'i:interfaces',
-        "\ 'c:classes',
-        "\ 'd:constant definitions',
-        "\ 'f:functions',
-        "\ 'j:javascript functions:1'
-    "\ ]
-  "\ }
 endif
 
 " Bind a button to open NERD Tree                                            }{
@@ -252,6 +249,7 @@ let g:rbpt_colorpairs = [
   \ [ '4',  '#268bd2'],
   \ ]
 
+" Fixes most gui problems (broken syntax coloring, status bar no color)
 function! FixGUI()
   syntax enable
   if expand("$SOL_FLAVOR") == 'light'
@@ -260,15 +258,15 @@ function! FixGUI()
     set background="dark"
   endif
   colorscheme solarized
-  autocmd BufRead *\(.php\)\@<! call LoadRainbow()
+  call MaybeRainbow()
 endfunction
 map <F9> :call FixGUI()<CR>
 
 """" W3m
 " Bind w3m to an easy key and add http so it doesn't search.                 }{
 nnoremap <leader>w3 :W3m http://
-autocmd filetype w3m nnoremap q :W3mClose<CR>
-autocmd filetype w3m nnoremap <buffer>o :W3mAddressBar<CR>
+autocmd FileType w3m nnoremap <buffer>q :W3mClose<CR>
+autocmd FileType w3m nnoremap <buffer>o :W3mAddressBar<CR>
 
 """" CtrlP
 " Ignore some folders and files for CtrlP indexing
@@ -276,17 +274,17 @@ let g:ctrlp_custom_ignore = {
   \ 'dir':  '\.git$\|\.yardoc\|public$|log\|tmp$',
   \ 'file': '\.so$\|\.dat$|\.DS_Store$'
   \ }
-"""" Vimux
+"""" Vimux                                                                   }{
 map <leader>vp :VimuxPromptCommand<CR>
 map <leader>vr :VimuxRunLastCommand<CR>
 map <leader>vo :VimuxInspectRunner<CR>
-map <leader>vq :VimuxCloseRunner<CR>
+map <leader>vc :VimuxCloseRunner<CR>
 
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
-autocmd BufRead,BufNewFile *.inc set filetype=php
-autocmd BufRead,BufNewFile *.module set filetype=php
+autocmd BufReadPre,BufNewFile *.inc set filetype=php
+autocmd BufReadPre,BufNewFile *.module set filetype=php
 
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
 " Remap ';' to ':' for easier commands                                       }{
@@ -314,9 +312,9 @@ nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
 " auto-save on focus loss
-au focuslost * :wa
+au FocusLost * :wa
 " return to last edit position when opening files (you want this!)
-autocmd bufreadpost *
+autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
      \   exe "normal! g`\"" |
      \ endif
@@ -354,8 +352,16 @@ endif
 if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
     " Use 256 colors
     set t_Co=256
-    " Start vim with dark solarized theme
-    call FixGUI()
+    " Start vim with solarized theme of the correct flavor
+    syntax enable
+    if expand("$SOL_FLAVOR") == 'light'
+      set background="light"
+    else
+      set background="dark"
+    endif
+    colorscheme solarized
+    " If we open a new buffer, and after any final filetype changes
+    autocmd FileType,BufRead * call MaybeRainbow()
     " Highlight search matches
     set hlsearch
 endif
@@ -552,6 +558,10 @@ map <c-l> <c-w>l
 " <leader>gr
 " <leader>gp
 " <leader>p
+" <leader>vo
+" <leader>vp
+" <leader>vr
+" <leader>vc
 " jk
 " <leader>cd
 " <leader>te
