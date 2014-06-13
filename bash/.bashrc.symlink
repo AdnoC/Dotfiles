@@ -3,3 +3,6 @@ for file in ~/.bash_{exports,functions,aliases}; do
 	[ -r "$file" ] && source "$file"
 done
 unset file
+if [ -f .fzf.bash ]
+  source ~/.fzf.bash
+fi
