@@ -107,6 +107,7 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     NeoBundle 'jiangmiao/auto-pairs'
     if executable('tmux')
       NeoBundle 'benmills/vimux'
+      NeoBundle 'edkolev/tmuxline.vim'
     endif
     if executable('w3m')
       NeoBundle 'yuratomo/w3m.vim'
@@ -205,7 +206,8 @@ endif
 
 " Bind a button to open NERD Tree                                            }{
 nnoremap <leader>nt :NERDTreeToggle<CR>
-let g:NERDTreeDirArrows=0
+let NERDTreeQuitOnOpen=1
+let NERDTreeDirArrows=0
 let NERDTreeShowHidden = 1
 
 " Bind a button to open Gundo                                                }{

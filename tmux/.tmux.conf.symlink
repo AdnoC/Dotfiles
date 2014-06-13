@@ -2,3 +2,4 @@ set -g update-environment "DISPLAY SSH_ASKPASS SSH_AGENT_PID SSH_CONNECTION WIND
 set -g terminal-overrides 'xterm*:smcup@:rmcup@'
 set-environment -g 'SSH_AUTH_SOCK' ~/.ssh/ssh_auth_sock
 set-window-option -g utf8 on
+if-shell "test -f tmuxline.conf" "source tmuxline.conf"
