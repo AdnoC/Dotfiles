@@ -1,4 +1,4 @@
-for src in $(find . -name '*.sh')
+for src in msc/*.shinstall
 do
   source $src
 done

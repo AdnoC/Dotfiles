@@ -160,9 +160,9 @@ then
   fi
 fi
 
+source "$DOTFILES_ROOT"/script/install
 #setup_gitconfig
-#install_dotfiles
-source ssh/install.sh
+install_dotfiles
 
 echo ''
 echo '  All installed!'

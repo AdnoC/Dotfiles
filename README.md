@@ -1,7 +1,7 @@
 ## NOTE
 Just made a major change based on Zach Holman's dotfile repo, will update this 
 README in the morning
-P.S. run script/instal
+P.S. run script/bootstrap
 
 
 A list of my dotfiles. Mainly for self reference and in order to access them

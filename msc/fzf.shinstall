@@ -10,9 +10,11 @@
   #echo "http://cygwinports.org/"
 #fi
 
-if [ "$(uname -s)" == "Linux" ]; then
-  sudo apt-get install libncurses-ruby
+if [ ! -d ~/.fzf ]; then
+  if [ "$(uname -s)" == "Linux" ]; then
+    sudo apt-get install libncurses-ruby
 
+  fi
+  git clone https://github.com/junegunn/fzf.git ~/.fzf
+  ~/.fzf/install
 fi
-git clone https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install
