@@ -66,6 +66,7 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     NeoBundle 'edkolev/promptline.vim'
     NeoBundle 'scrooloose/syntastic'
     NeoBundle 'bling/vim-airline'
+    NeoBundle 'bling/vim-bufferline'
     NeoBundle 'mhinz/vim-signify'
     NeoBundle 'airblade/vim-gitgutter'
     NeoBundle 'altercation/vim-colors-solarized'
@@ -270,10 +271,11 @@ autocmd FileType w3m nnoremap <buffer>o :W3mAddressBar<CR>
 
 """" CtrlP
 " Ignore some folders and files for CtrlP indexing
-let g:ctrlp_custom_ignore = {
+let g:ctrlp_custom_ignore={
   \ 'dir':  '\.git$\|\.yardoc\|public$|log\|tmp$',
   \ 'file': '\.so$\|\.dat$|\.DS_Store$'
   \ }
+let g:ctrlp_show_hidden = 1
 """" Vimux                                                                   }{
 map <leader>vp :VimuxPromptCommand<CR>
 map <leader>vr :VimuxRunLastCommand<CR>
@@ -409,6 +411,11 @@ set listchars=tab:›\ ,trail:·,eol:¬,nbsp:_
 set nolazyredraw
 " We are using a fairly fast terminal connection most times
 set ttyfast
+" When switching buffers, preserve window view.(Vim tip 1375)
+if v:version >= 700
+  au BufLeave * if !&diff | let b:winview = winsaveview() | endif
+  au BufEnter * if exists('b:winview') && !&diff | call winrestview(b:winview) | unlet! b:winview | endif
+endif
 
 """"""""""""""""""""""""""""""""" Formatting """"""""""""""""""""""""""""""""""
 " Strips excess whitespace from file                                         }{
@@ -433,6 +440,8 @@ set textwidth=100
 set formatoptions=qrno
 " Set line ending preferences (CR LR stuff)
 set ffs=unix,dos,mac
+" Creates a gutter on the left side ofthe screen showing fold info
+"set foldcolumn=4
 z" Reselect visual block after indent/outdent                                }{
 vnoremap < <gv
 vnoremap > >gv
@@ -456,6 +465,10 @@ set incsearch   " Search incrementally
 noremap <Leader>m mmHmt:%s/<C-V><CR>//ge<CR>'tzt'm
 " Allow backspacing over everything in insert mode (:h bs)
 set backspace=indent,eol,start
+if has("autocmd")
+    " Helps if you have to use another editor on the same file
+    au FileChangedShell * Warn "File has been changed outside of Vim."
+endif
 " Specify how keyword completion works
 set complete=.,t
 set completeopt=longest,menu
@@ -600,3 +613,20 @@ map <c-l> <c-w>l
 if filereadable(expand("~/.vimrc.local"))
   so ~/.vimrc.local
 endif
+
+
+" Refresh busted syntax highlighting (this happens too often)
+map <F12> :syntax sync fromstart<cr>
+
+" Use generic omnicompletion if something more specific isn't already set
+if has("autocmd") && exists("+omnifunc")
+    au Filetype *
+        \ if &omnifunc == "" | setl omnifunc=syntaxcomplete#Complete | endif
+endif
+inoremap <nul> <C-X><C-O>
+autocmd VimEnter * let g:airline_section_x='%{airline#util#prepend(airline#extensions#tagbar#currenttag(),0)}%'
+let g:airline#extension#bufferline#enabled=1
+let g:airline#extensions#hunks#non_zero_only=1
+let g:airline#extensions#tmuxline#enabled=1
+autocmd VimEnter * let g:airline_section_c = "%f%m %{bufname('#') != '' ? '('. expand('#:t') .')' : ''}"
+autocmd VimEnter * let g:airline_section_y=''

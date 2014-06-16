@@ -16,6 +16,7 @@ fi
 export CLASSPATH="$CLASSPATH;$LD_LIBRARY_PATH/lib/ext/j3dcore.jar;$LD_LIBRARY_PATH/lib/ext/j3dutils.jar;$LD_LIBRARY_PATH/lib/ext/vecmath.jar"
 
 
+export PATH=~/bin:$PATH
 if [[ "$OSTYPE" == cygwin ]]; then
 # Add to the path: Java, RabbitMQ, MongoDB, Ant, java3d libraries
   export PATH="$JAVA_HOME/bin":$PATH

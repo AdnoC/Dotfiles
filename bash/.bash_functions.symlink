@@ -23,20 +23,27 @@ cp_p () {
 eject() {
 	sudo umount -f "/Volumes/$@"
 }
+if [ "$OSTYPE" == "cygwin" ]; then
+  glfwcc() {
+    x86_64-w64-mingw32-g++.exe -static "$@" -L /usr/local/lib -I /usr/local/include/  -lglfw3  -lopengl32 -lgdi32
+  }
+  open() {
+    /cygdrive/c/WINNT/explorer.exe /e,`cygpath -w "$@"`
+  }
+fi
 
-glfwcc() {
-  x86_64-w64-mingw32-g++.exe -static "$@" -L /usr/local/lib -I /usr/local/include/  -lglfw3  -lopengl32 -lgdi32
-}
+if [ "$(uname)" == "Darwin" ]; then
+  # Clear Apple’s System Logs
+  function dstore-clean() {
+    find $@ -type f -name .DS_Store -print0 | xargs -0 rm
+  }
+fi
 
 # Search all subdirectories for files containing a string
 search() {
   grep -Rnis $@ **
 }
 
-# Clear Apple’s System Logs
-function dstore-clean() {
-  find $@ -type f -name .DS_Store -print0 | xargs -0 rm
-}
 
 # Change colorscheme
 function solChange() {
