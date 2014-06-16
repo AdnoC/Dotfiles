@@ -40,6 +40,9 @@ $if mode=vi
     # insert mode bindings
     set keymap vi-insert
 
+    # Insert the last arguement of the previous command
+    "\ep": yank-last-arg
+
     # use jk to exit insert mode
     "jk": vi-movement-mode
 
@@ -73,7 +76,10 @@ $if mode=vi
     # command mode bindings
     set keymap vi-command
 
-    # Insert the arguments from the last command
+    # Insert the last arguement of the previous command
+    "\ep": yank-last-arg
+
+    # Insert all arguments from the last command (and execute)
     "p": "i !!*\r"
 $else
 
