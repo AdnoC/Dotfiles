@@ -43,6 +43,9 @@ $if mode=vi
     # use jk to exit insert mode
     "jk": vi-movement-mode
 
+    # glob patterns without executing with <ALT-e>, eg: 'rm *x'
+    "\ee": glob-expand-word
+
     # override default binding of unix-word-rubout so that '/' is also used as a
     # delimiter; bind-tty-special-chars must be off
     set bind-tty-special-chars off
