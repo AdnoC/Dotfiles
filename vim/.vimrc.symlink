@@ -282,6 +282,14 @@ map <leader>vr :VimuxRunLastCommand<CR>
 map <leader>vo :VimuxInspectRunner<CR>
 map <leader>vc :VimuxCloseRunner<CR>
 
+" Be Smart About Whether To Open The Browser In A Horizontal Or Vertical Tab:
+let g:Gitv_OpenHorizontal='auto'
+" Mercilessly Purge All Fugitive Buffers In The Browser Tab:
+let g:Gitv_WipeAllOnClose=1
+" Don't map the ctrl key. otherwise I'd constantly open new windows
+let g:Gitv_DoNotMapCtrlKey = 1
+
+
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
