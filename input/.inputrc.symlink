@@ -27,11 +27,10 @@
 set editing-mode vi
 
 set bell-style none
-set completion-ignore-case on
 set show-all-if-ambiguous on
 #set show-all-if-unmodified on
 set expand-tilde off
-set match-hidden-files off
+set match-hidden-files on
 
 # append slash to tab-completed directory symlinks
 set mark-symlinked-directories on
