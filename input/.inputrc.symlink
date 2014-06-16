@@ -68,18 +68,17 @@ $if mode=vi
     # only works in command mode by default
     "\C-l": clear-screen
 
-    # Needed because binding 'p' in command mode above wipes its insert mode
-    # function, too. This fixes that, and will insert 'p' when you type 'p'.
-    "p": self-insert
-
     # command mode bindings
     set keymap vi-command
+
+    # Delete line shortcut
+    "dd": kill-line
 
     # Insert the last arguement of the previous command
     "\ep": yank-last-arg
 
     # Insert all arguments from the last command (and execute)
-    "p": "i !!*\r"
+    "\C-p": "i !!*\r"
 $else
 
   # the following line is actually
