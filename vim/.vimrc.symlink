@@ -23,6 +23,7 @@ endif
 " Remap leader. Needs to be done before any mappings involving the leader.   }{
 let mapleader=","
 
+
 """"""""""""""""""""""""""""""""""" Plugins """""""""""""""""""""""""""""""""""
 filetype off
 " Auto vundle install, taken from (before being slightly edited):
@@ -78,23 +79,23 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     " Ctags are a dependancy of tagbar
     if executable('ctags')
       NeoBundle 'majutsushi/tagbar'
+      NeoBundle 'vim-php/phpctags', {
+        \ 'depends' : 'tagbar',
+        \ 'build' : {
+          \ 'cygwin' : 'make -f Makefile',
+          \ 'unix' : 'make -f Makefile',
+          \ 'mac' : 'make -f Makefile'
+        \ }}
+      NeoBundle 'vim-php/tagbar-phpctags.vim', {
+        \ 'depends' : 'phpctags',
+        \ 'build' : {
+          \ 'cygwin' : 'make -f Makefile',
+          \ 'unix' : 'make -f Makefile',
+          \ 'mac' : 'make -f Makefile'
+        \ }}
     else
       echo 'Cannot find ctags. Not installing tagbar.'
     endif
-    NeoBundle 'vim-php/phpctags', {
-      \ 'depends' : 'tagbar',
-      \ 'build' : {
-        \ 'cygwin' : 'make -f Makefile',
-        \ 'unix' : 'make -f Makefile',
-        \ 'mac' : 'make -f Makefile'
-      \ }}
-    NeoBundle 'vim-php/tagbar-phpctags.vim', {
-      \ 'depends' : 'phpctags',
-      \ 'build' : {
-        \ 'cygwin' : 'make -f Makefile',
-        \ 'unix' : 'make -f Makefile',
-        \ 'mac' : 'make -f Makefile'
-      \ }}
     NeoBundle 'sjl/gundo.vim'
     NeoBundle 'nathanaelkane/vim-indent-guides'
     NeoBundle 'Lokaltog/vim-easymotion'
@@ -131,7 +132,7 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
 
 filetype plugin indent on
 
-"""" Syntastic
+"""" Syntastic:
 " Turn it on by default, so far no filetypes where it needs to be off.
 let g:syntastic_mode_map = { 'mode': 'active',
   \ 'active_filetypes': [],
@@ -155,14 +156,30 @@ let g:syntastic_loc_list_height = 5
 nnoremap <leader>s] :lnext<CR>
 nnoremap <leader>s[ :lprevious<CR>
 
-"""" vim-airline
+"""" Vim Airline:
+" Show a list of files on the top of the screen
 let g:airline#extensions#tabline#enabled = 1
+" Set the theme to solarized
 if !exists('g:airline_theme')
   let g:airline_theme = 'solarized'
 endif
+" Use fancy fonts
 let g:airline_powerline_fonts = 1
+" Also show list of files on bottom of screen
+let g:airline#extension#bufferline#enabled=1
+" Only show git stats that are non-zero
+let g:airline#extensions#hunks#non_zero_only=1
+" Tmuxline looks nice and should be used if we have tmux
+let g:airline#extensions#tmuxline#enabled=1
+" Clean up the status bar:
+" Just show the list of files/buffers in section c
+autocmd VimEnter * let g:airline_section_c = "%f%m %{bufname('#') != '' ? '('. expand('#:t') .')' : ''}"
+" No need to show filetype in the status bar, the ctags section is enough
+autocmd VimEnter * let g:airline_section_x='%{airline#util#prepend(airline#extensions#tagbar#currenttag(),0)}%'
+" Also don't need to know the formatting. Just leave it empty
+autocmd VimEnter * let g:airline_section_y=''
 
-"""" vim-gitgutter
+"""" Vim Gitgutter:
 " Tell gitgutter not to set any keybinds by itself. They will all be rebound.
 let g:gitgutter_map_keys = 0
 " Move from to the next/prev change                                          }{
@@ -178,7 +195,19 @@ let g:solarized_termcolors=256
 let g:solarized_termtrans=1
 let g:solarized_visibility='high'
 
-"""" rainbow_parentheses
+"""" Rainbow Parentheses:                                                    }{
+" Make rainbow parentheses an acual rainbow
+let g:rbpt_colorpairs = [
+  \ [ '13', '#6c71c4'],
+  \ [ '5',  '#d33682'],
+  \ [ '1',  '#dc322f'],
+  \ [ '9',  '#cb4b16'],
+  \ [ '3',  '#b58900'],
+  \ [ '2',  '#859900'],
+  \ [ '6',  '#2aa198'],
+  \ [ '4',  '#268bd2'],
+  \ ]
+" Calls all the functions to load rainbow parens
 function! LoadRainbow()
   RainbowParenthesesActivate
   RainbowParenthesesLoadRound
@@ -195,32 +224,34 @@ function! MaybeRainbow()
   endif
 endfunction
 
-if (executable('ctags'))
-  " Bind a button to open the tagbar                                         }{
-  nnoremap <leader>tg :TagbarToggle<CR>
-  let g:tagbar_autoclose=1
-  let g:tagbar_autofocus=1
-endif
+"""" Tagbar:
+" Bind a button to open the tagbar                                         }{
+nnoremap <leader>tg :TagbarToggle<CR>
+let g:tagbar_autoclose=1
+let g:tagbar_autofocus=1
 
+"""" NERD Tree:
 " Bind a button to open NERD Tree                                            }{
 nnoremap <leader>nt :NERDTreeToggle<CR>
 let NERDTreeQuitOnOpen=1
 let NERDTreeDirArrows=0
 let NERDTreeShowHidden = 1
 
+"""" Gundo:
 " Bind a button to open Gundo                                                }{
 nnoremap <leader>gu :GundoToggle<CR>
 
+"""" Indent Guides:
 " The default bind, just here so I remember
 nnoremap <leader>ig :IndentGuidesToggle<CR>
 let g:indent_guides_start_level=2
 let g:indent_guides_guide_size=1
 
 
+"""" Easy Motion:
 "nmap <leader> <Plug>(easymotion-prefix)
-
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
-" Make some easymotion binds
+" Make some easymotion binds                                                 }{
 nmap <leader>l <Plug>(easymotion-lineforward)
 nmap <leader>h <Plug>(easymotion-linebackward)
 nmap <leader>j <Plug>(easymotion-j)
@@ -232,25 +263,16 @@ vmap <leader>s <Plug>(easymotion-s2)
 nmap <leader><ENTER> <Plug>(easymotion-sn)
 let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 
+"""" NERD Commenter:
+" Use custon NERD commenter mapping                                          }{
 let g:NERDCreateDefaultMappings=0
 nmap <leader>cv <Plug>NERDCommenterComment
 vmap <leader>cv <Plug>NERDCommenterComment
 nmap <leader>cx <Plug>NERDCommenterUncomment
 vmap <leader>cx <Plug>NERDCommenterUncomment
 
-" Make rainbow parentheses an acual rainbow
-let g:rbpt_colorpairs = [
-  \ [ '13', '#6c71c4'],
-  \ [ '5',  '#d33682'],
-  \ [ '1',  '#dc322f'],
-  \ [ '9',  '#cb4b16'],
-  \ [ '3',  '#b58900'],
-  \ [ '2',  '#859900'],
-  \ [ '6',  '#2aa198'],
-  \ [ '4',  '#268bd2'],
-  \ ]
 
-" Fixes most gui problems (broken syntax coloring, status bar no color)
+" Fixes most gui problems (broken syntax coloring, status bar no color)      }{
 function! FixGUI()
   syntax enable
   if expand("$SOL_FLAVOR") == 'light'
@@ -263,28 +285,29 @@ function! FixGUI()
 endfunction
 map <F9> :call FixGUI()<CR>
 
-"""" W3m
+"""" W3m:
 " Bind w3m to an easy key and add http so it doesn't search.                 }{
 nnoremap <leader>w3 :W3m http://
 autocmd FileType w3m nnoremap <buffer>q :W3mClose<CR>
 autocmd FileType w3m nnoremap <buffer>o :W3mAddressBar<CR>
 
-"""" CtrlP
+"""" CtrlP:
 " Ignore some folders and files for CtrlP indexing
 let g:ctrlp_custom_ignore={
   \ 'dir':  '\.git$\|\.yardoc\|public$|log\|tmp$',
   \ 'file': '\.so$\|\.dat$|\.DS_Store$'
   \ }
 let g:ctrlp_show_hidden = 1
-"""" Vimux                                                                   }{
+"""" Vimux:                                                                  }{
 map <leader>vp :VimuxPromptCommand<CR>
 map <leader>vr :VimuxRunLastCommand<CR>
 map <leader>vo :VimuxInspectRunner<CR>
 map <leader>vc :VimuxCloseRunner<CR>
 
-" Be Smart About Whether To Open The Browser In A Horizontal Or Vertical Tab:
+"""" Gitv:
+" Be Smart About Whether To Open The Browser In A Horizontal Or Vertical Tab
 let g:Gitv_OpenHorizontal='auto'
-" Mercilessly Purge All Fugitive Buffers In The Browser Tab:
+" Mercilessly Purge All Fugitive Buffers In The Browser Tab
 let g:Gitv_WipeAllOnClose=1
 " Don't map the ctrl key. otherwise I'd constantly open new windows
 let g:Gitv_DoNotMapCtrlKey = 1
@@ -295,6 +318,7 @@ let g:Gitv_DoNotMapCtrlKey = 1
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
 autocmd BufReadPre,BufNewFile *.inc set filetype=php
 autocmd BufReadPre,BufNewFile *.module set filetype=php
+
 
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
 " Remap ';' to ':' for easier commands                                       }{
@@ -320,6 +344,12 @@ set wildmode=list:longest,list:full
 inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
+
+" Use generic omnicompletion if something more specific isn't already set
+if has("autocmd") && exists("+omnifunc")
+    au Filetype *
+        \ if &omnifunc == "" | setl omnifunc=syntaxcomplete#Complete | endif
+endif
 
 " auto-save on focus loss
 au FocusLost * :wa
@@ -350,12 +380,16 @@ endif
 set backupdir=~/.vim/backups
 set directory=~/.vim/swaps
 
+
 """""""""""""""""""""""""""""""""""" Looks """"""""""""""""""""""""""""""""""""
 """" Color Scheme
 " If using vimdiff, use a colorscheme that is actually readable.
 if &diff
   colorscheme blue
 endif
+
+" Refresh busted syntax highlighting (this happens too often)                }{
+map <F12> :syntax sync fromstart<cr>
 
 " Don't turn syntax or highlight searching on unless there are enough colors
 " to make them look good
@@ -425,6 +459,7 @@ if v:version >= 700
   au BufEnter * if exists('b:winview') && !&diff | call winrestview(b:winview) | unlet! b:winview | endif
 endif
 
+
 """"""""""""""""""""""""""""""""" Formatting """"""""""""""""""""""""""""""""""
 " Strips excess whitespace from file                                         }{
 nnoremap <leader>w :%s/\s\+$//<CR>:let @/=''<CR>
@@ -450,11 +485,14 @@ set formatoptions=qrno
 set ffs=unix,dos,mac
 " Creates a gutter on the left side ofthe screen showing fold info
 "set foldcolumn=4
-z" Reselect visual block after indent/outdent                                }{
+" Auto include folds based on syntax
+set foldmethod=syntax
+" Reselect visual block after indent/outdent                                }{
 vnoremap < <gv
 vnoremap > >gv
 " Re-hardwrap paragraph                                                      }{
 nnoremap <leader>q gqip
+
 
 """""""""""""""""""""""""""""""""" Searching """"""""""""""""""""""""""""""""""
 " Clears  the search by pressing <leader> SPACE                              }{
@@ -467,6 +505,7 @@ vnoremap / /\v
 nnoremap ? ?\v
 vnoremap ? ?\v
 set incsearch   " Search incrementally
+
 
 """""""""""""""""""""""""""""""""""" Msc. """""""""""""""""""""""""""""""""""""
 " Remove the Windows ^M - when the encodings gets messed up                  }{
@@ -513,6 +552,7 @@ function! ListLeaders()
   silent! normal <esc>
 endfunction
 command! ListLeaders :call ListLeaders()
+
 
 """""""""""""""""""""""""""""""""" Movement """""""""""""""""""""""""""""""""""
 " Number of lines to use for the command line
@@ -568,6 +608,7 @@ map <c-j> <c-w>j
 map <c-k> <c-w>k
 map <c-l> <c-w>l
 
+
 """""""""""""""""""""""""""""""""" Key List """""""""""""""""""""""""""""""""""
 " List of mapped keys:
 " ,
@@ -621,20 +662,3 @@ map <c-l> <c-w>l
 if filereadable(expand("~/.vimrc.local"))
   so ~/.vimrc.local
 endif
-
-
-" Refresh busted syntax highlighting (this happens too often)
-map <F12> :syntax sync fromstart<cr>
-
-" Use generic omnicompletion if something more specific isn't already set
-if has("autocmd") && exists("+omnifunc")
-    au Filetype *
-        \ if &omnifunc == "" | setl omnifunc=syntaxcomplete#Complete | endif
-endif
-inoremap <nul> <C-X><C-O>
-autocmd VimEnter * let g:airline_section_x='%{airline#util#prepend(airline#extensions#tagbar#currenttag(),0)}%'
-let g:airline#extension#bufferline#enabled=1
-let g:airline#extensions#hunks#non_zero_only=1
-let g:airline#extensions#tmuxline#enabled=1
-autocmd VimEnter * let g:airline_section_c = "%f%m %{bufname('#') != '' ? '('. expand('#:t') .')' : ''}"
-autocmd VimEnter * let g:airline_section_y=''
