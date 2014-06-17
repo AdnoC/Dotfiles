@@ -16,6 +16,10 @@ if [ -f ~/.bash_prompt ]; then
   source ~/.bash_prompt
 fi
 
+# Don't let tty put proccesses to sleep (I think)
+#http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
+stty -ixon
+
 shopt -s globstar
 # Enable some Bash 4 features when possible:
 # * `autocd`, e.g. `**/qux` will enter `./foo/bar/baz/qux`
