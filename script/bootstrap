@@ -163,6 +163,8 @@ fi
 source "$DOTFILES_ROOT"/script/install
 #setup_gitconfig
 install_dotfiles
+source "$DOTFILES_ROOT"/script/postinstall
+
 
 echo ''
 echo '  All installed!'

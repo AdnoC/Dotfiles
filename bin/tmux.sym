@@ -3,5 +3,5 @@ tmux_tmp="$(ls /tmp | grep tmux)"
 if [[ ! -n $tmux_running ]] && [[ -n $tmux_tmp ]]; then
   rm -rf /tmp/tmux-*
 fi
-
-/bin/tmux "$@"
+tmux_loc="$(which -a tmux | sed -n 2p)"
+eval $tmux_loc "$@"
