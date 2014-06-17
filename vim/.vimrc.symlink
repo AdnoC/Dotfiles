@@ -173,11 +173,11 @@ let g:airline#extensions#hunks#non_zero_only=1
 let g:airline#extensions#tmuxline#enabled=1
 " Clean up the status bar:
 " Just show the list of files/buffers in section c
-autocmd VimEnter * let g:airline_section_c = "%f%m %{bufname('#') != '' ? '('. expand('#:t') .')' : ''}"
+let g:airline_section_c = "%f%m %{bufname('#') != '' ? '('. expand('#:t') .')' : ''}"
 " No need to show filetype in the status bar, the ctags section is enough
-autocmd VimEnter * let g:airline_section_x='%{airline#util#prepend(airline#extensions#tagbar#currenttag(),0)}%'
+let g:airline_section_x='%{airline#util#prepend(airline#extensions#tagbar#currenttag(),0)}%'
 " Also don't need to know the formatting. Just leave it empty
-autocmd VimEnter * let g:airline_section_y=''
+let g:airline_section_y=''
 
 """" Vim Gitgutter:
 " Tell gitgutter not to set any keybinds by itself. They will all be rebound.
@@ -484,7 +484,10 @@ set formatoptions=qrno
 " Set line ending preferences (CR LR stuff)
 set ffs=unix,dos,mac
 " Creates a gutter on the left side ofthe screen showing fold info
-"set foldcolumn=4
+" By default do not show the gutter
+autocmd FileType * set foldcolumn=0
+" Show the gutter for only specified filetypes
+autocmd FileType javascript set foldcolumn=4
 " Auto include folds based on syntax
 set foldmethod=syntax
 " Reselect visual block after indent/outdent                                }{
