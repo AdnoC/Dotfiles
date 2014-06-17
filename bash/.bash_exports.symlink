@@ -15,19 +15,26 @@ fi
 
 export CLASSPATH="$CLASSPATH;$LD_LIBRARY_PATH/lib/ext/j3dcore.jar;$LD_LIBRARY_PATH/lib/ext/j3dutils.jar;$LD_LIBRARY_PATH/lib/ext/vecmath.jar"
 
+# http://superuser.com/questions/39751/add-directory-to-path-if-its-not-already-there
+pathadd() {
+  if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+      PATH="${PATH:+"$PATH:"}$1"
+  fi
+}
 
-export PATH=~/bin:$PATH
+pathadd ~/bin
 if [[ "$OSTYPE" == cygwin ]]; then
 # Add to the path: Java, RabbitMQ, MongoDB, Ant, java3d libraries
-  export PATH="$JAVA_HOME/bin":$PATH
-  export PATH="$RABBITMQ_HOME"/sbin:$PATH
-  export PATH="$MONGO_HOME"/bin:$PATH
-  export PATH="$ANT_HOME"/bin:$PATH
-  export PATH="$LD_LIBRARY_PATH"/bin:$PATH
-  export PATH=/cygdrive/d/Program\ Files/Oracle/VirtualBox:$PATH
+  pathadd "$JAVA_HOME/bin"
+  pathadd "$RABBITMQ_HOME"/sbin
+  pathadd "$MONGO_HOME"/bin
+  pathadd "$ANT_HOME"/bin
+  pathadd "$LD_LIBRARY_PATH"/bin
+  pathadd cygdrive/d/Program\ Files/Oracle/VirtualBox
 fi
-export PATH=/usr/local/sbin:$PATH
+pathadd /usr/local/sbin
 
+unset pathadd
 
 if [[ "$OSTYPE" == cygwin ]]; then
   # Fix Vagrant looking for the wrong variable
