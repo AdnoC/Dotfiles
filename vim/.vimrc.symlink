@@ -325,6 +325,8 @@ autocmd BufReadPre,BufNewFile *.module set filetype=php
 nnoremap ; :
 " Use Control-a to move to normal mode                                       }{
 inoremap jk <Esc>
+" Allow the use of a familiar key combination to exit visual mode            }{
+vnoremap jk <Esc>
 " Toggle paste mode.
 set pastetoggle=<leader>p
 " Makes the switch to paste mode immediately shown                           }{
@@ -515,10 +517,8 @@ set incsearch   " Search incrementally
 noremap <Leader>m mmHmt:%s/<C-V><CR>//ge<CR>'tzt'm
 " Allow backspacing over everything in insert mode (:h bs)
 set backspace=indent,eol,start
-if has("autocmd")
-    " Helps if you have to use another editor on the same file
-    au FileChangedShell * Warn "File has been changed outside of Vim."
-endif
+" Helps if you have to use another editor on the same file
+au FileChangedShell * echoerr "File has been changed outside of Vim."
 " Specify how keyword completion works
 set complete=.,t
 set completeopt=longest,menu
@@ -687,7 +687,3 @@ map <c-l> <c-w>l
 if filereadable(expand("~/.vimrc.local"))
   so ~/.vimrc.local
 endif
-" <M-o>
-" <M-i>
-" <M-o>
-" <M-i>
