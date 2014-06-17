@@ -1,20 +1,15 @@
 set -o vi
 
-if [ -f ~/.bashrc ]; then
-  source ~/.bashrc
-fi
+# '.' = run     '$_' = the last arg of the previous command
+test -f ~/.bashrc && . $_
 
-if [ -f ~/.profile ]; then
-  source ~/.profile
-fi
+test -f ~/.profile && . $_
 
-if [ -f ~/sol.dark ]; then
-  source ~/sol.dark
-fi
+test -f ~/sol.dark && . $_
 
-if [ -f ~/.bash_prompt ]; then
-  source ~/.bash_prompt
-fi
+test -f ~/.bash_prompt && . $_
+
+test -f ~/.git-completion.bash && . $_
 
 # Don't let tty put proccesses to sleep (I think)
 #http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
@@ -57,6 +52,4 @@ if [ "$SHELL" = "/bin/bash" ] && [ "$(type -t pathed_cd)" != "function" ]; then
   fi
 fi
 
-if [ -f ~/.bash_profile.local ]; then
-  source ~/.bash_profile.local
-fi
+test -f ~/.bash_profile.local && . $_
