@@ -299,6 +299,8 @@ let g:ctrlp_custom_ignore={
   \ 'file': '\.so$\|\.dat$|\.DS_Store$'
   \ }
 let g:ctrlp_show_hidden = 1
+" Navigate to specific buffers quickly                                       }{
+map <C-s> :CtrlPBuffer<CR>
 """" Vimux:                                                                  }{
 map <leader>vp :VimuxPromptCommand<CR>
 map <leader>vr :VimuxRunLastCommand<CR>
@@ -688,6 +690,7 @@ map <c-l> <c-w>l
 " <M-i>
 " <kHome>
 " <kEnd>
+" <C-s>
 
 """" Notes
 ":bro ol (AKA :browse oldfiles) lists previously opened files and allows you to open one
