@@ -490,7 +490,7 @@ set ffs=unix,dos,mac
 " By default do not show the gutter
 autocmd FileType * set foldcolumn=0
 " Show the gutter for only specified filetypes
-autocmd FileType javascript set foldcolumn=4
+autocmd FileType javascript set foldcolumn=6
 " Auto include folds based on syntax
 set foldmethod=syntax
 " Reselect visual block after indent/outdent                                }{
