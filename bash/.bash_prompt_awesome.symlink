@@ -10,41 +10,51 @@ if tput setaf 1 &> /dev/null; then
     tput sgr0
     if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
       if [ $SOL_FLAVOR = "light" ]; then
-        GREEN=$(tput setaf 22)
-        PURPLE=$(tput setaf 57)
-        MAGENTA=$(tput setaf 88)
-        ORANGE=$(tput setaf 202)
-        WHITE=$(tput setaf 233)
+        LOCATION_COLOR=$(tput setaf 22)
+        GIT_COLOR=$(tput setaf 57)
+        TIME_NAME_COLOR=$(tput setaf 88)
+        HOSTNAME_COLOR=$(tput setaf 202)
+        CONNECTION_COLOR=$(tput setaf 233)
       else
-        GREEN=$(tput setaf 190)
-        PURPLE=$(tput setaf 141)
-        MAGENTA=$(tput setaf 9)
-        ORANGE=$(tput setaf 172)
+        LOCATION_COLOR=$(tput setaf 190)
+        GIT_COLOR=$(tput setaf 141)
+        TIME_NAME_COLOR=$(tput setaf 9)
+        HOSTNAME_COLOR=$(tput setaf 172)
         if [ $SOL_FLAVOR = "dark" ]; then
-          WHITE=$(tput setaf 244)
+          CONNECTION_COLOR=$(tput setaf 244)
         else
-          WHITE=$(tput setaf 256)
+          CONNECTION_COLOR=$(tput setaf 256)
         fi
+        ENTRY_COLOR=$HOSTNAME_COLOR
       fi
     else
-      MAGENTA=$(tput setaf 5)
-      ORANGE=$(tput setaf 4)
-      GREEN=$(tput setaf 2)
-      PURPLE=$(tput setaf 1)
-      WHITE=$(tput setaf 7)
+      TIME_NAME_COLOR=$(tput setaf 5)
+      HOSTNAME_COLOR=$(tput setaf 4)
+      LOCATION_COLOR=$(tput setaf 2)
+      GIT_COLOR=$(tput setaf 1)
+      CONNECTION_COLOR=$(tput setaf 7)
     fi
     BOLD=$(tput bold)
     RESET=$(tput sgr0)
 else
-    MAGENTA="\033[1;31m"
-    ORANGE="\033[1;33m"
-    GREEN="\033[1;32m"
-    PURPLE="\033[1;35m"
-    WHITE="\033[1;37m"
+  if [ $SOL_FLAVOR = "dark" ]; then
+    HOSTNAME_COLOR="\033[3;37m"
+    CONNECTION_COLOR="\033[1;33m"
+    TIME_NAME_COLOR="\033[3;31m"
+    LOCATION_COLOR="\033[3;33m"
+    GIT_COLOR="\033[3;35m"
+  else
+    CONNECTION_COLOR="\033[1;37m"
+    HOSTNAME_COLOR="\033[1;33m"
+    TIME_NAME_COLOR="\033[1;31m"
+    LOCATION_COLOR="\033[1;32m"
+    GIT_COLOR="\033[1;35m"
+  fi
+    ENTRY_COLOR=$HOSTNAME_COLOR
     BOLD=""
     RESET="\033[m"
 fi
-source ~/git-prompt.sh
+#source ~/git-prompt.sh
 
 # Taken from promptline.vim and modified
 function __promptline_git_status {
@@ -127,5 +137,5 @@ function __promptline_vcs_branch {
 # before the prompt shows up again.
 export PRINT_GIT_CHANGES='true'
 
-PS1="\n\[${BOLD}${MAGENTA}\]\t[\u] \[$WHITE\]at \[$ORANGE\]\h \[$WHITE\]in \[${BOLD}${GREEN}\]\w\[$WHITE\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$PURPLE\]\$(__promptline_vcs_branch)\[$WHITE\]\n\$ \[$RESET\]"
+PS1="\n\[${BOLD}${TIME_NAME_COLOR}\]\t[\u] \[$CONNECTION_COLOR\]at \[$HOSTNAME_COLOR\]\h \[$CONNECTION_COLOR\]in \[${RESET}${BOLD}${LOCATION_COLOR}\]\w\[$CONNECTION_COLOR\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$GIT_COLOR\]\$(__promptline_vcs_branch)\[$CONNECTION_COLOR\]\n\$ \[${RESET}${ENTRY_COLOR}\]"
 
