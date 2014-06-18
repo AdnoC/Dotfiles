@@ -15,6 +15,7 @@ if tput setaf 1 &> /dev/null; then
         TIME_NAME_COLOR=$(tput setaf 88)
         HOSTNAME_COLOR=$(tput setaf 202)
         CONNECTION_COLOR=$(tput setaf 233)
+        ENTRY_COLOR=$HOSTNAME_COLOR
       else
         LOCATION_COLOR=$(tput setaf 190)
         GIT_COLOR=$(tput setaf 141)
@@ -23,9 +24,9 @@ if tput setaf 1 &> /dev/null; then
         if [ $SOL_FLAVOR = "dark" ]; then
           CONNECTION_COLOR=$(tput setaf 244)
         else
-          CONNECTION_COLOR=$(tput setaf 256)
+          CONNECTION_COLOR=$(tput setaf 255)
         fi
-        ENTRY_COLOR=$HOSTNAME_COLOR
+        ENTRY_COLOR=$(tput setaf 255)
       fi
     else
       TIME_NAME_COLOR=$(tput setaf 5)
