@@ -21,7 +21,8 @@ if has('vim_starting')
   set nocompatible
 endif
 " Remap leader. Needs to be done before any mappings involving the leader.   }{
-let mapleader=","
+nnoremap <SPACE> <Nop>
+let mapleader=" "
 
 
 """"""""""""""""""""""""""""""""""" Plugins """""""""""""""""""""""""""""""""""
@@ -500,8 +501,8 @@ nnoremap <leader>q gqip
 
 
 """""""""""""""""""""""""""""""""" Searching """"""""""""""""""""""""""""""""""
-" Clears  the search by pressing <leader> SPACE                              }{
-nnoremap <silent><leader><space> :noh<CR>
+" Clears  the search by pressing <leader> COMMA                              }{
+nnoremap <silent><leader>, :noh<CR>
 set ignorecase             " ignore case when searching
 set smartcase
 " Use sane regexes                                                           }{
@@ -594,6 +595,13 @@ endfunction
 nnoremap <silent><leader><C-o> :call JumpInFile("\<C-i>", "\<C-o>")<CR>
 nnoremap <silent><leader><C-i> :call JumpInFile("\<C-o>", "\<C-i>")<CR>
 
+" Binds numpad home/end to move 1/2 page up/down.
+" When I sit back to think I like moving around the page with only one hand,
+" usually the right one. This lets me do that. Would use PgUp/PgDown, but Mintty
+" or tmux captures those with my settings.                                   }{
+nnoremap <kEnd> <C-d>
+nnoremap <kHome> <C-u>
+
 
 " Get off my lawn (Turn off arrow keys, and give some friendly advice)       }{
 " Note: May wish to remove nmap for up/down because the commands slightly bleed
@@ -634,7 +642,7 @@ map <c-l> <c-w>l
 
 """""""""""""""""""""""""""""""""" Key List """""""""""""""""""""""""""""""""""
 " List of mapped keys:
-" ,
+" <SPACE>
 " <leader>s]
 " <leader>s[
 " <leader>g[
@@ -655,7 +663,7 @@ map <c-l> <c-w>l
 " <leader>t
 " <leader>q
 " <leader>m
-" <leader><space>
+" <leader>,
 " <leader>[
 " <leader>]
 " tt
@@ -678,6 +686,8 @@ map <c-l> <c-w>l
 " L
 " <M-o>
 " <M-i>
+" <kHome>
+" <kEnd>
 
 """" Notes
 ":bro ol (AKA :browse oldfiles) lists previously opened files and allows you to open one
