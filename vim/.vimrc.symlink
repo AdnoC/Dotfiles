@@ -230,71 +230,6 @@ nnoremap <leader>tg :TagbarToggle<CR>
 let g:tagbar_autoclose=1
 let g:tagbar_autofocus=1
 
-au VimEnter * let g:tagbar_type_inc = {
-    \ 'ctagsbin'  : tagbar_phpctags_bin,
-    \ 'ctagsargs' : '--memory="' . tagbar_phpctags_memory_limit . '" -f -',
-    \ 'kinds'     : [
-        \ 'd:Constants:0:0',
-        \ 'v:Variables:0:0',
-        \ 'f:Functions:1',
-        \ 'i:Interfaces:0',
-        \ 'c:Classes:0',
-        \ 'p:Properties:0:0',
-        \ 'm:Methods:1',
-        \ 'n:Namespaces:0',
-        \ 't:Traits:0',
-    \ ],
-    \ 'sro'        : '::',
-    \ 'kind2scope' : {
-        \ 'c' : 'class',
-        \ 'm' : 'method',
-        \ 'f' : 'function',
-        \ 'i' : 'interface',
-        \ 'n' : 'namespace',
-        \ 't' : 'trait',
-    \ },
-    \ 'scope2kind' : {
-        \ 'class'     : 'c',
-        \ 'method'    : 'm',
-        \ 'function'  : 'f',
-        \ 'interface' : 'i',
-        \ 'namespace' : 'n',
-        \ 'trait'     : 't',
-    \ }
-\}
-au VimEnter * let g:tagbar_type_module = {
-    \ 'ctagsbin'  : tagbar_phpctags_bin,
-    \ 'ctagsargs' : '--memory="' . tagbar_phpctags_memory_limit . '" -f -',
-    \ 'kinds'     : [
-        \ 'd:Constants:0:0',
-        \ 'v:Variables:0:0',
-        \ 'f:Functions:1',
-        \ 'i:Interfaces:0',
-        \ 'c:Classes:0',
-        \ 'p:Properties:0:0',
-        \ 'm:Methods:1',
-        \ 'n:Namespaces:0',
-        \ 't:Traits:0',
-    \ ],
-    \ 'sro'        : '::',
-    \ 'kind2scope' : {
-        \ 'c' : 'class',
-        \ 'm' : 'method',
-        \ 'f' : 'function',
-        \ 'i' : 'interface',
-        \ 'n' : 'namespace',
-        \ 't' : 'trait',
-    \ },
-    \ 'scope2kind' : {
-        \ 'class'     : 'c',
-        \ 'method'    : 'm',
-        \ 'function'  : 'f',
-        \ 'interface' : 'i',
-        \ 'namespace' : 'n',
-        \ 'trait'     : 't',
-    \ }
-\}
-
 """" NERD Tree:
 " Bind a button to open NERD Tree                                            }{
 nnoremap <leader>nt :NERDTreeToggle<CR>
@@ -383,8 +318,8 @@ let g:Gitv_DoNotMapCtrlKey = 1
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
-autocmd BufReadPre,BufNewFile *.inc set filetype=php
-autocmd BufReadPre,BufNewFile *.module set filetype=php
+"autocmd BufReadPre,BufNewFile *.inc set filetype=php
+"autocmd BufReadPre,BufNewFile *.module set filetype=php
 
 
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
