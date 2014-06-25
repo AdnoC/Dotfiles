@@ -58,6 +58,9 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
       \     'unix' : 'make -f make_unix.mak',
       \    },
       \ })
+    """ Games
+    NeoBundle 'vim-scripts/TeTrIs.vim'
+
     NeoBundle 'othree/html5.vim'
     NeoBundle 'kien/ctrlp.vim'
     " So that gitv can work
