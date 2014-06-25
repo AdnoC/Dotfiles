@@ -10,6 +10,6 @@ cd "$(dirname $0)"/..
 # find the installers and run them iteratively
 for src in $(find "$DOTFILES_ROOT" -maxdepth 2 -name 'postinstall.sh')
 do
-echo $src
+  echo $src
   source $src
 done

@@ -18,11 +18,10 @@ export CLASSPATH="$CLASSPATH;$LD_LIBRARY_PATH/lib/ext/j3dcore.jar;$LD_LIBRARY_PA
 # http://superuser.com/questions/39751/add-directory-to-path-if-its-not-already-there
 pathadd() {
   if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
-      PATH="${PATH:+"$PATH:"}$1"
+      PATH="${PATH:+"$1:"}$PATH"
   fi
 }
 
-pathadd ~/bin
 if [[ "$OSTYPE" == cygwin ]]; then
 # Add to the path: Java, RabbitMQ, MongoDB, Ant, java3d libraries
   pathadd "$JAVA_HOME/bin"
@@ -33,6 +32,7 @@ if [[ "$OSTYPE" == cygwin ]]; then
   pathadd cygdrive/d/Program\ Files/Oracle/VirtualBox
 fi
 pathadd /usr/local/sbin
+pathadd ~/bin
 
 unset pathadd
 
@@ -53,8 +53,8 @@ export LC_CTYPE=en_US.UTF-8
 
 # If this is cygwin, set a shortcut to my home dir.
 if [[ "$OSTYPE" == cygwin ]]; then
-  export USER_HOME="/cygdrive/c/Users/Adam"
-  export CYG_SETUP="$USER_HOME"/Downloads/CygwinSetup.exe
+  export USER_HOME="$(cygpath -H)/Adam"
+  export CYG_SETUP="$USER_HOME"/Downloads/Cygwin/CygwinSetup.exe
 fi
 
 # Use passive ftp mode by default
