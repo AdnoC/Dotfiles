@@ -3,10 +3,12 @@ tmux_tmp="$(ls /tmp | grep tmux)"
 if [[ ! -n $tmux_running ]] && [[ -n $tmux_tmp ]]; then
   rm -rf /tmp/tmux-*
 fi
-tmux_loc="$(which tmux -a | sed -n 1p)"
-i=1
-while [ "" != $tmux_loc ] && [ $tmux_loc == "${HOME}/bin/tmux" ]; do
-  tmux_loc="$(which tmux -a | sed -n ${i}p)"
+tmux_loc="$(which tmux)"
+i=2
+while [ "" != "$tmux_loc" ] && [ $tmux_loc == "${HOME}/bin/tmux" ]; do
+  tmux_loc="$(which -a tmux | sed -n ${i}p)"
   let i=i+1
 done
-eval $tmux_loc "$@"
+if [ "" != "$tmux_loc" ]; then
+  eval $tmux_loc "$@"
+fi
