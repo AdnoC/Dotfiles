@@ -100,7 +100,7 @@ function __promptline_git_status {
   # Made any errors from the ls-files be sent to /dev/null
   # Prints a list of untracked files. Often slow to execute
   # Added --directory, allows it to often print less and run faster
-  if [ -n "$(git ls-files --directory --others --exclude-standard 2>/dev/null) | sed q1" ]; then
+  if [ -n "$(git ls-files --directory --others --exclude-standard 2>/dev/null)" ]; then
     has_untracked_files=1
   fi
 
