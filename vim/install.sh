@@ -11,3 +11,12 @@ if ! command -v ctags >/dev/null 2>&1; then
     echo "http://cygwinports.org/"
   fi
 fi
+
+
+if [ ! -f ~/.vim/vimball ]; then
+  if [ ! -d ~/.vim ]; then
+    mkdir ~/.vim
+  fi
+   vi
+  link_file "$DOTFILES_ROOT"/vim/vimball.sym ~/.vim/vimball
+fi

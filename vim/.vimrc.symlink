@@ -158,6 +158,27 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
 filetype plugin indent on
 
 """" Syntastic:
+"""" Vimballs:
+" Installs all vimballs in the vimball directory
+function! InstallVimballs()
+  " For each file in the vimball diretcory...
+  for f in split(glob('~/.vim/vimball/*'))
+    " Open the file in a new buffer
+    exec 'new' f
+    " Source the buffer
+    source %
+    " Then close the buffer
+    bd
+  endfor
+endfunction
+
+" If we are in a new installation and therefore are installing plugins...
+if iCanHazNeobundle == 0
+  echo "Intalling Vimballs"
+  " Intall vimballs (UseVimball needs to be called after startup, therefore au)
+  autocmd VimEnter * call InstallVimballs()
+endif
+
 " Turn it on by default, so far no filetypes where it needs to be off.
 let g:syntastic_mode_map = { 'mode': 'active',
   \ 'active_filetypes': [],
