@@ -21,6 +21,7 @@ if has('vim_starting')
   set nocompatible
 endif
 " Remap leader. Needs to be done before any mappings involving the leader.   }{
+nnoremap <SPACE> <NOP>
 let mapleader=" "
 
 
@@ -77,6 +78,7 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     NeoBundle 'sheerun/vim-polyglot'
     NeoBundle 'Valloric/MatchTagAlways'
     NeoBundle 'nathanaelkane/vim-indent-guides'
+    NeoBundle 'spf13/PIV'
     """ Tools:
     NeoBundle 'scrooloose/nerdcommenter'
     NeoBundle 'scrooloose/nerdtree'
@@ -89,7 +91,6 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     NeoBundle 'edkolev/promptline.vim'
     """ Movement:
     NeoBundle 'Lokaltog/vim-easymotion'
-    NeoBundle 'edsono/vim-matchit'
     NeoBundle 'wikitopian/hardmode'
 
     NeoBundle 'othree/html5.vim'
@@ -98,6 +99,10 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     NeoBundle 'tpope/vim-repeat'
     NeoBundle 'tpope/vim-endwise'
     NeoBundle 'thinca/vim-ref'
+    " matchit breaks [] jumping. Only use it when 100% useful
+    NeoBundleLazy 'edsono/vim-matchit'
+    autocmd FileType html NeoBundleSource vim-matchit
+
 
     """ Tagbar:
     " Ctags are a dependancy of tagbar
@@ -178,6 +183,7 @@ if iCanHazNeobundle == 0
   " Intall vimballs (UseVimball needs to be called after startup, therefore au)
   autocmd VimEnter * call InstallVimballs()
 endif
+
 
 """" Syntastic:
 " Turn it on by default, so far no filetypes where it needs to be off.
@@ -362,6 +368,8 @@ let g:Gitv_WipeAllOnClose=1
 " Don't map the ctrl key. otherwise I'd constantly open new windows
 let g:Gitv_DoNotMapCtrlKey = 1
 
+"""" PreserveNoEOL:
+let g:PreserveNoEOL=1
 
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)

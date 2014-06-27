@@ -5,6 +5,10 @@ set-window-option -g xterm-keys on
 set-environment -g 'SSH_AUTH_SOCK' ~/.ssh/ssh_auth_sock
 set-window-option -g utf8 on
 if-shell "test -f ~/tmuxline.conf" "source ~/tmuxline.conf"
-set-option -g prefix C-a
+# Start numbering windows with 1. It is easier to press than 0.
 set -g base-index 1
 set -s escape-time 0
+# Use Ctrl-a as tmux prefix. Easier to hit than Ctrl-b.
+set-option -g prefix C-a
+# Double-tap a to move to previous window;
+bind-key a last-window
