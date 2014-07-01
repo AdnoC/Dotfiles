@@ -1,3 +1,4 @@
+# vim: set ft=sh
 findhosts(){
   nmap -sP -n -oG - "$1"/24 | grep "Up" | awk '{print $2}' -
   echo "To scan those do: nmap $1-254" 
@@ -20,13 +21,25 @@ cp_p () {
   rsync -WavP --human-readable --progress $1 $2
 }
 
+
 eject() {
 	sudo umount -f "/Volumes/$@"
 }
 if [ "$OSTYPE" == "cygwin" ]; then
+# Wrapper for Tmux to fix on Cygin
+  tmux() {
+    tmux_running="$(ps -a | grep tmux 2>/dev/null)"
+    tmux_tmp="$(ls /tmp | grep tmux)"
+    if [[ ! -n $tmux_running ]] && [[ -n $tmux_tmp ]]; then
+      rm -rf /tmp/tmux-*
+    fi
+    $(which tmux) "$@"
+  }
+
   glfwcc() {
     x86_64-w64-mingw32-g++.exe -static "$@" -L /usr/local/lib -I /usr/local/include/  -lglfw3  -lopengl32 -lgdi32
   }
+
   open() {
     /cygdrive/c/WINNT/explorer.exe /e,`cygpath -w "$@"`
   }
