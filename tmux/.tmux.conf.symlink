@@ -1,12 +1,18 @@
 set -g default-terminal xterm-256color
+
+# Let ssh work
 set -g update-environment "DISPLAY SSH_ASKPASS SSH_AGENT_PID SSH_CONNECTION WINDOWID XAUTHORITY"
-set -g terminal-overrides 'xterm*:smcup@:rmcup@'
-set-window-option -g xterm-keys on
 set-environment -g 'SSH_AUTH_SOCK' ~/.ssh/ssh_auth_sock
+
+set -g terminal-overrides 'xterm*:smcup@:rmcup@'
+#set-window-option -g xterm-keys on
+setw -g mode-keys vi
+set -g status-keys vi
 set-window-option -g utf8 on
 if-shell "test -f ~/tmuxline.conf" "source ~/tmuxline.conf"
 # Start numbering windows with 1. It is easier to press than 0.
 set -g base-index 1
+# No delay after escape key press
 set -s escape-time 0
 # Use Ctrl-a as tmux prefix. Easier to hit than Ctrl-b.
 set-option -g prefix C-a

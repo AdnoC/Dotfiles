@@ -17,6 +17,5 @@ if [ ! -f ~/.vim/vimball ]; then
   if [ ! -d ~/.vim ]; then
     mkdir ~/.vim
   fi
-   vi
   link_file "$DOTFILES_ROOT"/vim/vimball.sym ~/.vim/vimball
 fi
