@@ -1,3 +1,4 @@
+# vim: set ft=sh :
 #Prompt
 PS1="
 \t-\h:\u[\w\]

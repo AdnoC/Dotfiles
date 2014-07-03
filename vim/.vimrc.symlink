@@ -206,6 +206,7 @@ let g:syntastic_check_on_open = 1
 " Set location list window height
 let g:syntastic_loc_list_height = 5
 " Shortcuts to prev/next errors                                              }{
+let g:syntastic_java_javac_config_file_enabled = 1
 nnoremap <leader>s] :lnext<CR>
 nnoremap <leader>s[ :lprevious<CR>
 
@@ -376,6 +377,10 @@ let g:PreserveNoEOL=1
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
 "autocmd BufReadPre,BufNewFile *.inc set filetype=php
 "autocmd BufReadPre,BufNewFile *.module set filetype=php
+if executable('ant')
+  autocmd FileType java set makeprg='ant'
+  autocmd FileType java compiler ant
+endif
 
 
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
@@ -395,7 +400,7 @@ nnoremap <leader>cd :cd %:p:h<CR>
 nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<CR>/
 
 " We aren't going to have any vim variables at the beginning or end of files
-set modelines=0
+set modelines=1
 " Turn on wild menu (Allow tab use with the command line)
 set wildmenu
 " Settings for wildmenu (:h wildmenu)

@@ -1,4 +1,4 @@
-# vim: set ft=sh
+# vim: set ft=sh :
 findhosts(){
   nmap -sP -n -oG - "$1"/24 | grep "Up" | awk '{print $2}' -
   echo "To scan those do: nmap $1-254" 
@@ -19,6 +19,28 @@ function md() {
 # Copy w/ progress
 cp_p () {
   rsync -WavP --human-readable --progress $1 $2
+}
+
+function up()
+{
+    dir=""
+    if [ -z "$1" ]; then
+        dir=..
+    elif [[ $1 =~ ^[0-9]+$ ]]; then
+        x=0
+        while [ $x -lt ${1:-1} ]; do
+            dir=${dir}../
+            x=$(($x+1))
+        done
+    else
+        dir=${PWD%/$1/*}/$1
+    fi
+    cd "$dir";
+}
+
+function upstr()
+{
+    echo "$(up "$1" && pwd)";
 }
 
 

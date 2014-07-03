@@ -1,3 +1,4 @@
+# vim: set ft=sh :
 # exports
 
 export caen_ssh='arcutler@login.engin.umich.edu'

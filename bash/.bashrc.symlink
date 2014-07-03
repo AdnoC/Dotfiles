@@ -1,3 +1,4 @@
+# vim: set ft=sh :
 #Run for non-login shells
 for file in ~/.bash_{exports,functions,aliases}; do
   test -f $file && . $_
