@@ -4,11 +4,11 @@
 export caen_ssh='arcutler@login.engin.umich.edu'
 # Different tools' homes
 if [[ "$OSTYPE" == 'cygwin' ]]; then
-  export ANT_HOME="/cygdrive/d/ProgrammingTools/apache-ant-1.9.2"
-  export JAVA_HOME="/cygdrive/d/Program Files/Java/jdk1.7.0_25"
+  export ANT_HOME="~/ant"
+  export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.7.0_17"
   export PYTHON_HOME="/cygdrive/d/ProgrammingTools/Python33"
-  export MONGO_HOME="/cygdrive/d/Program Files (x86)/mongodb-win32-x86_64-2.4.5"
-  export RABBITMQ_HOME="/cygdrive/d/Program Files (x86)/RabbitMQ Server/rabbitmq_server-3.1.3"
+  export MONGO_HOME="/cygdrive/d/Program Files \(x86\)/mongodb-win32-x86_64-2.4.5"
+  export RABBITMQ_HOME="/cygdrive/d/Program Files \(x86\)/RabbitMQ Server/rabbitmq_server-3.1.3"
 
   # Java stuff
   export LD_LIBRARY_PATH=/cygdrive/d/ProgrammingTools/j3d-1_5_2-windows-amd64
@@ -18,24 +18,26 @@ export CLASSPATH="$CLASSPATH;$LD_LIBRARY_PATH/lib/ext/j3dcore.jar;$LD_LIBRARY_PA
 
 # http://superuser.com/questions/39751/add-directory-to-path-if-its-not-already-there
 pathadd() {
-  if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
-      PATH="${PATH:+"$1:"}$PATH"
+  tmpvar=$(eval echo $1)
+  if [ -d "$tmpvar" ] && [[ ":$PATH:" != *":$tmpvar:"* ]]; then
+    PATH="${PATH:+"$tmpvar:"}$PATH"
   fi
+  unset tmpvar
 }
 
-if [[ "$OSTYPE" == cygwin ]]; then
+if [[ "$OSTYPE" == 'cygwin' ]]; then
 # Add to the path: Java, RabbitMQ, MongoDB, Ant, java3d libraries
-  pathadd "$JAVA_HOME/bin"
+  pathadd "$JAVA_HOME"/bin
   pathadd "$RABBITMQ_HOME"/sbin
   pathadd "$MONGO_HOME"/bin
   pathadd "$ANT_HOME"/bin
   pathadd "$LD_LIBRARY_PATH"/bin
-  pathadd cygdrive/d/Program\ Files/Oracle/VirtualBox
+  pathadd "cygdrive/d/Program\ Files/Oracle/VirtualBox"
 fi
 pathadd /usr/local/sbin
 pathadd ~/bin
 
-unset pathadd
+#unset pathadd
 
 if [[ "$OSTYPE" == cygwin ]]; then
   # Fix Vagrant looking for the wrong variable
