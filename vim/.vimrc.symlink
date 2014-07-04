@@ -189,7 +189,7 @@ endif
 " Turn it on by default, so far no filetypes where it needs to be off.
 let g:syntastic_mode_map = { 'mode': 'active',
   \ 'active_filetypes': [],
-  \ 'passive_filetypes': [] }
+  \ 'passive_filetypes': ['java'] }
 " Better :sign interface symbols
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
@@ -378,10 +378,12 @@ let g:PreserveNoEOL=1
 "autocmd BufReadPre,BufNewFile *.inc set filetype=php
 "autocmd BufReadPre,BufNewFile *.module set filetype=php
 if executable('ant')
-  autocmd FileType java set makeprg='ant'
+  autocmd FileType java set makeprg=ant\ -find\ 'build.xml'
   autocmd FileType java compiler ant
+  autocmd FileType java :set shellpipe=2>&1\ \|\ tee
 endif
 
+let java_highlight_all=1
 
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
 " Remap ';' to ':' for easier commands                                       }{
