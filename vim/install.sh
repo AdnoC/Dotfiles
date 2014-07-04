@@ -19,3 +19,15 @@ if [ ! -f ~/.vim/vimball ]; then
   fi
   link_file "$DOTFILES_ROOT"/vim/vimball.sym ~/.vim/vimball
 fi
+
+SYNTAX_TARGET="${HOME}/.vim/syntax"
+mkdir -p "$SYNTAX_TARGET"
+SYNTAX_ROOT="$DOTFILES_ROOT"/vim/syntax
+for src in $(find "$SYNTAX_ROOT" -name "*.sym")
+do
+  dst="${SYNTAX_TARGET}/$(basename "${src%.*}")"
+  link_file "$src" "$dst"
+done
+unset $dst
+unset $SYNTAX_TARGET
+unset $SYNTAX_ROOT
