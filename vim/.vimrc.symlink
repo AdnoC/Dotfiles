@@ -190,6 +190,8 @@ endif
 let g:syntastic_mode_map = { 'mode': 'active',
   \ 'active_filetypes': [],
   \ 'passive_filetypes': ['java'] }
+" Bind a button to check syntax when in passive mode                         }{
+autocmd FileType java nnoremap <buffer><leader>cc :SyntasticCheck<CR>
 " Better :sign interface symbols
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
@@ -772,6 +774,7 @@ map <c-l> <c-w>l
 " <C-s>
 " <leader>cs
 " <leader>rs
+" <leader>cc
 
 """" Notes
 ":bro ol (AKA :browse oldfiles) lists previously opened files and allows you to open one
