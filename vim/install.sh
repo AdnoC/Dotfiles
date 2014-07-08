@@ -13,7 +13,7 @@ if ! command -v ctags >/dev/null 2>&1; then
 fi
 
 
-if [ ! -f ~/.vim/vimball ]; then
+if [ ! -d ~/.vim/vimball ]; then
   if [ ! -d ~/.vim ]; then
     mkdir ~/.vim
   fi
@@ -25,9 +25,11 @@ mkdir -p "$SYNTAX_TARGET"
 SYNTAX_ROOT="$DOTFILES_ROOT"/vim/syntax
 for src in $(find "$SYNTAX_ROOT" -name "*.sym")
 do
-  dst="${SYNTAX_TARGET}/$(basename "${src%.*}")"
-  link_file "$src" "$dst"
+  if [ ! -f "${SYNTAX_TARGET}/$(basename "${src%.*}")" ]; then
+    dst="${SYNTAX_TARGET}/$(basename "${src%.*}")"
+    link_file "$src" "$dst"
+  fi
 done
-unset $dst
-unset $SYNTAX_TARGET
-unset $SYNTAX_ROOT
+unset dst
+unset SYNTAX_TARGET
+unset SYNTAX_ROOT
