@@ -372,6 +372,9 @@ let g:Gitv_DoNotMapCtrlKey = 1
 """" PreserveNoEOL:
 let g:PreserveNoEOL=1
 
+"""" PIV
+" Don't let it map, because it causes ',' to hava a delay
+let g:PIVCreateDefaultMappings = 0
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
