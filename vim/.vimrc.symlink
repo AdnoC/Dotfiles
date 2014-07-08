@@ -79,6 +79,7 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     NeoBundle 'Valloric/MatchTagAlways'
     NeoBundle 'nathanaelkane/vim-indent-guides'
     NeoBundle 'spf13/PIV'
+    NeoBundle 'ervandew/supertab'
     """ Tools:
     NeoBundle 'scrooloose/nerdcommenter'
     NeoBundle 'scrooloose/nerdtree'
