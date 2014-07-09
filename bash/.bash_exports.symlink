@@ -5,7 +5,8 @@ export caen_ssh='arcutler@login.engin.umich.edu'
 # Different tools' homes
 if [[ "$OSTYPE" == 'cygwin' ]]; then
   export ANT_HOME="~/ant"
-  export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.7.0_17"
+  export JAVA_HOME="/cygdrive/c/Program Files/Java/"
+  export JAVA_HOME=$(find "$JAVA_HOME" -name 'jdk*' | sed -n 1p)
   export PYTHON_HOME="/cygdrive/d/ProgrammingTools/Python33"
   export MONGO_HOME="/cygdrive/d/Program Files \(x86\)/mongodb-win32-x86_64-2.4.5"
   export RABBITMQ_HOME="/cygdrive/d/Program Files \(x86\)/RabbitMQ Server/rabbitmq_server-3.1.3"
