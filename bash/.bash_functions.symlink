@@ -43,6 +43,23 @@ function upstr()
     echo "$(up "$1" && pwd)";
 }
 
+#dirsize - finds directory sizes and lists them for the current directory
+dirsize () {
+  du -shx * .[a-zA-Z0-9_]* 2> /dev/null | \
+  egrep '^ *[0-9.]*[MG]' | sort -n > /tmp/list
+  egrep '^ *[0-9.]*M' /tmp/list
+  egrep '^ *[0-9.]*G' /tmp/list
+  rm -rf /tmp/list
+}
+
+psgrep() {
+  if [ ! -z $1 ] ; then
+    echo "Grepping for processes matching $1..."
+    ps aux | grep $1 | grep -v grep
+  else
+    echo "!! Need name to grep for"
+  fi
+}
 
 eject() {
 	sudo umount -f "/Volumes/$@"

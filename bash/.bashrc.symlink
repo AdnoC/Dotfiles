@@ -1,7 +1,18 @@
 # vim: set ft=sh :
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
 #Run for non-login shells
 for file in ~/.bash_{exports,functions,aliases}; do
   test -f $file && . $_
 done
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+#if [ -f /etc/bash_completion ]; then
+    #. /etc/bash_completion
+#fi
+
 unset file
 test -f ~/.fzf.bash && . $_

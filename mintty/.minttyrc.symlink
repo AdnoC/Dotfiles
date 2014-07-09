@@ -8,5 +8,5 @@ Transparency=low
 CursorType=block
 AllowBlinking=yes
 Font=Inconsolata for Powerline
-OpaqueWhenFocused=no
+OpaqueWhenFocused=yes
 ScrollbackLines=1000000

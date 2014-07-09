@@ -27,6 +27,19 @@ for option in autocd globstar; do
   shopt -s "$option" 2> /dev/null
 done
 
+#use extra globing features. See man bash, search extglob.
+shopt -s extglob
+#include .files when globbing.
+shopt -s dotglob
+#When a glob expands to nothing, make it an empty string instead of the literal characters.
+shopt -s nullglob
+# fix spelling errors for cd, only in interactive shell
+shopt -s cdspell
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
 # Set a default umask
 umask 0022
 
