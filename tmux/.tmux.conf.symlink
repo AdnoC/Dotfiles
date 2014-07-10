@@ -12,6 +12,8 @@ set-window-option -g utf8 on
 if-shell "test -f ~/tmuxline.conf" "source ~/tmuxline.conf"
 # Start numbering windows with 1. It is easier to press than 0.
 set -g base-index 1
+# Also start numbering panes with one
+set -g pane-base-index 1
 # No delay after escape key press
 set -s escape-time 0
 # Use Ctrl-a as tmux prefix. Easier to hit than Ctrl-b.
