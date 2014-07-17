@@ -80,6 +80,13 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     NeoBundle 'nathanaelkane/vim-indent-guides'
     NeoBundle 'spf13/PIV'
     NeoBundle 'ervandew/supertab'
+    NeoBundle 'vim-scripts/jcommenter.vim'
+    "autocmd FileType java NeoBundleSource jcommenter.vim
+    "NeoBundleLazy 'vim-scripts/Vim-JDE'
+    "autocmd FileType java NeoBundleSource Vim-JDE
+    NeoBundle 'davetron5000/javax-xml-javadoc-vim'
+    NeoBundle 'davetron5000/javax-javadoc-vim'
+    NeoBundle 'davetron5000/java-javadoc-vim'
     """ Tools:
     NeoBundle 'scrooloose/nerdcommenter'
     NeoBundle 'scrooloose/nerdtree'
@@ -192,7 +199,7 @@ let g:syntastic_mode_map = { 'mode': 'active',
   \ 'active_filetypes': [],
   \ 'passive_filetypes': ['java'] }
 " Bind a button to check syntax when in passive mode                         }{
-autocmd FileType java nnoremap <buffer><leader>cc :SyntasticCheck<CR>
+autocmd FileType java nnoremap <leader>cc :SyntasticCheck<CR>
 " Better :sign interface symbols
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
@@ -378,6 +385,16 @@ let g:PreserveNoEOL=1
 """" PIV
 " Don't let it map, because it causes ',' to hava a delay
 let g:PIVCreateDefaultMappings = 0
+"""" JCommenter:
+" Set author config
+autocmd FileType java let b:jcommenter_class_author='Adam Cutler'
+autocmd FileType java let b:jcommenter_file_author='Adam Cutler'
+" Create a bind to generate comments                                         }{
+autocmd FileType java nmap <leader>cj :call JCommentWriter()<CR>
+autocmd FileType java nmap <leader>c] :call SearchInvalidComment(0)<cr>
+autocmd FileType java nmap <leader>c[ :call SearchInvalidComment(1)<cr>
+"""" VimJDE:
+let g:vjde_lib_path=system("ant -q cp | grep echo | cut -f2- -d] | tr -d ' ' | tr ':' '\n'")
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
@@ -388,8 +405,9 @@ if executable('ant')
   autocmd FileType java compiler ant
   autocmd FileType java :set shellpipe=2>&1\ \|\ tee
 endif
-
 let java_highlight_all=1
+" Use the java docs for keyword help
+autocmd FileType java set keywordprg=
 
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
 " Remap ';' to ':' for easier commands                                       }{
@@ -595,6 +613,8 @@ set incsearch   " Search incrementally
 noremap <Leader>m mmHmt:%s/<C-V><CR>//ge<CR>'tzt'm
 " Allow backspacing over everything in insert mode (:h bs)
 set backspace=indent,eol,start
+" Be smart about case when using autocomplete
+set infercase
 " Helps if you have to use another editor on the same file
 au FileChangedShell * echoerr "File has been changed outside of Vim."
 " Specify how keyword completion works
