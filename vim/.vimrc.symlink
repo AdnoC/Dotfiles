@@ -358,10 +358,12 @@ endfunction
 map <F9> :call FixGUI()<CR>
 
 """" W3m:
-" Bind w3m to an easy key and add http so it doesn't search.                 }{
-nnoremap <leader>w3 :W3m http://
-autocmd FileType w3m nnoremap <buffer>q :W3mClose<CR>
-autocmd FileType w3m nnoremap <buffer>o :W3mAddressBar<CR>
+if executable('w3m')
+  " Bind w3m to an easy key and add http so it doesn't search.                 }{
+  nnoremap <leader>w3 :W3m http://
+  autocmd FileType w3m nnoremap <buffer>q :W3mClose<CR>
+  autocmd FileType w3m nnoremap <buffer>o :W3mAddressBar<CR>
+endif
 
 """" CtrlP:
 " Ignore some folders and files for CtrlP indexing
@@ -373,10 +375,12 @@ let g:ctrlp_show_hidden = 1
 " Navigate to specific buffers quickly                                       }{
 map <C-s> :CtrlPBuffer<CR>
 """" Vimux:                                                                  }{
-map <leader>vp :VimuxPromptCommand<CR>
-map <leader>vr :VimuxRunLastCommand<CR>
-map <leader>vo :VimuxInspectRunner<CR>
-map <leader>vc :VimuxCloseRunner<CR>
+if executable('tmux')
+  map <leader>vp :VimuxPromptCommand<CR>
+  map <leader>vr :VimuxRunLastCommand<CR>
+  map <leader>vo :VimuxInspectRunner<CR>
+  map <leader>vc :VimuxCloseRunner<CR>
+endif
 
 """" Gitv:
 " Be Smart About Whether To Open The Browser In A Horizontal Or Vertical Tab
