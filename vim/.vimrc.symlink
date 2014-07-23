@@ -65,6 +65,7 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     """ Git:
     " So that gitv can work
     NeoBundle 'tpope/vim-fugitive'
+    " Gitk in Vim
     NeoBundle 'gregsexton/gitv', {
       \ 'depends' : 'vim-fugitive' }
     " Using both!?!?
@@ -80,10 +81,7 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     NeoBundle 'nathanaelkane/vim-indent-guides'
     NeoBundle 'spf13/PIV'
     NeoBundle 'ervandew/supertab'
-    NeoBundle 'vim-scripts/jcommenter.vim'
-    "autocmd FileType java NeoBundleSource jcommenter.vim
-    "NeoBundleLazy 'vim-scripts/Vim-JDE'
-    "autocmd FileType java NeoBundleSource Vim-JDE
+    " Java class highlighting
     NeoBundle 'davetron5000/javax-xml-javadoc-vim'
     NeoBundle 'davetron5000/javax-javadoc-vim'
     NeoBundle 'davetron5000/java-javadoc-vim'
@@ -234,12 +232,16 @@ let g:airline#extension#bufferline#enabled=1
 " Only show git stats that are non-zero
 let g:airline#extensions#hunks#non_zero_only=1
 " Tmuxline looks nice and should be used if we have tmux
-let g:airline#extensions#tmuxline#enabled=1
+if executable('tmux')
+  let g:airline#extensions#tmuxline#enabled=1
+endif
 " Clean up the status bar:
 " Just show the list of files/buffers in section c
 let g:airline_section_c = "%f%m %{bufname('#') != '' ? '('. expand('#:t') .')' : ''}"
 " No need to show filetype in the status bar, the ctags section is enough
-let g:airline_section_x='%{airline#util#prepend(airline#extensions#tagbar#currenttag(),0)}%'
+if executable('ctags')
+  let g:airline_section_x='%{airline#util#prepend(airline#extensions#tagbar#currenttag(),0)}%'
+endif
 " Also don't need to know the formatting. Just leave it empty
 let g:airline_section_y=''
 
@@ -389,16 +391,6 @@ let g:PreserveNoEOL=1
 """" PIV
 " Don't let it map, because it causes ',' to hava a delay
 let g:PIVCreateDefaultMappings = 0
-"""" JCommenter:
-" Set author config
-autocmd FileType java let b:jcommenter_class_author='Adam Cutler'
-autocmd FileType java let b:jcommenter_file_author='Adam Cutler'
-" Create a bind to generate comments                                         }{
-autocmd FileType java nmap <leader>cj :call JCommentWriter()<CR>
-autocmd FileType java nmap <leader>c] :call SearchInvalidComment(0)<cr>
-autocmd FileType java nmap <leader>c[ :call SearchInvalidComment(1)<cr>
-"""" VimJDE:
-let g:vjde_lib_path=system("ant -q cp | grep echo | cut -f2- -d] | tr -d ' ' | tr ':' '\n'")
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
