@@ -10,7 +10,7 @@ fi
 if tput setaf 1 &> /dev/null; then
     tput sgr0
     if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
-      if [ $SOL_FLAVOR = "light" ]; then
+      if [ "$SOL_FLAVOR" = "light" ]; then
         LOCATION_COLOR=$(tput setaf 22)
         GIT_COLOR=$(tput setaf 57)
         TIME_NAME_COLOR=$(tput setaf 88)
@@ -22,7 +22,7 @@ if tput setaf 1 &> /dev/null; then
         GIT_COLOR=$(tput setaf 141)
         TIME_NAME_COLOR=$(tput setaf 9)
         HOSTNAME_COLOR=$(tput setaf 172)
-        if [ $SOL_FLAVOR = "dark" ]; then
+        if [ "$SOL_FLAVOR" = "dark" ]; then
           CONNECTION_COLOR=$(tput setaf 244)
         else
           CONNECTION_COLOR=$(tput setaf 255)
@@ -39,7 +39,7 @@ if tput setaf 1 &> /dev/null; then
     BOLD=$(tput bold)
     RESET=$(tput sgr0)
 else
-  if [ $SOL_FLAVOR = "dark" ]; then
+  if [ "$SOL_FLAVOR" = "dark" ]; then
     HOSTNAME_COLOR="\033[1;37m"
     CONNECTION_COLOR="\033[1;33m"
     TIME_NAME_COLOR="\033[1;31m"
