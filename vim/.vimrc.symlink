@@ -317,14 +317,18 @@ let g:indent_guides_guide_size=1
 "nmap <leader> <Plug>(easymotion-prefix)
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 " Make some easymotion binds                                                 }{
+" Move left or right on the line
 nmap <leader>l <Plug>(easymotion-lineforward)
 nmap <leader>h <Plug>(easymotion-linebackward)
+" Move up or down lines
 nmap <leader>j <Plug>(easymotion-j)
 vmap <leader>j <Plug>(easymotion-j)
 nmap <leader>k <Plug>(easymotion-k)
 vmap <leader>k <Plug>(easymotion-k)
+" Prompt for two characters and move to the selected one
 nmap <leader>s <Plug>(easymotion-s2)
 vmap <leader>s <Plug>(easymotion-s2)
+" Prompt for n number of characters
 nmap <leader><ENTER> <Plug>(easymotion-sn)
 let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 
@@ -656,6 +660,8 @@ command! ListLeaders :call ListLeaders()
 
 
 """""""""""""""""""""""""""""""""" Movement """""""""""""""""""""""""""""""""""
+" Use the mouse for navigation. Turned on for an easier transition.
+set mouse=a
 " Number of lines to use for the command line
 set cmdheight=2
 " The minimum number of line to keep above and below the cursor.
@@ -703,27 +709,30 @@ nnoremap <kEnd> <C-d>
 nnoremap <kHome> <C-u>
 
 
-" Get off my lawn (Turn off arrow keys, and give some friendly advice)       }{
-" Note: May wish to remove nmap for up/down because the commands slightly bleed
-" over to insert mode for a time after the switch.
-inoremap <Left> <C-o>:echom "Use h"<CR>
-inoremap <Right> <C-o>:echom "Use l"<CR>
-vnoremap <Left> <Esc>:echom "Use h"<CR>
-vnoremap <Right> <Esc>:echom "Use l"<CR>
-vnoremap <Up> <Esc>:echom "Use k"<CR>
-vnoremap <Down> <Esc>:echom "Use j"<CR>
-nnoremap <Left> :echom "Use h"<CR>
-nnoremap <Right> :echom "Use l"<CR>
-nnoremap <Up> :echom "Use k"<CR>
-nnoremap <Down> :echom "Use j"<CR>
+" This section is turned off because it isn't easy for beginners to go without array keys
+" HOWEVER: You should try to use EasyMotion as much as possible, since it is amazing.
 
-" Turn off up and down arrows completely in insert mode, as the mouse scroll
-" is interpreted as scroll and gets past any other mapping and goes back to
-" default behavior. Also preceding command with <Esc> isn't ideal.           }{
-inoremap <Up> <nop>
-inoremap <Down> <nop>
-nnoremap <Up> <nop>
-nnoremap <Down> <nop>
+"" Get off my lawn (Turn off arrow keys, and give some friendly advice)       }{
+"" Note: May wish to remove nmap for up/down because the commands slightly bleed
+"" over to insert mode for a time after the switch.
+"inoremap <Left> <C-o>:echom "Use h"<CR>
+"inoremap <Right> <C-o>:echom "Use l"<CR>
+"vnoremap <Left> <Esc>:echom "Use h"<CR>
+"vnoremap <Right> <Esc>:echom "Use l"<CR>
+"vnoremap <Up> <Esc>:echom "Use k"<CR>
+"vnoremap <Down> <Esc>:echom "Use j"<CR>
+"nnoremap <Left> :echom "Use h"<CR>
+"nnoremap <Right> :echom "Use l"<CR>
+"nnoremap <Up> :echom "Use k"<CR>
+"nnoremap <Down> :echom "Use j"<CR>
+
+"" Turn off up and down arrows completely in insert mode, as the mouse scroll
+"" is interpreted as scroll and gets past any other mapping and goes back to
+"" default behavior. Also preceding command with <Esc> isn't ideal.           }{
+"inoremap <Up> <nop>
+"inoremap <Down> <nop>
+"nnoremap <Up> <nop>
+"nnoremap <Down> <nop>
 
 " Allows one to switch buffers without having to save or undo changes first.
 set hidden
