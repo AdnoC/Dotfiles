@@ -74,6 +74,7 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     """ Auto Formatting:
     NeoBundle 'jiangmiao/auto-pairs'
     """ Syntax:
+    NeoBundle "AdnoC/semantic-highlight.vim"
     NeoBundle 'scrooloose/syntastic'
     NeoBundle 'kien/rainbow_parentheses.vim'
     NeoBundle 'sheerun/vim-polyglot'
@@ -285,7 +286,7 @@ map <F6> :call LoadRainbow()<CR>
 " Wrapper function that only lets RainbowParens run if it works with the file
 " type
 function! MaybeRainbow()
-  if &ft != "php"
+  if &ft != "php" && &ft != "html"
     call LoadRainbow()
   endif
 endfunction
@@ -391,6 +392,8 @@ let g:PreserveNoEOL=1
 """" PIV
 " Don't let it map, because it causes ',' to hava a delay
 let g:PIVCreateDefaultMappings = 0
+"""" SemanticHighlight:
+let g:semanticTermColors = [28,1,2,3,4,5,6,7,25,9,10,34,12,13,14,15,16,125,124,19]
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
@@ -404,6 +407,11 @@ endif
 let java_highlight_all=1
 " Use the java docs for keyword help
 autocmd FileType java set keywordprg=
+
+" Vim doesn't play nice with javascript's anonymous function use. This makes the code actually have
+" colors.
+autocmd BufEnter *.js SemanticHighlight
+autocmd BufEnter *.js set foldmethod=indent
 
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
 " Remap ';' to ':' for easier commands                                       }{
