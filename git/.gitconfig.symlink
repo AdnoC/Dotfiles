@@ -33,3 +33,6 @@
   insteadOf = "gh:"
   pushInsteadOf = "github:"
   pushInsteadOf = "git://github.com/"
+# Use pull --rebase instead of normal pull
+[pull]
+  rebase = true
