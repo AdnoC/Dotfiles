@@ -14,7 +14,9 @@ In .gitconfig, you should replace the name and email with your own.
 
 ## Instalation Instructions
     git clone https://github.com/AdnoC/dotfiles.git
-    cd dotfiles && bash script/bootstrap
+    cd dotfiles
+    git co transition
+    bash script/bootstrap
 Then just open vim and let it automatically install the plugins.
 Also, you may have to install the included font in order for vim-airline and powerline symbols to
 display.
