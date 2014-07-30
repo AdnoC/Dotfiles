@@ -8,12 +8,12 @@ findhosts(){
 
 #functions
 cs(){
- 	cd "$@" && ls .
+  cd "$@" && ls .
 }
 
 # Create a new directory and enter it
 function md() {
-	mkdir -p "$@" && cd "$@"
+  mkdir -p "$@" && cd "$@"
 }
 
 # Copy w/ progress
@@ -21,23 +21,26 @@ cp_p () {
   rsync -WavP --human-readable --progress $1 $2
 }
 
+# Move up the directory tree quickly
+# "up n" moves you up n times
 function up()
 {
-    dir=""
-    if [ -z "$1" ]; then
-        dir=..
-    elif [[ $1 =~ ^[0-9]+$ ]]; then
-        x=0
-        while [ $x -lt ${1:-1} ]; do
-            dir=${dir}../
-            x=$(($x+1))
-        done
-    else
-        dir=${PWD%/$1/*}/$1
-    fi
-    cd "$dir";
+  dir=""
+  if [ -z "$1" ]; then
+    dir=..
+  elif [[ $1 =~ ^[0-9]+$ ]]; then
+    x=0
+    while [ $x -lt ${1:-1} ]; do
+      dir=${dir}../
+      x=$(($x+1))
+    done
+  else
+    dir=${PWD%/$1/*}/$1
+  fi
+  cd "$dir";
 }
 
+# Shows the name of the directory you will go to if you use 'up'
 function upstr()
 {
     echo "$(up "$1" && pwd)";
@@ -52,6 +55,7 @@ dirsize () {
   rm -rf /tmp/list
 }
 
+# Looks through the list of proccesses for a specified process name
 psgrep() {
   if [ ! -z $1 ] ; then
     echo "Grepping for processes matching $1..."
@@ -61,31 +65,27 @@ psgrep() {
   fi
 }
 
-eject() {
-	sudo umount -f "/Volumes/$@"
-}
-if [ "$OSTYPE" == "cygwin" ]; then
-# Wrapper for Tmux to fix on Cygin
-  tmux() {
-    tmux_running="$(ps -a | grep tmux 2>/dev/null)"
-    tmux_tmp="$(ls /tmp | grep tmux)"
-    if [[ ! -n $tmux_running ]] && [[ -n $tmux_tmp ]]; then
-      rm -rf /tmp/tmux-*
-    fi
-    $(which tmux) "$@"
+if [[ "$OSTYPE" == darwin* ]]; then
+  # Forces a drive to be unmounted. Useful if the OS insists that something is using it.
+  eject() {
+    sudo umount -f "/Volumes/$@"
   }
+fi
 
+if [ "$OSTYPE" == "cygwin" ]; then
   glfwcc() {
     x86_64-w64-mingw32-g++.exe -static "$@" -L /usr/local/lib -I /usr/local/include/  -lglfw3  -lopengl32 -lgdi32
   }
 
+  # Opens a folder in Windows Explorer
   open() {
     /cygdrive/c/WINNT/explorer.exe /e,`cygpath -w "$@"`
   }
 fi
 
 if [ "$(uname)" == "Darwin" ]; then
-  # Clear Apple’s System Logs
+  # Clear Apple’s .DS_Store files which are used to store where files are placed
+  # in Finder (The actual location in the window/on the desktop, not the directory)
   function dstore-clean() {
     find $@ -type f -name .DS_Store -print0 | xargs -0 rm
   }
@@ -97,7 +97,7 @@ search() {
 }
 
 
-# Change colorscheme
+# Change colorscheme between light and dark Solarized
 function solChange() {
   if [ $SOL_FLAVOR = "light" ]; then
     source ~/sol.dark

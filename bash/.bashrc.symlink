@@ -2,10 +2,12 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-#Run for non-login shells
+# Run for non-login shells
 for file in ~/.bash_{exports,functions,aliases}; do
   test -f $file && . $_
 done
+# unset the variable after we are done with it
+unset file
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -14,5 +16,5 @@ done
     #. /etc/bash_completion
 #fi
 
-unset file
+# Source fzf because it is awesome
 test -f ~/.fzf.bash && . $_

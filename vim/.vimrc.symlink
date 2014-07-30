@@ -145,10 +145,6 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     endif
 
 
-    if executable('tmux')
-      NeoBundle 'benmills/vimux'
-      NeoBundle 'edkolev/tmuxline.vim'
-    endif
     if executable('w3m')
       NeoBundle 'yuratomo/w3m.vim'
     endif
@@ -232,10 +228,6 @@ let g:airline_powerline_fonts = 1
 let g:airline#extension#bufferline#enabled=1
 " Only show git stats that are non-zero
 let g:airline#extensions#hunks#non_zero_only=1
-" Tmuxline looks nice and should be used if we have tmux
-if executable('tmux')
-  let g:airline#extensions#tmuxline#enabled=1
-endif
 " Clean up the status bar:
 " Just show the list of files/buffers in section c
 let g:airline_section_c = "%f%m %{bufname('#') != '' ? '('. expand('#:t') .')' : ''}"
@@ -374,13 +366,6 @@ let g:ctrlp_custom_ignore={
 let g:ctrlp_show_hidden = 1
 " Navigate to specific buffers quickly                                       }{
 map <C-s> :CtrlPBuffer<CR>
-"""" Vimux:                                                                  }{
-if executable('tmux')
-  map <leader>vp :VimuxPromptCommand<CR>
-  map <leader>vr :VimuxRunLastCommand<CR>
-  map <leader>vo :VimuxInspectRunner<CR>
-  map <leader>vc :VimuxCloseRunner<CR>
-endif
 
 """" Gitv:
 " Be Smart About Whether To Open The Browser In A Horizontal Or Vertical Tab

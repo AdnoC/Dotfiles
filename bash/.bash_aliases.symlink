@@ -3,28 +3,24 @@
 
 #Ensure that ls always shows color
 if [[ "$OSTYPE" == darwin* ]]; then
-	alias ls="command ls -GAsF"
+  alias ls="command ls -GAsF"
 else
-	alias ls=" command ls --color -AsF"
+  alias ls=" command ls --color -AsF"
 fi
 alias cd..="cd .."
 alias lsl="ls -1 -A -s -F"
-alias mysqlstart='sudo /opt/local/bin/mysqld_safe5 &'
-alias mysqlstop='/opt/local/bin/mysqladmin5 -u root -p shutdown'
-alias checkStyle='java -jar ~/bin/checkstyle-5.5/checkstyle-5.5-all.jar -c ~/bin/checkstyle-5.5/jhu_checks.xml'
-#Node.js testin
-alias mocha='./node_modules/mocha/bin/mocha'
 
 alias javacx='javac -Xlint:all'
-alias javacxu='javac -Xlint:all -classpath .:/Users/adno4/bin/ant-1.8/junit-4.10.jar'
 alias javax='java -ea'
-alias javau='java -cp .:/Users/adno4/bin/ant-1.8/junit-4.10.jar org.junit.runner.JUnitCore'
 alias javaps='java -agentlib:hprof=cpu=samples'
 alias javapt='java -agentlib:hprof=cpu=times'
+
 alias fn='find . -name'
+
 # Allow the use of sudo with aliases.
 alias sudo='sudo '
 alias path='echo -e ${PATH//:/\\n}'
+
 #My habbit is to just type "vi"
 alias vi='vim'
 
