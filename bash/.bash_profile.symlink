@@ -2,6 +2,7 @@
 set -o vi
 
 # '.' = run     '$_' = the last arg of the previous command
+# Makes sure the file exists, then runs the file.
 test -f ~/.bashrc && . $_
 
 test -f ~/.profile && . $_
@@ -17,7 +18,7 @@ complete -cf sudo
 
 # Don't let tty put proccesses to sleep (I think)
 #http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
-stty -ixon
+#stty -ixon
 
 shopt -s globstar
 # Enable some Bash 4 features when possible:
@@ -27,46 +28,55 @@ for option in autocd globstar; do
   shopt -s "$option" 2> /dev/null
 done
 
-#use extra globing features. See man bash, search extglob.
+# Use extra globing features. See man bash, search extglob.
 shopt -s extglob
-#include .files when globbing.
+
+# Include files starting with '.' when globbing.
 shopt -s dotglob
+
 #When a glob expands to nothing, make it an empty string instead of the literal characters.
 #shopt -s nullglob
-# fix spelling errors for cd, only in interactive shell
+
+# Fix spelling errors for cd. Only in interactive shell
 shopt -s cdspell
 
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
+# Check the window size after each command and, if necessary, update the values
+# of LINES and COLUMNS.
 shopt -s checkwinsize
 
-# Set a default umask
+# Set a default umask. Makes git behave better accross different file systems.
 umask 0022
 
-# colors!
+# Colors!
 export CLICOLOR=1
 
+# If we just sshed, clear the console.
 if [ "$SHLVL" = 1 ]; then
     [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
 fi
 
+# When starting terminal, cd to the last directory we went to instead of starting in ~.
 # If we are using bash and have not already created this function (cuases crashes)
 if [ "$SHELL" = "/bin/bash" ] && [ "$(type -t pathed_cd)" != "function" ]; then
-  #magical new tab to last directory trick
-  #source: http://gist.github.com/132456
+  # Magical new tab to last directory trick
+  # Source: http://gist.github.com/132456
+
+  # Save the directory that we go to after changing directories.
   function pathed_cd () {
       if [ "$1" == "" ]; then
           cd
       else
           cd "$1"
       fi
-      pwd > ~/.cdpath
+      pwd > ~/.cdp?yath
   }
+
+  # Use the history-saving function when changing directories.
   alias cd="pathed_cd"
 
+  # If we stored the directory we were last at...
   if [ -f ~/.cdpath ]; then
+    # Move to it when logging in.
     cd "$(cat ~/.cdpath)"
   fi
 fi
-
-test -f ~/.bash_profile.local && . $_
