@@ -52,7 +52,7 @@ filetype off
     "Add your bundles here
     let vimproc_updcmd = has('win64') ?
       \ 'tools\\update-dll-mingw 64' : 'tools\\update-dll-mingw 32'
-execute "NeoBundle 'Shougo/vimproc.vim'," . string({
+    execute "NeoBundle 'Shougo/vimproc.vim'," . string({
       \ 'build' : {
       \     'windows' : vimproc_updcmd,
       \     'cygwin' : 'make -f make_cygwin.mak',
@@ -60,7 +60,7 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
       \     'unix' : 'make -f make_unix.mak',
       \    },
       \ })
-    """ Games:
+    "" Games:
     NeoBundle 'vim-scripts/TeTrIs.vim'
     """ Git:
     " So that gitv can work
@@ -73,27 +73,36 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     """ Auto Formatting:
     NeoBundle 'jiangmiao/auto-pairs'
     """ Syntax:
+    NeoBundle 'elzr/vim-json'
     NeoBundle "AdnoC/semantic-highlight.vim"
     NeoBundle 'scrooloose/syntastic'
     NeoBundle 'kien/rainbow_parentheses.vim'
     NeoBundle 'sheerun/vim-polyglot'
-    NeoBundle 'Valloric/MatchTagAlways'
-    NeoBundle 'nathanaelkane/vim-indent-guides'
-    NeoBundle 'spf13/PIV'
+    " Highlights matching HTML tags
+    NeoBundleLazy 'Valloric/MatchTagAlways'
+    " Auto-close HTML tags
+    NeoBundleLazy 'vim-scripts/HTML-AutoCloseTag'
+    "NeoBundle 'nathanaelkane/vim-indent-guides'
+    NeoBundle 'Yggdroot/indentLine'
+    NeoBundleLazy 'spf13/PIV'
     NeoBundle 'ervandew/supertab'
-    NeoBundle 'vim-scripts/jcommenter.vim'
-    NeoBundle 'jelera/vim-javascript-syntax'
+    NeoBundleLazy 'JLimperg/jcommenter.vim'
+    NeoBundleLazy 'jelera/vim-javascript-syntax'
     "autocmd FileType java NeoBundleSource jcommenter.vim
     "NeoBundleLazy 'vim-scripts/Vim-JDE'
     "autocmd FileType java NeoBundleSource Vim-JDE
-    NeoBundle 'davetron5000/javax-xml-javadoc-vim'
-    NeoBundle 'davetron5000/javax-javadoc-vim'
-    NeoBundle 'davetron5000/java-javadoc-vim'
+    NeoBundleLazy 'davetron5000/javax-xml-javadoc-vim'
+    NeoBundleLazy 'davetron5000/javax-javadoc-vim'
+    NeoBundleLazy 'davetron5000/java-javadoc-vim'
+    NeoBundleLazy 'vim-scripts/csv.vim'
+    " Python autocomplete
+    "NeoBundle 'davidhalter/jedi-vim'
     """ Tools:
     NeoBundle 'scrooloose/nerdcommenter'
     NeoBundle 'scrooloose/nerdtree'
     NeoBundle 'sjl/gundo.vim'
     NeoBundle 'kien/ctrlp.vim'
+    NeoBundle 'szw/vim-ctrlspace'
     """ Looks:
     NeoBundle 'bling/vim-airline'
     NeoBundle 'bling/vim-bufferline'
@@ -102,8 +111,10 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     """ Movement:
     NeoBundle 'Lokaltog/vim-easymotion'
     NeoBundle 'wikitopian/hardmode'
+    " Lets you press 'f'/'F' for repeated movements
+    NeoBundle 'rhysd/clever-f.vim'
 
-    NeoBundle 'othree/html5.vim'
+    NeoBundleLazy 'othree/html5.vim'
     NeoBundle 'tpope/vim-surround'
     NeoBundle 'tpope/vim-abolish'
     NeoBundle 'tpope/vim-repeat'
@@ -111,7 +122,6 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
     NeoBundle 'thinca/vim-ref'
     " matchit breaks [] jumping. Only use it when 100% useful
     NeoBundleLazy 'edsono/vim-matchit'
-    autocmd FileType html NeoBundleSource vim-matchit
 
 
     """ Tagbar:
@@ -125,7 +135,7 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
           \ 'unix' : 'make -f Makefile',
           \ 'mac' : 'make -f Makefile'
         \ }}
-      NeoBundle 'vim-php/tagbar-phpctags.vim', {
+      NeoBundleLazy 'vim-php/tagbar-phpctags.vim', {
         \ 'depends' : 'phpctags',
         \ 'build' : {
           \ 'cygwin' : 'make -f Makefile',
@@ -136,16 +146,37 @@ execute "NeoBundle 'Shougo/vimproc.vim'," . string({
       echo 'Cannot find ctags. Not installing tagbar.'
     endif
     if executable('node')
-      NeoBundle 'faceleg/doctorjs', {
+      NeoBundleLazy 'marijnh/tern_for_vim' , {
         \ 'build' : {
-          \ 'cygwin' : 'git submodule update --init; make -f Makefile install',
-          \ 'unix' : 'git submodule update --init; sudo make -f Makefile install',
-          \ 'mac' : 'git submodule update --init; sudo make -f Makefile install',
+          \ 'cygwin' : 'npm install',
+          \ 'unix' : 'sudo npm install',
+          \ 'mac' : 'sudo npm install',
           \ }
         \ }
+      " Install jsctags. Don't add it to the rtp since it isn't a vim plugin
+      NeoBundleFetch 'ramitos/jsctags' , {
+        \ 'build' : {
+          \ 'cygwin' : 'npm install --update',
+          \ 'unix' : 'sudo npm install --update',
+          \ 'mac' : 'sudo npm install --update',
+          \ }
+        \ }
+      "NeoBundle 'faceleg/doctorjs', {
+        "\ 'build' : {
+          "\ 'cygwin' : 'git submodule update --init; make -f Makefile install',
+          "\ 'unix' : 'git submodule update --init; sudo make -f Makefile install',
+          "\ 'mac' : 'git submodule update --init; sudo make -f Makefile install',
+          "\ }
+        "\ }
     else
       echo 'Cannot find nodejs. Not installing doctorjs/jsctags'
     endif
+
+    autocmd FileType javascript NeoBundleSource tern_for_vim vim-javascript-syntax
+    autocmd FileType php NeoBundleSource tagbar-phpctags.vim PIV html5.vim MatchTagAlways HTML-AutoCloseTag
+    autocmd FileType html NeoBundleSource vim-matchit
+    autocmd FileType java NeoBundleSource jcommenter.vim javax-xml-javadoc-vim javax-javadoc-vim java-javadoc-vim
+    autocmd FileType csv NeoBundleSource csv.vim
 
 
     if executable('tmux')
@@ -366,7 +397,7 @@ let g:ctrlp_custom_ignore={
   \ }
 let g:ctrlp_show_hidden = 1
 " Navigate to specific buffers quickly                                       }{
-map <C-s> :CtrlPBuffer<CR>
+map <leader><C-p> :CtrlPBuffer<CR>
 """" Vimux:                                                                  }{
 map <leader>vp :VimuxPromptCommand<CR>
 map <leader>vr :VimuxRunLastCommand<CR>
@@ -444,6 +475,16 @@ set wildmode=list:longest,list:full
 inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
+
+" Don't redraw while executing macros (good performance config)
+set lazyredraw
+
+" Disable some things if the file is very large.
+let g:LargeFile = 1024 * 1024 * 1
+augroup LargeFile
+  " Gitgutter slows vim to a halt if the file is to big, so turn it off in those cases.
+  autocmd BufReadPre * let f=expand("<afile>") | if getfsize(f) > g:LargeFile | let g:gitgutter_enabled = 0 | endif
+augroup END
 
 " Use generic omnicompletion if something more specific isn't already set
 if has("autocmd") && exists("+omnifunc")
@@ -546,7 +587,7 @@ if exists('+colorcolumn')
 endif
 " Show the number of changes made when doing substitutions
 set report=0
-" When closing a parenthesis or bracket (etc) briefly move cursor to its match
+" Show matching brackets when text indicator is over them"
 set showmatch
 " How long in 1/10s of a second to show the match
 set matchtime=5
