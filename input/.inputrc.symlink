@@ -1,9 +1,9 @@
-# To the extent possible under law, the author(s) have dedicated all 
-# copyright and related and neighboring rights to this software to the 
-# public domain worldwide. This software is distributed without any warranty. 
-# You should have received a copy of the CC0 Public Domain Dedication along 
-# with this software. 
-# If not, see <http://creativecommons.org/publicdomain/zero/1.0/>. 
+# To the extent possible under law, the author(s) have dedicated all
+# copyright and related and neighboring rights to this software to the
+# public domain worldwide. This software is distributed without any warranty.
+# You should have received a copy of the CC0 Public Domain Dedication along
+# with this software.
+# If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 
 # base-files version 4.1-1
 
@@ -24,8 +24,14 @@
 
 # https://github.com/acx0/etc/blob/master/inputrc
 # and http://vim.wikia.com/wiki/Use_vi_shortcuts_in_terminal
+# http://www.catonmat.net/download/bash-vi-editing-mode-cheat-sheet.pdf
 set editing-mode vi
 
+# Show a '+' or ':' depending on whether I am in command or insert mode on the left
+# side of the prompt
+set show-mode-in-prompt on
+
+# Don't beep whenever something happens
 set bell-style none
 set show-all-if-ambiguous on
 #set show-all-if-unmodified on

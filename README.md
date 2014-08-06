@@ -19,6 +19,10 @@ for untracked files.
     git clone https://github.com/AdnoC/dotfiles.git
     cd dotfiles && bash script/bootstrap
 Then just open vim and let it automatically install the plugins.
+If you are using a Mac, or the terminal colorscheme isn't applied, go to
+[this repo](https://github.com/altercation/solarized) and follow the instructions for whatever
+terminal you are using
+
 NOTE: If you do not have ctags installed it will not install the vim plugin 'tagbar'
 NOTE: If you do not have phps installed it will not install the vim plugins for
 php tagbar

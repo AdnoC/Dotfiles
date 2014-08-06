@@ -142,9 +142,11 @@ function __promptline_vcs_branch {
 }
 
 # Controls whether the prompt prints git changes.
-# Sometimes getting all the changes for some reason causes a large delay 
+# Sometimes getting all the changes for some reason causes a large delay
 # before the prompt shows up again.
 export PRINT_GIT_CHANGES='true'
 
-PS1="\n\[${BOLD}${TIME_NAME_COLOR}\]\t[\u] \[$CONNECTION_COLOR\]at \[$HOSTNAME_COLOR\]\h \[$CONNECTION_COLOR\]in \[${RESET}${BOLD}${LOCATION_COLOR}\]\w\[$CONNECTION_COLOR\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$GIT_COLOR\]\$(__promptline_vcs_branch)\[$CONNECTION_COLOR\]\n\$ \[${RESET}${ENTRY_COLOR}\]"
+# Until the bug where the vi-mode indicator fails to update in multi-line prompts,
+# I am changing this to a single line prompt. When it is fixed, add a '\n' before the last '\$'
+PS1="\[${BOLD}${TIME_NAME_COLOR}\]\t[\u] \[$CONNECTION_COLOR\]at \[$HOSTNAME_COLOR\]\h \[$CONNECTION_COLOR\]in \[${RESET}${BOLD}${LOCATION_COLOR}\]\w\[$CONNECTION_COLOR\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$GIT_COLOR\]\$(__promptline_vcs_branch)\[$CONNECTION_COLOR\]  \$ \[${RESET}${ENTRY_COLOR}\]"
 
