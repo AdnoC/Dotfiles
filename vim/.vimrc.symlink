@@ -143,7 +143,9 @@ filetype off
           \ 'mac' : 'make -f Makefile'
         \ }}
     else
-      echo 'Cannot find ctags. Not installing tagbar.'
+      if iCanHazNeobundle == 0
+        echo 'Cannot find ctags. Not installing tagbar.'
+      endif
     endif
     if executable('node')
       NeoBundleLazy 'marijnh/tern_for_vim' , {
@@ -169,7 +171,9 @@ filetype off
           "\ }
         "\ }
     else
-      echo 'Cannot find nodejs. Not installing doctorjs/jsctags'
+      if iCanHazNeobundle == 0
+        echo 'Cannot find nodejs. Not installing doctorjs/jsctags'
+      endif
     endif
 
     autocmd FileType javascript NeoBundleSource tern_for_vim vim-javascript-syntax
@@ -182,9 +186,16 @@ filetype off
     if executable('tmux')
       NeoBundle 'benmills/vimux'
       NeoBundle 'edkolev/tmuxline.vim'
+    else
+      if iCanHazNeobundle == 0
+        echo 'Cannot find tmux. Not installing vimux or tmuxline'
+      endif
     endif
     if executable('w3m')
       NeoBundle 'yuratomo/w3m.vim'
+      if iCanHazNeobundle == 0
+        echo 'Cannot find W3m. Not installing w3m.vim'
+      endif
     endif
     call neobundle#end()
         "...All your other bundles...
@@ -266,13 +277,17 @@ let g:airline_powerline_fonts = 1
 let g:airline#extension#bufferline#enabled=1
 " Only show git stats that are non-zero
 let g:airline#extensions#hunks#non_zero_only=1
-" Tmuxline looks nice and should be used if we have tmux
-let g:airline#extensions#tmuxline#enabled=1
+if executable('tmux')
+  " Tmuxline looks nice and should be used if we have tmux
+  let g:airline#extensions#tmuxline#enabled=1
+endif
 " Clean up the status bar:
 " Just show the list of files/buffers in section c
 let g:airline_section_c = "%f%m %{bufname('#') != '' ? '('. expand('#:t') .')' : ''}"
-" No need to show filetype in the status bar, the ctags section is enough
-let g:airline_section_x='%{airline#util#prepend(airline#extensions#tagbar#currenttag(),0)}%'
+if executable('ctags')
+  " No need to show filetype in the status bar, the ctags section is enough
+  let g:airline_section_x='%{airline#util#prepend(airline#extensions#tagbar#currenttag(),0)}%'
+endif
 " Also don't need to know the formatting. Just leave it empty
 let g:airline_section_y=''
 
