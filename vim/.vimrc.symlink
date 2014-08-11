@@ -112,7 +112,7 @@ filetype off
     NeoBundle 'Lokaltog/vim-easymotion'
     NeoBundle 'wikitopian/hardmode'
     " Lets you press 'f'/'F' for repeated movements
-    NeoBundle 'rhysd/clever-f.vim'
+    "NeoBundle 'rhysd/clever-f.vim'
 
     NeoBundleLazy 'othree/html5.vim'
     NeoBundle 'tpope/vim-surround'
