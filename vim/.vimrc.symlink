@@ -85,7 +85,20 @@ filetype off
     "NeoBundle 'nathanaelkane/vim-indent-guides'
     NeoBundle 'Yggdroot/indentLine'
     NeoBundleLazy 'spf13/PIV'
-    NeoBundle 'ervandew/supertab'
+    " YouCompleteMe only works on Linux/Mac and if vim is version > 7.3.584
+    " Use supertab if YCM won't work
+    if (has('win32') || has('win32unix')) || v:version < 704
+      NeoBundle 'ervandew/supertab'
+    else
+      " This won't work because it times out while loading all the submodules.
+      " It is handled in postinstall though
+      NeoBundle 'Valloric/YouCompleteMe', {
+        \ 'build' : {
+          \ 'unix' : "./install.sh",
+          \ 'mac' : "./install.sh",
+        \ }
+      \ }
+    endif
     NeoBundleLazy 'JLimperg/jcommenter.vim'
     NeoBundleLazy 'jelera/vim-javascript-syntax'
     "autocmd FileType java NeoBundleSource jcommenter.vim
@@ -104,6 +117,7 @@ filetype off
     NeoBundle 'kien/ctrlp.vim'
     NeoBundle 'szw/vim-ctrlspace'
     """ Looks:
+    NeoBundle 'junegunn/limelight.vim'
     NeoBundle 'bling/vim-airline'
     NeoBundle 'bling/vim-bufferline'
     NeoBundle 'altercation/vim-colors-solarized'
