@@ -75,6 +75,7 @@ filetype off
     """ Syntax:
     NeoBundle 'elzr/vim-json'
     NeoBundle "AdnoC/semantic-highlight.vim"
+    NeoBundle 'vim-scripts/VOoM'
     NeoBundle 'scrooloose/syntastic'
     NeoBundle 'kien/rainbow_parentheses.vim'
     NeoBundle 'sheerun/vim-polyglot'
@@ -100,6 +101,7 @@ filetype off
       \ }
     endif
     NeoBundleLazy 'JLimperg/jcommenter.vim'
+    NeoBundleLazy 'heavenshell/vim-jsdoc'
     NeoBundleLazy 'jelera/vim-javascript-syntax'
     "autocmd FileType java NeoBundleSource jcommenter.vim
     "NeoBundleLazy 'vim-scripts/Vim-JDE'
@@ -190,7 +192,7 @@ filetype off
       endif
     endif
 
-    autocmd FileType javascript NeoBundleSource tern_for_vim vim-javascript-syntax
+    autocmd FileType javascript NeoBundleSource tern_for_vim vim-javascript-syntax vim-jsdoc
     autocmd FileType php NeoBundleSource tagbar-phpctags.vim PIV html5.vim MatchTagAlways HTML-AutoCloseTag
     autocmd FileType html NeoBundleSource vim-matchit
     autocmd FileType java NeoBundleSource jcommenter.vim javax-xml-javadoc-vim javax-javadoc-vim java-javadoc-vim
@@ -455,6 +457,13 @@ autocmd FileType java let b:jcommenter_file_author='Adam Cutler'
 autocmd FileType java nmap <leader>cj :call JCommentWriter()<CR>
 autocmd FileType java nmap <leader>c] :call SearchInvalidComment(0)<cr>
 autocmd FileType java nmap <leader>c[ :call SearchInvalidComment(1)<cr>
+"""" VimJSDoc:
+let g:jsdoc_allow_input_prompt=1
+let g:jsdoc_additional_descriptions=1
+let g:jsdoc_default_mapping=0
+"                                                                            }{
+autocmd FileType javascript nmap <leader>cj :JsDoc<CR>
+
 """" VimJDE:
 let g:vjde_lib_path=system("ant -q cp | grep echo | cut -f2- -d] | tr -d ' ' | tr ':' '\n'")
 """" SemanticHighlight:
