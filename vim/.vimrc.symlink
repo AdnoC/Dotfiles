@@ -22,6 +22,7 @@ if has('vim_starting')
 endif
 " Remap leader. Needs to be done before any mappings involving the leader.   }{
 nnoremap <SPACE> <NOP>
+onoremap <SPACE> <NOP>
 let mapleader=" "
 
 
@@ -378,18 +379,29 @@ let g:indent_guides_guide_size=1
 
 
 """" Easy Motion:
-"nmap <leader> <Plug>(easymotion-prefix)
+" NOTE: omaps are used when using 'c' and 'd' operators
+nmap <leader> <Plug>(easymotion-prefix)
+omap <leader> <Plug>(easymotion-prefix)
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 " Make some easymotion binds                                                 }{
 nmap <leader>l <Plug>(easymotion-lineforward)
+omap <leader>l <Plug>(easymotion-lineforward)
 nmap <leader>h <Plug>(easymotion-linebackward)
+omap <leader>h <Plug>(easymotion-linebackward)
 nmap <leader>j <Plug>(easymotion-j)
+omap <leader>j <Plug>(easymotion-j)
 vmap <leader>j <Plug>(easymotion-j)
+omap <leader>j <Plug>(easymotion-j)
 nmap <leader>k <Plug>(easymotion-k)
+omap <leader>k <Plug>(easymotion-k)
 vmap <leader>k <Plug>(easymotion-k)
+omap <leader>k <Plug>(easymotion-k)
 nmap <leader>s <Plug>(easymotion-s2)
+omap <leader>s <Plug>(easymotion-s2)
 vmap <leader>s <Plug>(easymotion-s2)
+omap <leader>s <Plug>(easymotion-s2)
 nmap <leader><ENTER> <Plug>(easymotion-sn)
+omap <leader><ENTER> <Plug>(easymotion-sn)
 let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 
 """" NERD Commenter:
