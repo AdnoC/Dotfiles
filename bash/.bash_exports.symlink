@@ -73,9 +73,14 @@ export GREP_COLOR="1;37;41"
 export GREP_OPIONS='--color'
 
 # Set ls colors
-if [[ "$OSTYPE" == darwin* ]]; then
+if [[ "$OSTYPE" == darwin* ]] || [[ -n $MAC_TERM ]]; then
+  echo "DAR"
   # Macs way of setting ls colors makes me cry. No compatability.
-  export LSCOLORS="gxBxhxDxfxhxhxhxhxcxcx"
+  if [ "$SOL_FLAVOR" == "dark" ]; then
+    export LSCOLORS="gxBxhxDxfxhxhxhxhxcxcx"
+  else
+    export LSCOLORS="gxBxhxAxfxaxaxaxaxcxcx"
+  fi
   export CLICOLORS=1
 else
   # http://www.bigsoft.co.uk/blog/index.php/2008/04/11/configuring-ls_colors
@@ -84,14 +89,16 @@ else
     # A nice green color ex='00;32'
     # Blue ex='01;35'
     # Bright white with underline '04;97'
-  if [ "$SOL_FLAVOR" = "light" ]; then
-    di='04;30'
-    ex='00;34'
+  if [ "$SOL_FLAVOR" == "light" ]; then
+    di='04;36'
+    #ex='00;34'
+    ex='00;91'
+    fi='00;32'
   else
     di='04;91'
     ex='00;32'
+    fi='00;97'
   fi
-  fi='00;97'
   ln='target' #'01;36'
   msc="ow=${di};40:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:*.symlink=01;35"
   export LS_COLORS="fi=$fi:di=$di:ln=$ln:ex=$ex:$msc"

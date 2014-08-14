@@ -80,6 +80,7 @@ filetype off
     NeoBundle 'jiangmiao/auto-pairs'
     """ Syntax:
     NeoBundle 'elzr/vim-json'
+    NeoBundleLazy 'groenewege/vim-less'
     NeoBundle "AdnoC/semantic-highlight.vim"
     NeoBundle 'vim-scripts/VOoM'
     NeoBundle 'scrooloose/syntastic'
@@ -219,6 +220,7 @@ filetype off
     autocmd FileType html NeoBundleSource vim-matchit
     autocmd FileType java NeoBundleSource jcommenter.vim javax-xml-javadoc-vim javax-javadoc-vim java-javadoc-vim
     autocmd FileType csv NeoBundleSource csv.vim
+    autocmd FileType less NeoBundleSource vim-less
 
 
     if executable('tmux')
@@ -519,17 +521,29 @@ autocmd FileType javascript nmap <leader>cj :JsDoc<CR>
 """" VimJDE:
 let g:vjde_lib_path=system("ant -q cp | grep echo | cut -f2- -d] | tr -d ' ' | tr ':' '\n'")
 """" SemanticHighlight:
-let g:semanticTermColors = [28,1,2,3,4,5,6,7,25,9,10,34,12,13,14,15,16,125,124,19]
+let s:semanticTermColorsDark = [28,1,2,3,4,5,6,7,25,9,10,34,12,13,14,15,16,125,124,19]
+let s:semanticTermColorsLight = [28,1,2,3,4,5,6,8,25,9,10,34,12,13,14,17,16,125,124,19]
 
 
 """" VimOperatorSurround:
 "" operator mappings                                                         }{
-map <silent>as <Plug>(operator-surround-append)
-map <silent>ds <Plug>(operator-surround-delete)
-map <silent>cs <Plug>(operator-surround-replace)
+map <silent>sa <Plug>(operator-surround-append)
+map <silent>sd <Plug>(operator-surround-delete)
+map <silent>sc <Plug>(operator-surround-replace)
 
 """" VimOperatorReplace:
 map <silent><leader>re <Plug>(operator-replace)
+
+"""" TextobjComment:
+let g:textobj_comment_no_default_key_mappings = 1
+xmap ax <Plug>(textobj-comment-a)
+omap ax <Plug>(textobj-comment-a)
+xmap ix <Plug>(textobj-comment-i)
+omap ix <Plug>(textobj-comment-i)
+xmap aX <Plug>(textobj-comment-big-a)
+omap aX <Plug>(textobj-comment-big-a)
+xmap iX <Plug>(textobj-comment-big-i)
+omap iX <Plug>(textobj-comment-big-i)
 
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
@@ -544,6 +558,8 @@ endif
 let java_highlight_all=1
 " Use the java docs for keyword help
 autocmd FileType java set keywordprg=
+"nnoremap <Leader>ls :w <BAR> !lessc % > ../css/%:t:r.css<CR><space>
+autocmd FileType less set makeprg=lessc\ %\ >\ ../css/%:t:r.css
 
 " Vim doesn't play nice with javascript's anonymous function use. This makes the code actually have
 " colors.
@@ -565,7 +581,8 @@ map <F11> :set invpaste paste?<CR>
 nnoremap <leader>cd :cd %:p:h<CR>
 " Open the current directory in a new tab                                    }{
 nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<CR>/
-
+" Fix broken default mappings
+nmap dd d_
 " We aren't going to have any vim variables at the beginning or end of files
 set modelines=1
 " Turn on wild menu (Allow tab use with the command line)
@@ -649,7 +666,9 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
     syntax enable
     if expand("$SOL_FLAVOR") == 'light'
       set background="light"
+      let g:semanticTermColors =s:semanticTermColorsLight
     else
+      let g:semanticTermColors =s:semanticTermColorsDark
       set background="dark"
     endif
     colorscheme solarized
