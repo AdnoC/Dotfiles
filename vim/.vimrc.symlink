@@ -25,6 +25,11 @@ nnoremap <SPACE> <NOP>
 onoremap <SPACE> <NOP>
 let mapleader=" "
 
+" Get SID prefix of vimrc (see :h <SID>)
+function! s:SID_PREFIX()
+    return matchstr(expand('<sfile>'), '<SNR>\d\+_')
+endfunction
+
 
 """"""""""""""""""""""""""""""""""" Plugins """""""""""""""""""""""""""""""""""
 filetype off
@@ -119,6 +124,21 @@ filetype off
     NeoBundle 'sjl/gundo.vim'
     NeoBundle 'kien/ctrlp.vim'
     NeoBundle 'szw/vim-ctrlspace'
+    NeoBundle 'kana/vim-operator-user'
+    NeoBundle 'kana/vim-textobj-user'
+    " Allows for things like 'cs2a([' to change ((*)) to [(*)]
+    NeoBundle 'osyo-manga/vim-textobj-multiblock'
+    " Allows for text objects to be between any specified char
+    NeoBundle 'thinca/vim-textobj-between'
+    " Allows for the use of 'b' as a text objext of any [('"<
+    NeoBundle 'rhysd/vim-textobj-anyblock'
+    " Allows text objects to only exist on one side of the carot
+    NeoBundle 'tommcdo/vim-ninja-feet'
+    NeoBundle 'kana/vim-operator-replace'
+    NeoBundle 'coderifous/textobj-word-column.vim'
+    NeoBundle 'kana/vim-textobj-indent'
+    NeoBundle 'kana/vim-textobj-fold'
+    NeoBundle 'glts/vim-textobj-comment'
     """ Looks:
     NeoBundle 'junegunn/limelight.vim'
     NeoBundle 'bling/vim-airline'
@@ -132,7 +152,8 @@ filetype off
     "NeoBundle 'rhysd/clever-f.vim'
 
     NeoBundleLazy 'othree/html5.vim'
-    NeoBundle 'tpope/vim-surround'
+    "NeoBundle 'tpope/vim-surround'
+    NeoBundle 'rhysd/vim-operator-surround'
     NeoBundle 'tpope/vim-abolish'
     NeoBundle 'tpope/vim-repeat'
     NeoBundle 'tpope/vim-endwise'
@@ -407,10 +428,29 @@ let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 """" NERD Commenter:
 " Use custon NERD commenter mapping                                          }{
 let g:NERDCreateDefaultMappings=0
-nmap <leader>cv <Plug>NERDCommenterComment
-vmap <leader>cv <Plug>NERDCommenterComment
-nmap <leader>cx <Plug>NERDCommenterUncomment
-vmap <leader>cx <Plug>NERDCommenterUncomment
+" http://relaxedcolumn.blog8.fc2.com/blog-entry-154.html
+" NERDCommenter + operator-user
+function! s:setCommentOperator(key, name)
+    call operator#user#define(
+    \   'comment-' . a:name,
+    \   s:SID_PREFIX() . 'doCommentCommand',
+    \   'call ' . s:SID_PREFIX() . 'setCommentCommand("' . a:name . '")')
+    execute 'map' a:key '<Plug>(operator-comment-' . a:name . ')'
+endfunction
+
+function! s:setCommentCommand(command)
+    let s:comment_command = a:command
+endfunction
+
+function! s:doCommentCommand(motion_wiseness)
+    let v = operator#user#visual_command_from_wise_name(a:motion_wiseness)
+    execute 'normal! `[' . v . "`]\<Esc>"
+    echo s:comment_command
+    call NERDComment('x', s:comment_command)
+endfunction
+
+call s:setCommentOperator('<leader>cv', 'comment')
+call s:setCommentOperator('<leader>cx', 'uncomment')
 
 
 " Fixes most gui problems (broken syntax coloring, status bar no color)      }{
@@ -480,6 +520,17 @@ autocmd FileType javascript nmap <leader>cj :JsDoc<CR>
 let g:vjde_lib_path=system("ant -q cp | grep echo | cut -f2- -d] | tr -d ' ' | tr ':' '\n'")
 """" SemanticHighlight:
 let g:semanticTermColors = [28,1,2,3,4,5,6,7,25,9,10,34,12,13,14,15,16,125,124,19]
+
+
+"""" VimOperatorSurround:
+"" operator mappings                                                         }{
+map <silent>as <Plug>(operator-surround-append)
+map <silent>ds <Plug>(operator-surround-delete)
+map <silent>cs <Plug>(operator-surround-replace)
+
+"""" VimOperatorReplace:
+map <silent><leader>re <Plug>(operator-replace)
+
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
@@ -764,8 +815,8 @@ set scrolloff=10
 set whichwrap=b,s,h,l,<,>,[,]
 
 " Move to the beginning and end of lines easier                              }{
-nnoremap H ^
-nnoremap L $
+"nnoremap H ^
+"nnoremap L $
 
 " Use sane movement along wrapped lines                                      }{
 nnoremap j gj
