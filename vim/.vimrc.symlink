@@ -29,6 +29,12 @@ let mapleader=" "
 function! s:SID_PREFIX()
     return matchstr(expand('<sfile>'), '<SNR>\d\+_')
 endfunction
+if has('gui_win32')
+  let s:vimDirectory=expand("$HOME/vimfiles")
+else
+  let s:vimDirectory=expand("$HOME/.vim")
+endif
+let s:vimDirectoryPart=expand(s:vimDirectory . "/")
 
 
 """"""""""""""""""""""""""""""""""" Plugins """""""""""""""""""""""""""""""""""
@@ -38,20 +44,24 @@ filetype off
 " http://erikzaadi.com/2012/03/19/auto-installing-vundle-from-your-vimrc/
 " Setting up Vundle - the vim plugin bundler
     let iCanHazNeobundle=1
-    let neobundle_readme=expand('~/.vim/bundle/neobundle.vim/README.md')
+    let neobundle_readme=expand(s:vimDirectory.'/bundle/neobundle.vim/README.md')
     if !filereadable(neobundle_readme)
         echo "Installing Neobundle.."
         echo ""
-        silent !mkdir -p ~/.vim/bundle
-        silent !git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+        if has('gui_win32')
+          silent exec "!mkdir " . shellescape(s:vimDirectoryPart . "bundle")
+        else
+          silent exec "!mkdir -p " . (s:vimDirectoryPart . "bundle")
+        endif
+        silent exec '!git clone https://github.com/Shougo/neobundle.vim ' . shellescape(expand(s:vimDirectory."/bundle/neobundle.vim"))
         let iCanHazNeobundle=0
     endif
     if has('vim_starting')
       "required
-      set runtimepath+=~/.vim/bundle/neobundle.vim/
+      exec "set runtimepath+=" . expand(s:vimDirectory . '/bundle/neobundle.vim/')
     endif
     " Required:
-    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#begin(s:vimDirectoryPart . 'bundle')
     " Let NeoBundle manage NeoBundle
     " Required:
     NeoBundleFetch 'Shougo/neobundle.vim'
@@ -259,7 +269,7 @@ filetype plugin indent on
 " Installs all vimballs in the vimball directory
 function! InstallVimballs()
   " For each file in the vimball diretcory...
-  for f in split(glob('~/.vim/vimball/*'))
+  for f in split(glob(expand(s:vimDirectory . '/vimball/') . "*"))
     " Open the file in a new buffer
     exec 'new' f
     " Source the buffer
@@ -519,7 +529,9 @@ let g:jsdoc_default_mapping=0
 autocmd FileType javascript nmap <leader>cj :JsDoc<CR>
 
 """" VimJDE:
-let g:vjde_lib_path=system("ant -q cp | grep echo | cut -f2- -d] | tr -d ' ' | tr ':' '\n'")
+if executable('ant')
+  let g:vjde_lib_path=system("ant -q cp | grep echo | cut -f2- -d] | tr -d ' ' | tr ':' '\n'")
+endif
 """" SemanticHighlight:
 let s:semanticTermColorsDark = [28,1,2,3,4,5,6,7,25,9,10,34,12,13,14,15,16,125,124,19]
 let s:semanticTermColorsLight = [28,1,2,3,4,5,6,8,25,9,10,34,12,13,14,17,16,125,124,19]
@@ -629,23 +641,54 @@ nnoremap <leader>rs :exe "resize " . (winheight(0) * 2 * 5/6)<CR>
 """" Meta files
 " Create backup, swap, and undo  folders if they do not exist
 " Centralize backups, swapfiles and undo history
- if ! isdirectory(expand('$HOME/.vim/backups'))
-  call mkdir(expand('$HOME/.vim/backups'))
+ if ! isdirectory(s:vimDirectoryPart . 'backups')
+  call mkdir(s:vimDirectoryPart . 'backups')
 endif
- if ! isdirectory(expand('$HOME/.vim/swaps'))
-  call mkdir(expand('$HOME/.vim/swaps'))
+ if ! isdirectory(s:vimDirectoryPart . 'swaps')
+  call mkdir(s:vimDirectoryPart . 'swaps')
 endif
  if has('persistent_undo')
   " Store undo data in a file for persistence between sessions
   set undofile
-  if ! isdirectory(expand('$HOME/.vim/undo'))
-    call mkdir(expand('$HOME/.vim/undo'))
+  if ! isdirectory(s:vimDirectoryPart . 'undo')
+    call mkdir(s:vimDirectoryPart . 'undo')
   endif
-  set undodir=~/.vim/undo
+  exec "set undodir=" . s:vimDirectoryPart . "undo"
 endif
-set backupdir=~/.vim/backups
-set directory=~/.vim/swaps
+exec "set backupdir=" . s:vimDirectoryPart . "backups"
+exec "set directory=" . s:vimDirectoryPart . "swaps"
 
+"if has('gui_win32')
+"  source $VIMRUNTIME/mswin.vim
+"endif
+"
+" Was in default gVim vimrc
+if has('gui')
+  set diffexpr=MyDiff()
+  function MyDiff()
+    let opt = '-a --binary '
+    if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+    if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+    let arg1 = v:fname_in
+    if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+    let arg2 = v:fname_new
+    if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+    let arg3 = v:fname_out
+    if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+    let eq = ''
+    if $VIMRUNTIME =~ ' '
+      if &sh =~ '\<cmd'
+        let cmd = '""' . $VIMRUNTIME . '\diff"'
+        let eq = '"'
+      else
+        let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+      endif
+    else
+      let cmd = $VIMRUNTIME . '\diff'
+    endif
+    silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+  endfunction
+endif
 
 """""""""""""""""""""""""""""""""""" Looks """"""""""""""""""""""""""""""""""""
 """" Color Scheme
@@ -672,6 +715,15 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
       set background="dark"
     endif
     colorscheme solarized
+
+    " If we are using a gui set the font in the proper format for that gui
+    if has("gui_gtk2")
+      set guifont=Inconsolata\ for\ Powerline\ 10
+    elseif has("gui_macvim")
+      set guifont=Inconsolata\ for\ Powerline:h10
+    elseif has("gui_win32")
+      set guifont=Inconsolata\ for\ Powerline:h10:cANSI
+    endif
     " If we open a new buffer, and after any final filetype changes
     autocmd FileType,BufRead * call MaybeRainbow()
     " Highlight search matches
@@ -833,6 +885,14 @@ set scrolloff=10
 " Allow keys to move left or right to the prev/next line
 set whichwrap=b,s,h,l,<,>,[,]
 
+" Use the mouse if we have a gui
+if has('gui')
+  set mouse=a
+" If we are on command line, ignore the mouse
+else
+  set mouse=
+endif
+
 " Move to the beginning and end of lines easier                              }{
 "nnoremap H ^
 "nnoremap L $
@@ -972,6 +1032,6 @@ map <c-l> <c-w>l
 "<c-o> Returns you to locations before jumps. <c-i> (also tab) moves you forward
 
 """" If there is a local vim configuration file, run it
-if filereadable(expand("~/.vimrc.local"))
-  so ~/.vimrc.local
+if filereadable(s:vimDirectoryPart . ".vimrc.local")
+  so s:vimDirectoryPart . ".vimrc.local"
 endif
