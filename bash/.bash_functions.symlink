@@ -96,6 +96,13 @@ search() {
   grep -Rnis $@ **
 }
 
+# Find the address of my raspberry pi
+piaddress() {
+  IP_ADDR=$(hostname -I | cut -f2 -d' ')
+  nmap -sn $IP_ADDR/24 | awk '/^Nmap/{ip=$NF}/80:1F:02:EE:89:1B/{print ip}'
+  unset IP_ADDR
+}
+
 
 # Change colorscheme
 function solChange() {
