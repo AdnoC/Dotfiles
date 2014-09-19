@@ -58,7 +58,7 @@ filetype off
     endif
     if has('vim_starting')
       "required
-      exec "set runtimepath+=" . expand(s:vimDirectory . '/bundle/neobundle.vim/')
+      exec "set runtimepath+=" . expand(s:vimDirectory . '/bundle/neobundle.vim')
     endif
     " Required:
     call neobundle#begin(s:vimDirectoryPart . 'bundle')
@@ -87,12 +87,13 @@ filetype off
     NeoBundle 'airblade/vim-gitgutter'
     NeoBundle 'mhinz/vim-signify'
     """ Auto Formatting:
-    NeoBundle 'jiangmiao/auto-pairs'
+    " Currently this breaks undo and repeat.
+    "NeoBundle 'Raimondi/delimitMate'
     """ Syntax:
+    "NeoBundleLazy 'LaTeX-Box-Team/LaTeX-Box'
     NeoBundle 'elzr/vim-json'
     NeoBundleLazy 'groenewege/vim-less'
-    NeoBundle "AdnoC/semantic-highlight.vim"
-    NeoBundle 'vim-scripts/VOoM'
+    NeoBundle "jaxbot/semantic-highlight.vim"
     NeoBundle 'scrooloose/syntastic'
     NeoBundle 'kien/rainbow_parentheses.vim'
     NeoBundle 'sheerun/vim-polyglot'
@@ -158,7 +159,7 @@ filetype off
     NeoBundle 'edkolev/promptline.vim'
     """ Movement:
     NeoBundle 'Lokaltog/vim-easymotion'
-    NeoBundle 'wikitopian/hardmode'
+    NeoBundleLazy 'wikitopian/hardmode'
     " Lets you press 'f'/'F' for repeated movements
     "NeoBundle 'rhysd/clever-f.vim'
 
@@ -231,6 +232,7 @@ filetype off
     autocmd FileType java NeoBundleSource jcommenter.vim javax-xml-javadoc-vim javax-javadoc-vim java-javadoc-vim
     autocmd FileType csv NeoBundleSource csv.vim
     autocmd FileType less NeoBundleSource vim-less
+    autocmd FileType tex NeoBundleSource LaTeX-Box
 
 
     if executable('tmux')
@@ -563,20 +565,26 @@ omap iX <Plug>(textobj-comment-big-i)
 "autocmd BufReadPre,BufNewFile *.inc set filetype=php
 "autocmd BufReadPre,BufNewFile *.module set filetype=php
 if executable('ant')
-  autocmd FileType java set makeprg=ant\ -find\ 'build.xml'
+  autocmd FileType java setlocal makeprg=ant\ -find\ 'build.xml'
   autocmd FileType java compiler ant
-  autocmd FileType java :set shellpipe=2>&1\ \|\ tee
+  autocmd FileType java setlocal shellpipe=2>&1\ \|\ tee
 endif
 let java_highlight_all=1
 " Use the java docs for keyword help
-autocmd FileType java set keywordprg=
+autocmd FileType java setlocal keywordprg=
 "nnoremap <Leader>ls :w <BAR> !lessc % > ../css/%:t:r.css<CR><space>
-autocmd FileType less set makeprg=lessc\ %\ >\ ../css/%:t:r.css
+autocmd FileType less setlocal makeprg=lessc\ %\ >\ ../css/%:t:r.css
+autocmd FileType plaintex set ft=tex
+
+autocmd FileType tex  if ! isdirectory('LatexOutput') |  exec "!mkdir LatexOutput" |  endif
+
+autocmd FileType tex exec "setlocal makeprg=latexmk\ -outdir=" . expand('%:p:h') . "LatexOutput\ -pdf\ %"
+autocmd FileType tex set conceallevel=0
 
 " Vim doesn't play nice with javascript's anonymous function use. This makes the code actually have
 " colors.
 autocmd BufEnter *.js SemanticHighlight
-autocmd BufEnter *.js set foldmethod=indent
+autocmd BufEnter *.js setlocal foldmethod=indent
 
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
 " Remap ';' to ':' for easier commands                                       }{
@@ -663,7 +671,7 @@ exec "set directory=" . s:vimDirectoryPart . "swaps"
 "endif
 "
 " Was in default gVim vimrc
-if has('gui')
+if has('gui') && has('vim_starting')
   set diffexpr=MyDiff()
   function MyDiff()
     let opt = '-a --binary '
@@ -688,6 +696,16 @@ if has('gui')
     endif
     silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
   endfunction
+
+" Get the args that Vim was opened with
+  redir @a
+  silent args
+  redir END
+  " If we are running the GUI and we didn't open a specific file, move to ~ so that
+  " we aren't in the folder where Vim was installed to
+  if has('gui') && @a == ''
+    cd ~
+  endif
 endif
 
 """""""""""""""""""""""""""""""""""" Looks """"""""""""""""""""""""""""""""""""
@@ -716,6 +734,9 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
     endif
     colorscheme solarized
 
+    if has("gui_running")
+      set guioptions-=T
+    endif
     " If we are using a gui set the font in the proper format for that gui
     if has("gui_gtk2")
       set guifont=Inconsolata\ for\ Powerline\ 10
@@ -807,7 +828,7 @@ set fileformats=unix,dos,mac
 " By default do not show the gutter
 autocmd FileType * set foldcolumn=0
 " Show the gutter for only specified filetypes
-autocmd FileType javascript set foldcolumn=6
+autocmd FileType javascript setlocal foldcolumn=6
 " Auto include folds based on syntax
 set foldmethod=syntax
 " Reselect visual block after indent/outdent                                }{
