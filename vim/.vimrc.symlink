@@ -118,7 +118,7 @@ filetype off
         \ }
       \ }
     endif
-    NeoBundleLazy 'JLimperg/jcommenter.vim'
+    NeoBundleLazy 'AdnoC/jcommenter.vim'
     NeoBundleLazy 'heavenshell/vim-jsdoc'
     NeoBundleLazy 'jelera/vim-javascript-syntax'
     "autocmd FileType java NeoBundleSource jcommenter.vim
@@ -311,6 +311,12 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_check_on_open = 1
 " Set location list window height
 let g:syntastic_loc_list_height = 5
+" Check header files
+let g:syntastic_cpp_check_header = 1
+" Tell syntastic where SDL is located so it stops complaining
+let g:syntastic_cpp_include_dirs = ['/usr/local/include/SDL2']
+" Use modern C++ compile options
+let g:syntastic_cpp_compiler_options = ' -std=c++11'
 " Shortcuts to prev/next errors                                              }{
 let g:syntastic_java_javac_config_file_enabled = 1
 nnoremap <leader>s] :lnext<CR>
@@ -517,8 +523,9 @@ let g:PreserveNoEOL=1
 let g:PIVCreateDefaultMappings = 0
 """" JCommenter:
 " Set author config
-autocmd FileType java let b:jcommenter_class_author='Adam Cutler'
-autocmd FileType java let b:jcommenter_file_author='Adam Cutler'
+autocmd FileType java let g:jcommenter_class_author='Adam Cutler'
+autocmd FileType java let g:jcommenter_file_author='Adam Cutler'
+autocmd FileType java let g:jcommenter_method_description_space = 1
 " Create a bind to generate comments                                         }{
 autocmd FileType java nmap <leader>cj :call JCommentWriter()<CR>
 autocmd FileType java nmap <leader>c] :call SearchInvalidComment(0)<cr>
@@ -578,8 +585,9 @@ autocmd FileType plaintex set ft=tex
 
 autocmd FileType tex  if ! isdirectory('LatexOutput') |  exec "!mkdir LatexOutput" |  endif
 
-autocmd FileType tex exec "setlocal makeprg=latexmk\ -outdir=" . expand('%:p:h') . "LatexOutput\ -pdf\ %"
+autocmd FileType tex exec "setlocal makeprg=latexmk\\ -outdir=\\\"" . expand('%:p:h') . expand('/') . "LatexOutput\\\"\\ -pdf\\ %"
 autocmd FileType tex set conceallevel=0
+let g:tex_conceal = ""
 
 " Vim doesn't play nice with javascript's anonymous function use. This makes the code actually have
 " colors.

@@ -11,6 +11,19 @@ cs(){
  	cd "$@" && ls .
 }
 
+function sdlCompileMulti() {
+      g++   -o $@ -g -O2 -I/usr/local/include/SDL2 -I/usr/include/mingw -Dmain=SDL_main -DHAVE_OPENGL -g -lSDL2_test -L/usr/local/lib -lcygwin -lSDL2main -lSDL2 -mwindows -lSDL2_image -std=c++11
+}
+function sdlCompile() {
+  if [ ! -z "$1" ]; then
+    if [ ! -z "$2" ]; then
+      g++  "$1" -o "$2" -g -O2 -I/usr/local/include/SDL2 -I/usr/include/mingw -Dmain=SDL_main -DHAVE_OPENGL -g -lSDL2_test -L/usr/local/lib -lcygwin -lSDL2main -lSDL2 -mwindows -lSDL2_image -std=c++11
+    else
+      g++  $1 -g -O2 -I/usr/local/include/SDL2 -I/usr/include/mingw -Dmain=SDL_main -DHAVE_OPENGL -g -lSDL2_test -L/usr/local/lib -lcygwin -lSDL2main -lSDL2 -mwindows -lSDL2_image -std=c++11
+    fi
+  fi
+}
+
 # Create a new directory and enter it
 function md() {
 	mkdir -p "$@" && cd "$@"
