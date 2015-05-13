@@ -80,9 +80,10 @@ filetype off
     NeoBundle 'vim-scripts/TeTrIs.vim'
     """ Git:
     " So that gitv can work
-    NeoBundle 'tpope/vim-fugitive'
-    NeoBundle 'gregsexton/gitv', {
-      \ 'depends' : 'vim-fugitive' }
+    " NOTE: fugitive makes vim very laggy sometimes
+    "NeoBundle 'tpope/vim-fugitive'
+    "NeoBundle 'gregsexton/gitv', {
+      "\ 'depends' : 'vim-fugitive' }
     " Using both!?!?
     NeoBundle 'airblade/vim-gitgutter'
     NeoBundle 'mhinz/vim-signify'
@@ -227,7 +228,7 @@ filetype off
     endif
 
     autocmd FileType javascript NeoBundleSource tern_for_vim vim-javascript-syntax vim-jsdoc
-    autocmd FileType php NeoBundleSource tagbar-phpctags.vim PIV html5.vim MatchTagAlways HTML-AutoCloseTag
+    "autocmd FileType php NeoBundleSource tagbar-phpctags.vim PIV html5.vim HTML-AutoCloseTag
     autocmd FileType html NeoBundleSource vim-matchit
     autocmd FileType java NeoBundleSource jcommenter.vim javax-xml-javadoc-vim javax-javadoc-vim java-javadoc-vim
     autocmd FileType csv NeoBundleSource csv.vim
