@@ -186,7 +186,7 @@ filetype off
           \ 'unix' : 'make -f Makefile',
           \ 'mac' : 'make -f Makefile'
         \ }}
-      NeoBundleLazy 'vim-php/tagbar-phpctags.vim', {
+      NeoBundle 'vim-php/tagbar-phpctags.vim', {
         \ 'depends' : 'phpctags',
         \ 'build' : {
           \ 'cygwin' : 'make -f Makefile',
@@ -227,8 +227,11 @@ filetype off
       endif
     endif
 
+
+
+    " Lazy loading of filetype-dependant plugins
     autocmd FileType javascript NeoBundleSource tern_for_vim vim-javascript-syntax vim-jsdoc
-    "autocmd FileType php NeoBundleSource tagbar-phpctags.vim PIV html5.vim HTML-AutoCloseTag
+    autocmd FileType php NeoBundleSource html5.vim HTML-AutoCloseTag PIV
     autocmd FileType html NeoBundleSource vim-matchit
     autocmd FileType java NeoBundleSource jcommenter.vim javax-xml-javadoc-vim javax-javadoc-vim java-javadoc-vim
     autocmd FileType csv NeoBundleSource csv.vim
@@ -522,6 +525,8 @@ let g:PreserveNoEOL=1
 """" PIV
 " Don't let it map, because it causes ',' to hava a delay
 let g:PIVCreateDefaultMappings = 0
+" AutoPHPFolding really hits performance, making cursor movement and switching bufers laggy
+let g:DisableAutoPHPFolding = 1
 """" JCommenter:
 " Set author config
 autocmd FileType java let g:jcommenter_class_author='Adam Cutler'
@@ -570,8 +575,8 @@ omap iX <Plug>(textobj-comment-big-i)
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
-"autocmd BufReadPre,BufNewFile *.inc set filetype=php
-"autocmd BufReadPre,BufNewFile *.module set filetype=php
+autocmd FileReadPre *.inc set filetype=php
+autocmd FileReadPre *.module set filetype=php
 if executable('ant')
   autocmd FileType java setlocal makeprg=ant\ -find\ 'build.xml'
   autocmd FileType java compiler ant
@@ -840,6 +845,7 @@ autocmd FileType * set foldcolumn=0
 autocmd FileType javascript setlocal foldcolumn=6
 " Auto include folds based on syntax
 set foldmethod=syntax
+"set nofoldenable
 " Reselect visual block after indent/outdent                                }{
 vnoremap < <gv
 vnoremap > >gv
