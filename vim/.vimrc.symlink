@@ -1063,5 +1063,5 @@ map <c-l> <c-w>l
 
 """" If there is a local vim configuration file, run it
 if filereadable(s:vimDirectoryPart . ".vimrc.local")
-  so s:vimDirectoryPart . ".vimrc.local"
+  exec "so " . s:vimDirectoryPart . ".vimrc.local"
 endif
