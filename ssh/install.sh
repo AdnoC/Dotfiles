@@ -1,4 +1,4 @@
-if [ ! -f ~/.ssh/rc ]; then
+if [ ! -f ~/.ssh/rc ] && [ -z "$LINK_SSH_RC"]; then
   if [ ! -d ~/.ssh ]; then
     mkdir ~/.ssh
   fi
