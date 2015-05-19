@@ -9,7 +9,7 @@
 "   -> Searching
 "   -> Msc
 "   -> Movement
-"   -> Key List and other things
+"   -> Other things
 "
 " Note: Mappings have a }{ symbol at the end of the line
 "
@@ -38,238 +38,216 @@ let s:vimDirectoryPart=expand(s:vimDirectory . "/")
 
 
 """"""""""""""""""""""""""""""""""" Plugins """""""""""""""""""""""""""""""""""
-filetype off
-"""" Plugin Manager: (NeoBundle)
-" Auto vundle install, taken from (before being slightly edited):
-" http://erikzaadi.com/2012/03/19/auto-installing-vundle-from-your-vimrc/
-" Setting up Vundle - the vim plugin bundler
-    let iCanHazNeobundle=1
-    let neobundle_readme=expand(s:vimDirectory.'/bundle/neobundle.vim/README.md')
-    if !filereadable(neobundle_readme)
-        echo "Installing Neobundle.."
-        echo ""
-        if has('gui_win32')
-          silent exec "!mkdir " . shellescape(s:vimDirectoryPart . "bundle")
-        else
-          silent exec "!mkdir -p " . (s:vimDirectoryPart . "bundle")
-        endif
-        silent exec '!git clone https://github.com/Shougo/neobundle.vim ' . shellescape(expand(s:vimDirectory."/bundle/neobundle.vim"))
-        let iCanHazNeobundle=0
-    endif
-    if has('vim_starting')
-      "required
-      exec "set runtimepath+=" . expand(s:vimDirectory . '/bundle/neobundle.vim')
-    endif
-    " Required:
-    call neobundle#begin(s:vimDirectoryPart . 'bundle')
-    " Let NeoBundle manage NeoBundle
-    " Required:
-    NeoBundleFetch 'Shougo/neobundle.vim'
-    "Add your bundles here
-    let vimproc_updcmd = has('win64') ?
-      \ 'tools\\update-dll-mingw 64' : 'tools\\update-dll-mingw 32'
-    execute "NeoBundle 'Shougo/vimproc.vim'," . string({
-      \ 'build' : {
-      \     'windows' : vimproc_updcmd,
-      \     'cygwin' : 'make -f make_cygwin.mak',
-      \     'mac' : 'make -f make_mac.mak',
-      \     'unix' : 'make -f make_unix.mak',
-      \    },
-      \ })
-    "" Games:
-    NeoBundle 'vim-scripts/TeTrIs.vim'
-    """ Git:
-    " So that gitv can work
-    " NOTE: fugitive makes vim very laggy sometimes
-    "NeoBundle 'tpope/vim-fugitive'
-    "NeoBundle 'gregsexton/gitv', {
-      "\ 'depends' : 'vim-fugitive' }
-    " Using both!?!?
-    NeoBundle 'airblade/vim-gitgutter'
-    NeoBundle 'mhinz/vim-signify'
-    """ Auto Formatting:
-    " Currently this breaks undo and repeat.
-    "NeoBundle 'Raimondi/delimitMate'
-    """ Syntax:
-    "NeoBundleLazy 'LaTeX-Box-Team/LaTeX-Box'
-    NeoBundle 'elzr/vim-json'
-    NeoBundleLazy 'groenewege/vim-less'
-    NeoBundle "jaxbot/semantic-highlight.vim"
-    NeoBundle 'scrooloose/syntastic'
-    NeoBundle 'kien/rainbow_parentheses.vim'
-    NeoBundle 'sheerun/vim-polyglot'
-    " Highlights matching HTML tags
-    NeoBundleLazy 'Valloric/MatchTagAlways'
-    " Auto-close HTML tags
-    NeoBundleLazy 'vim-scripts/HTML-AutoCloseTag'
-    "NeoBundle 'nathanaelkane/vim-indent-guides'
-    NeoBundle 'Yggdroot/indentLine'
-    NeoBundleLazy 'spf13/PIV'
-    " YouCompleteMe only works on Linux/Mac and if vim is version > 7.3.584
-    " Use supertab if YCM won't work
-    if (has('win32') || has('win32unix')) || v:version < 704
-      NeoBundle 'ervandew/supertab'
+"""" Plugin Manager: (Vim-Plug)
+let iCanHazVimPlug=1
+" Download the manager if it isn't yet.
+if empty(glob(expand(s:vimDirectory . '/autoload/plug.vim')))
+  let iCanHazVimPlug=0
+  silent exec '!curl -fLo' . shellescape(expand(s:vimDirectory."/autoload/plug.vim")) . 
+      \ ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall
+endif
+
+" Required:
+call plug#begin(s:vimDirectoryPart . 'bundle')
+"Add your plugins here
+" Does anything rely on vimproc?
+"let vimproc_updcmd = has('win64') ?
+  "\ 'tools\\update-dll-mingw 64' : 'tools\\update-dll-mingw 32'
+"execute "NeoBundle 'Shougo/vimproc.vim'," . string({
+  "\ 'build' : {
+  "\     'windows' : vimproc_updcmd,
+  "\     'cygwin' : 'make -f make_cygwin.mak',
+  "\     'mac' : 'make -f make_mac.mak',
+  "\     'unix' : 'make -f make_unix.mak',
+  "\    },
+  "\ })
+function! NeverCallThis(info)
+endfunction
+"" Games:
+Plug 'vim-scripts/TeTrIs.vim', { 'on': 'LoadTetris'}
+function! LoadTetris()
+endfunction
+""" Git:
+" So that gitv can work
+" NOTE: fugitive makes vim very laggy sometimes
+"NeoBundle 'tpope/vim-fugitive'
+"NeoBundle 'gregsexton/gitv', {
+  "\ 'depends' : 'vim-fugitive' }
+" Using both!?!?
+Plug 'airblade/vim-gitgutter'
+Plug 'mhinz/vim-signify'
+""" Auto Formatting:
+" Currently this breaks undo and repeat.
+"NeoBundle 'Raimondi/delimitMate'
+""" Syntax:
+"NeoBundleLazy 'LaTeX-Box-Team/LaTeX-Box'
+Plug 'elzr/vim-json'
+Plug 'groenewege/vim-less'
+Plug 'jaxbot/semantic-highlight.vim', { 'for': 'javascript'}
+Plug 'scrooloose/syntastic'
+Plug 'kien/rainbow_parentheses.vim'
+Plug 'sheerun/vim-polyglot'
+" Highlights matching HTML tags
+Plug 'Valloric/MatchTagAlways', { 'for': ['html', 'php']}
+" Auto-close HTML tags
+Plug 'vim-scripts/HTML-AutoCloseTag', { 'for': 'html'}
+" Auto-close some structures (i.e. adds 'endfunction' after you type 'function!' in VimL)
+Plug 'tpope/vim-endwise'
+"NeoBundle 'nathanaelkane/vim-indent-guides'
+Plug 'Yggdroot/indentLine', { 'on': 'IndentGuidesToggle'}
+Plug 'spf13/PIV', { 'for': ['php']}
+" YouCompleteMe only works on Linux/Mac and if vim is version > 7.3.584
+" Use supertab if YCM won't work
+if (has('win32') || has('win32unix')) || v:version < 704
+  Plug 'ervandew/supertab'
+else
+  function! YouCompleteMeInstall(info)
+    !./install.sh --clang-completer --system-libclang --omnisharp-completer
+  endfunction
+  " If we have a new enough version of cmake, use upsteam
+  if $UPSTEAM_YCM
+    Plug 'Valloric/YouCompleteMe', { 'do': function('YouCompleteMeInstall')}
+  else
+    Plug 'AdnoC/YouCompleteMe', { 'do': function('YouCompleteMeInstall')}
+  endif
+endif
+Plug 'AdnoC/jcommenter.vim', { 'for': 'java'}
+Plug 'heavenshell/vim-jsdoc', { 'for': 'javascript'}
+Plug 'jelera/vim-javascript-syntax', { 'for': 'javascript'}
+"autocmd FileType java NeoBundleSource jcommenter.vim
+"NeoBundleLazy 'vim-scripts/Vim-JDE'
+"autocmd FileType java NeoBundleSource Vim-JDE
+Plug 'davetron5000/javax-xml-javadoc-vim', { 'for': 'java'}
+Plug 'davetron5000/javax-javadoc-vim', { 'for': 'java'}
+Plug 'davetron5000/java-javadoc-vim', { 'for': 'java'}
+Plug 'vim-scripts/csv.vim'
+" Python autocomplete
+"NeoBundle 'davidhalter/jedi-vim'
+""" Tools:
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle'}
+Plug 'sjl/gundo.vim', { 'on': 'GundoToggle'}
+Plug 'kien/ctrlp.vim'", { 'on': ['CtrlPBuffer', 'CtrlP']}
+Plug 'szw/vim-ctrlspace', { 'on': 'CtrlSpace'}
+Plug 'kana/vim-operator-user'
+Plug 'kana/vim-textobj-user'
+" Text Objects:
+" Allows for things like 'cs2a([' to change ((*)) to [(*)]
+Plug 'osyo-manga/vim-textobj-multiblock'
+" Allows for text objects to be between any specified char
+Plug 'thinca/vim-textobj-between'
+" Allows for the use of 'b' as a text objext of any [('"<
+Plug 'rhysd/vim-textobj-anyblock'
+" Allows text objects to only exist on one side of the carot
+Plug 'tommcdo/vim-ninja-feet'
+Plug 'coderifous/textobj-word-column.vim'
+Plug 'kana/vim-textobj-indent'
+Plug 'kana/vim-textobj-fold'
+Plug 'glts/vim-textobj-comment'
+""" Looks:
+" Colorscheme
+Plug 'altercation/vim-colors-solarized'
+" Makes the status bar & buffer bar look nice and display useful info
+Plug 'bling/vim-airline'
+" Dims paragraphs besides the one you are working on
+Plug 'junegunn/limelight.vim', { 'on': 'Limelight'}
+" Removes distractions
+Plug 'junegunn/goyo.vim', { 'on': ['GoyoEnter', 'Limelight']}
+Plug 'bling/vim-bufferline'
+Plug 'edkolev/promptline.vim'
+""" Movement:
+Plug 'Lokaltog/vim-easymotion'
+Plug 'wikitopian/hardmode', { 'on': ['ToggleHardMode', 'HardMode']}
+" Lets you press 'f'/'F' for repeated movements
+"NeoBundle 'rhysd/clever-f.vim'
+
+Plug 'othree/html5.vim'
+"NeoBundle 'tpope/vim-surround'
+Plug 'rhysd/vim-operator-surround'
+" Lets you replace text with something from a register (like pasting from register)
+Plug 'kana/vim-operator-replace'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-repeat'
+" Opens a buffer with documentation on language functions. Sources must be installed first
+Plug 'thinca/vim-ref', { 'on': 'Ref'}
+" matchit breaks [] jumping. Only use it when 100% useful
+Plug 'edsono/vim-matchit', { 'for': 'html'}
+
+
+""" Tagbar:
+" Ctags are a dependancy of tagbar
+if executable('ctags')
+  Plug 'majutsushi/tagbar'
+  if !has('win32') "&& !has('win32unix')
+    Plug 'vim-php/phpctags', { 'do': 'make -f Makefile'}
+    Plug 'vim-php/tagbar-phpctags.vim', { 'do': 'make -f Makefile'}
+  endif
+else
+  if iCanHazVimPlug == 0
+    echo 'Cannot find ctags. Not installing tagbar.'
+  endif
+endif
+if executable('node')
+  function! TernInstall(info)
+    if has('win32unix')
+      !npm install
     else
-      " This won't work because it times out while loading all the submodules.
-      " It is handled in postinstall though
-      NeoBundle 'Valloric/YouCompleteMe', {
-        \ 'build' : {
-          \ 'unix' : "./install.sh",
-          \ 'mac' : "./install.sh",
-        \ }
-      \ }
-    endif
-    NeoBundleLazy 'AdnoC/jcommenter.vim'
-    NeoBundleLazy 'heavenshell/vim-jsdoc'
-    NeoBundleLazy 'jelera/vim-javascript-syntax'
-    "autocmd FileType java NeoBundleSource jcommenter.vim
-    "NeoBundleLazy 'vim-scripts/Vim-JDE'
-    "autocmd FileType java NeoBundleSource Vim-JDE
-    NeoBundleLazy 'davetron5000/javax-xml-javadoc-vim'
-    NeoBundleLazy 'davetron5000/javax-javadoc-vim'
-    NeoBundleLazy 'davetron5000/java-javadoc-vim'
-    NeoBundleLazy 'vim-scripts/csv.vim'
-    " Python autocomplete
-    "NeoBundle 'davidhalter/jedi-vim'
-    """ Tools:
-    NeoBundle 'scrooloose/nerdcommenter'
-    NeoBundle 'scrooloose/nerdtree'
-    NeoBundle 'sjl/gundo.vim'
-    NeoBundle 'kien/ctrlp.vim'
-    NeoBundle 'szw/vim-ctrlspace'
-    NeoBundle 'kana/vim-operator-user'
-    NeoBundle 'kana/vim-textobj-user'
-    " Allows for things like 'cs2a([' to change ((*)) to [(*)]
-    NeoBundle 'osyo-manga/vim-textobj-multiblock'
-    " Allows for text objects to be between any specified char
-    NeoBundle 'thinca/vim-textobj-between'
-    " Allows for the use of 'b' as a text objext of any [('"<
-    NeoBundle 'rhysd/vim-textobj-anyblock'
-    " Allows text objects to only exist on one side of the carot
-    NeoBundle 'tommcdo/vim-ninja-feet'
-    NeoBundle 'kana/vim-operator-replace'
-    NeoBundle 'coderifous/textobj-word-column.vim'
-    NeoBundle 'kana/vim-textobj-indent'
-    NeoBundle 'kana/vim-textobj-fold'
-    NeoBundle 'glts/vim-textobj-comment'
-    """ Looks:
-    NeoBundle 'junegunn/limelight.vim'
-    NeoBundle 'bling/vim-airline'
-    NeoBundle 'bling/vim-bufferline'
-    NeoBundle 'altercation/vim-colors-solarized'
-    NeoBundle 'edkolev/promptline.vim'
-    """ Movement:
-    NeoBundle 'Lokaltog/vim-easymotion'
-    NeoBundleLazy 'wikitopian/hardmode'
-    " Lets you press 'f'/'F' for repeated movements
-    "NeoBundle 'rhysd/clever-f.vim'
-
-    NeoBundleLazy 'othree/html5.vim'
-    "NeoBundle 'tpope/vim-surround'
-    NeoBundle 'rhysd/vim-operator-surround'
-    NeoBundle 'tpope/vim-abolish'
-    NeoBundle 'tpope/vim-repeat'
-    NeoBundle 'tpope/vim-endwise'
-    NeoBundle 'thinca/vim-ref'
-    " matchit breaks [] jumping. Only use it when 100% useful
-    NeoBundleLazy 'edsono/vim-matchit'
-
-
-    """ Tagbar:
-    " Ctags are a dependancy of tagbar
-    if executable('ctags')
-      NeoBundle 'majutsushi/tagbar'
-      NeoBundle 'vim-php/phpctags', {
-        \ 'depends' : 'tagbar',
-        \ 'build' : {
-          \ 'cygwin' : 'make -f Makefile',
-          \ 'unix' : 'make -f Makefile',
-          \ 'mac' : 'make -f Makefile'
-        \ }}
-      NeoBundle 'vim-php/tagbar-phpctags.vim', {
-        \ 'depends' : 'phpctags',
-        \ 'build' : {
-          \ 'cygwin' : 'make -f Makefile',
-          \ 'unix' : 'make -f Makefile',
-          \ 'mac' : 'make -f Makefile'
-        \ }}
-    else
-      if iCanHazNeobundle == 0
-        echo 'Cannot find ctags. Not installing tagbar.'
+      if !has('win32')
+        !sudo npm install
       endif
     endif
-    if executable('node')
-      NeoBundleLazy 'marijnh/tern_for_vim' , {
-        \ 'build' : {
-          \ 'cygwin' : 'npm install',
-          \ 'unix' : 'sudo npm install',
-          \ 'mac' : 'sudo npm install',
-          \ }
-        \ }
-      " Install jsctags. Don't add it to the rtp since it isn't a vim plugin
-      NeoBundleFetch 'ramitos/jsctags' , {
-        \ 'build' : {
-          \ 'cygwin' : 'npm install --update',
-          \ 'unix' : 'sudo npm install --update',
-          \ 'mac' : 'sudo npm install --update',
-          \ }
-        \ }
-      "NeoBundle 'faceleg/doctorjs', {
-        "\ 'build' : {
-          "\ 'cygwin' : 'git submodule update --init; make -f Makefile install',
-          "\ 'unix' : 'git submodule update --init; sudo make -f Makefile install',
-          "\ 'mac' : 'git submodule update --init; sudo make -f Makefile install',
-          "\ }
-        "\ }
-    else
-      if iCanHazNeobundle == 0
-        echo 'Cannot find nodejs. Not installing doctorjs/jsctags'
-      endif
-    endif
+  endfunction
+  Plug 'marijnh/tern_for_vim' , { 'do': function('TernInstall'), 'for': 'javascript'}
+  " Install jsctags. Don't add it to the rtp since it isn't a vim plugin
+  "TODO: Put this in the vim/install.sh file instead
+  Plug 'ramitos/jsctags' , { 'on': 'NeverCallThis'}
+    "\ 'build' : {
+      "\ 'cygwin' : 'npm install --update',
+      "\ 'unix' : 'sudo npm install --update',
+      "\ 'mac' : 'sudo npm install --update',
+      "\ }
+    "\ }
+  "NeoBundle 'faceleg/doctorjs', {
+    "\ 'build' : {
+      "\ 'cygwin' : 'git submodule update --init; make -f Makefile install',
+      "\ 'unix' : 'git submodule update --init; sudo make -f Makefile install',
+      "\ 'mac' : 'git submodule update --init; sudo make -f Makefile install',
+      "\ }
+    "\ }
+else
+  if iCanHazVimPlug == 0
+    echo 'Cannot find nodejs. Not installing doctorjs/jsctags'
+  endif
+endif
+""" Tmux:
+if executable('tmux')
+  Plug 'benmills/vimux'
+  Plug 'edkolev/tmuxline.vim'
+else
+  if iCanHazVimPlug == 0
+    echo 'Cannot find tmux. Not installing vimux or tmuxline'
+  endif
+endif
+""" W3M:
+if executable('w3m')
+  Plug 'yuratomo/w3m.vim'
+  if iCanHazVimPlug == 0
+    echo 'Cannot find W3m. Not installing w3m.vim'
+  endif
+endif
 
 
 
-    " Lazy loading of filetype-dependant plugins
-    autocmd FileType javascript NeoBundleSource tern_for_vim vim-javascript-syntax vim-jsdoc
-    autocmd FileType php NeoBundleSource html5.vim HTML-AutoCloseTag PIV
-    autocmd FileType html NeoBundleSource vim-matchit
-    autocmd FileType java NeoBundleSource jcommenter.vim javax-xml-javadoc-vim javax-javadoc-vim java-javadoc-vim
-    autocmd FileType csv NeoBundleSource csv.vim
-    autocmd FileType less NeoBundleSource vim-less
-    autocmd FileType tex NeoBundleSource LaTeX-Box
 
+call plug#end()
+    "...All your other bundles...
+"if iCanHazVimPlug == 0
+  "echo "Installing Plugins, please ignore key map error messages"
+  "echo ""
+  "NeoBundleCheck
+"endif
 
-    if executable('tmux')
-      NeoBundle 'benmills/vimux'
-      NeoBundle 'edkolev/tmuxline.vim'
-    else
-      if iCanHazNeobundle == 0
-        echo 'Cannot find tmux. Not installing vimux or tmuxline'
-      endif
-    endif
-    if executable('w3m')
-      NeoBundle 'yuratomo/w3m.vim'
-      if iCanHazNeobundle == 0
-        echo 'Cannot find W3m. Not installing w3m.vim'
-      endif
-    endif
-    call neobundle#end()
-        "...All your other bundles...
-    if iCanHazNeobundle == 0
-      echo "Installing Plugins, please ignore key map error messages"
-      echo ""
-      NeoBundleCheck
-    endif
-" Setting up Neobundle - the vim plugin bundler end
-
-" Brief help
-" :PluginInstal
-" :PluginList          - list configured plugins
-" :PluginInstall(!)    - install (update) plugins
-" :PluginSearch(!) foo - search (or refresh cache first) for foo
-" :PluginClean(!)      - confirm (or auto-approve) removal of unused plugins
-
-filetype plugin indent on
 
 """" Vimballs:
 " Installs all vimballs in the vimball directory
@@ -286,7 +264,7 @@ function! InstallVimballs()
 endfunction
 
 " If we are in a new installation and therefore are installing plugins...
-if iCanHazNeobundle == 0
+if iCanHazVimPlug == 0
   echo "Intalling Vimballs"
   " Intall vimballs (UseVimball needs to be called after startup, therefore au)
   autocmd VimEnter * call InstallVimballs()
@@ -326,9 +304,16 @@ let g:syntastic_java_javac_config_file_enabled = 1
 nnoremap <leader>s] :lnext<CR>
 nnoremap <leader>s[ :lprevious<CR>
 
+"""" Goyo:
+autocmd User GoyoEnter Limelight
+autocmd User GoyoLeave Limelight!
+"""" Limelight:
+let g:limelight_conceal_ctermfg = 'DarkGray'
+
 """" Vim Airline:
 " Show a list of files on the top of the screen
 let g:airline#extensions#tabline#enabled = 1
+
 " Set the theme to solarized
 if !exists('g:airline_theme')
   let g:airline_theme = 'solarized'
@@ -336,6 +321,7 @@ endif
 " Use fancy fonts
 let g:airline_powerline_fonts = 1
 " Also show list of files on bottom of screen
+
 let g:airline#extension#bufferline#enabled=1
 " Only show git stats that are non-zero
 let g:airline#extensions#hunks#non_zero_only=1
@@ -614,7 +600,7 @@ map <F11> :set invpaste paste?<CR>
 " Change vim pwd to dir of file to easily open other files in dir            }{
 nnoremap <leader>cd :cd %:p:h<CR>
 " Open the current directory in a new tab                                    }{
-nnoremap <leader>te :tabedit <c-r>=expand("%:p:h")<CR>/
+nnoremap <leader>tbe :tabedit <c-r>=expand("%:p:h")<CR>/
 " Fix broken default mappings
 nmap dd d_
 " We aren't going to have any vim variables at the beginning or end of files
@@ -639,10 +625,10 @@ augroup LargeFile
 augroup END
 
 " Use generic omnicompletion if something more specific isn't already set
-if has("autocmd") && exists("+omnifunc")
-    au Filetype *
-        \ if &omnifunc == "" | setl omnifunc=syntaxcomplete#Complete | endif
-endif
+"if has("autocmd") && exists("+omnifunc")
+    "au Filetype *
+        "\ if &omnifunc == "" | setl omnifunc=syntaxcomplete#Complete | endif
+"endif
 
 " auto-save on focus loss
 au FocusLost * :wa
@@ -1005,63 +991,6 @@ map <c-j> <c-w>j
 map <c-k> <c-w>k
 map <c-l> <c-w>l
 
-
-"""""""""""""""""""""""""""""""""" Key List """""""""""""""""""""""""""""""""""
-" List of mapped keys:
-" <SPACE>
-" <leader>s]
-" <leader>s[
-" <leader>g[
-" <leader>g]
-" <leader>gs
-" <leader>gr
-" <leader>gp
-" <F6>
-" <F9>
-" <F1>
-" <F12>
-" <F11>
-" <leader>vo
-" <leader>vp
-" <leader>vr
-" <leader>vc
-" jk
-" <leader>cd
-" <leader>te
-" <leader>ev
-" <leader>w
-" <leader>rt
-" <leader>q
-" <leader>m
-" <leader>,
-" <leader>[
-" <leader>]
-" tt
-" <c-h>
-" <c-j>
-" <c-k>
-" <c-l>
-" <leader>rp
-" <leaer>gu
-" <leader>tg
-" <leader>nt
-" <leader>l
-" <leader>k
-" <leader>j
-" <leader>h
-" <leader>s
-" <leader><ENTER>
-" Y (kinda)
-" H
-" L
-" <M-o>
-" <M-i>
-" <kHome>
-" <kEnd>
-" <C-s>
-" <leader>cs
-" <leader>rs
-" <leader>cc
 
 """" Notes
 ":bro ol (AKA :browse oldfiles) lists previously opened files and allows you to open one
