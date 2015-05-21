@@ -29,12 +29,15 @@ let mapleader=" "
 function! s:SID_PREFIX()
     return matchstr(expand('<sfile>'), '<SNR>\d\+_')
 endfunction
+
+" Vim looks for plugins in vimfiles instead of .vim in Windows
 if has('gui_win32')
   let s:vimDirectory=expand("$HOME/vimfiles")
 else
   let s:vimDirectory=expand("$HOME/.vim")
 endif
 let s:vimDirectoryPart=expand(s:vimDirectory . "/")
+let g:vimDirectory=s:vimDirectory
 
 
 """"""""""""""""""""""""""""""""""" Plugins """""""""""""""""""""""""""""""""""
@@ -43,8 +46,41 @@ let iCanHazVimPlug=1
 " Download the manager if it isn't yet.
 if empty(glob(expand(s:vimDirectory . '/autoload/plug.vim')))
   let iCanHazVimPlug=0
-  silent exec '!curl -fLo' . shellescape(expand(s:vimDirectory."/autoload/plug.vim")) . 
-      \ ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  " I know that all these could be replaced with just the git one. But I don't want to delete them
+  if executable("curl")
+    silent exec '!curl -fLo ' . shellescape(expand(s:vimDirectory."/autoload/plug.vim")) .
+        \ ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  elseif executable("wget")
+    " wget can't make folders on its own, so we need to make .vim/autoload for it
+    if executable("mkdir")
+      silent exec '!mkdir -p ' . shellescape(expand(s:vimDirectory."/autoload/"))
+    endif
+    silent exec '!wget -q -O ' . shellescape(expand(s:vimDirectory."/autoload/plug.vim")) .
+        \ '  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  " If we are on Windows we can use Powershell to download it
+  elseif executable("powershell")
+    silent exec '!if not exist ' . shellescape(expand(s:vimDirectory)) . ' mkdir ' .
+      \ shellescape(expand(s:vimDirectory."/autoload/"))
+    silent exec '!powershell "(new-object System.Net.WebClient).DownloadFile(''https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'',''' .
+      \ shellescape(expand(s:vimDirectory."/autoload/plug.vim")) . ''')"'
+  " If all else fails we can just use git.
+  elseif executable("git")
+    silent exec '!git clone -q --depth=1 git@github.com:junegunn/vim-plug.git ' . shellescape(expand(s:vimDirectory."/temp"))
+    if has('gui_win32')
+      let s:mv="move "
+      let s:rm="del "
+    else
+      let s:mv="mv "
+      let s:rm="rm -rf "
+    endif
+    silent exec '!' . s:mv . shellescape(expand(s:vimDirectory."/temp/plug.vim")) .
+      \ ' ' . shellescape(expand(s:vimDirectory."/autoload/plug.vim"))
+    silent exec '!' . s:rm . shellescape(expand(s:vimDirectory."/temp/"))
+  else
+    echo "Couldn't find a way to download Vim-Plug. Not sure how you were planning" .
+      \ " installing plugins without Git."
+  endif
+
   autocmd VimEnter * PlugInstall
 endif
 
@@ -739,11 +775,11 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
     endif
     " If we are using a gui set the font in the proper format for that gui
     if has("gui_gtk2")
-      set guifont=Inconsolata\ for\ Powerline\ 10
+      set guifont=Inconsolata\ for\ Powerline\ 12
     elseif has("gui_macvim")
-      set guifont=Inconsolata\ for\ Powerline:h10
+      set guifont=Inconsolata\ for\ Powerline:h12
     elseif has("gui_win32")
-      set guifont=Inconsolata\ for\ Powerline:h10:cANSI
+      set guifont=Inconsolata\ for\ Powerline:h12:cANSI
     endif
     " If we open a new buffer, and after any final filetype changes
     autocmd FileType,BufRead * call MaybeRainbow()
