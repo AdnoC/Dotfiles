@@ -167,7 +167,7 @@ Plug 'vim-scripts/csv.vim'
 " Python autocomplete
 "NeoBundle 'davidhalter/jedi-vim'
 """ Tools:
-Plug 'scrooloose/nerdcommenter'
+Plug 'tomtom/tcomment_vim'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle'}
 Plug 'sjl/gundo.vim', { 'on': 'GundoToggle'}
 Plug 'kien/ctrlp.vim'", { 'on': ['CtrlPBuffer', 'CtrlP']}
@@ -511,47 +511,6 @@ nmap <leader><ENTER> <Plug>(easymotion-sn)
 omap <leader><ENTER> <Plug>(easymotion-sn)
 let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 
-"""" NERD Commenter:
-" Use custon NERD commenter mapping                                          }{
-let g:NERDCreateDefaultMappings=0
-" http://relaxedcolumn.blog8.fc2.com/blog-entry-154.html
-" NERDCommenter + operator-user
-function! s:setCommentOperator(key, name)
-    call operator#user#define(
-    \   'comment-' . a:name,
-    \   s:SID_PREFIX() . 'doCommentCommand',
-    \   'call ' . s:SID_PREFIX() . 'setCommentCommand("' . a:name . '")')
-    execute 'map' a:key '<Plug>(operator-comment-' . a:name . ')'
-endfunction
-
-function! s:setCommentCommand(command)
-    let s:comment_command = a:command
-endfunction
-
-function! s:doCommentCommand(motion_wiseness)
-    let v = operator#user#visual_command_from_wise_name(a:motion_wiseness)
-    execute 'normal! `[' . v . "`]\<Esc>"
-    echo s:comment_command
-    call NERDComment('x', s:comment_command)
-endfunction
-
-call s:setCommentOperator('<leader>cv', 'comment')
-call s:setCommentOperator('<leader>cx', 'uncomment')
-
-
-" Fixes most gui problems (broken syntax coloring, status bar no color)      }{
-function! FixGUI()
-  syntax enable
-  if expand("$SOL_FLAVOR") == 'light'
-    set background="light"
-  else
-    set background="dark"
-  endif
-  colorscheme solarized
-  call MaybeRainbow()
-endfunction
-map <F9> :call FixGUI()<CR>
-
 """" W3m:
 " Bind w3m to an easy key and add http so it doesn't search.                 }{
 nnoremap <leader>w3 :W3m http://
@@ -633,6 +592,31 @@ xmap aX <Plug>(textobj-comment-big-a)
 omap aX <Plug>(textobj-comment-big-a)
 xmap iX <Plug>(textobj-comment-big-i)
 omap iX <Plug>(textobj-comment-big-i)
+
+" Using vim-operator-user (With NERDCommenter)
+" http://relaxedcolumn.blog8.fc2.com/blog-entry-154.html
+"function! s:setCommentOperator(key, name)
+    "call operator#user#define(
+    "\   'comment-' . a:name,
+    "\   s:SID_PREFIX() . 'doCommentCommand',
+    "\   'call ' . s:SID_PREFIX() . 'setCommentCommand("' . a:name . '")')
+    "execute 'map' a:key '<Plug>(operator-comment-' . a:name . ')'
+"endfunction
+
+"function! s:setCommentCommand(command)
+    "let s:comment_command = a:command
+"endfunction
+
+"function! s:doCommentCommand(motion_wiseness)
+    "let v = operator#user#visual_command_from_wise_name(a:motion_wiseness)
+    "execute 'normal! `[' . v . "`]\<Esc>"
+    "echo s:comment_command
+    "call NERDComment('x', s:comment_command)
+"endfunction
+
+"call s:setCommentOperator('<leader>cv', 'comment')
+"call s:setCommentOperator('<leader>cx', 'uncomment')
+
 
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
