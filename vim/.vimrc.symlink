@@ -460,6 +460,19 @@ function! MaybeRainbow()
   endif
 endfunction
 
+" Fixes most gui problems (broken syntax coloring, status bar no color)      }{
+function! FixGUI()
+  syntax enable
+  if expand("$SOL_FLAVOR") == 'light'
+    set background="light"
+  else
+    set background="dark"
+  endif
+  colorscheme solarized
+  call MaybeRainbow()
+endfunction
+map <F9> :call FixGUI()<CR>
+
 """" Tagbar:
 " Bind a button to open the tagbar                                         }{
 nnoremap <leader>tg :TagbarToggle<CR>
@@ -647,8 +660,6 @@ autocmd BufEnter *.js SemanticHighlight
 autocmd BufEnter *.js setlocal foldmethod=indent
 
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
-" Remap ';' to ':' for easier commands                                       }{
-nnoremap ; :
 " Use Control-a to move to normal mode                                       }{
 inoremap jk <Esc>
 " Allow the use of a familiar key combination to exit visual mode            }{
@@ -985,8 +996,6 @@ nnoremap k gk
 vnoremap j gj
 vnoremap k gk
 
-" Moving forward occurs more often than backwards                            }{
-nnoremap , ;
 
 " Only jumps around the current buffer.                                      }{
 function! JumpInFile(back, forw)
