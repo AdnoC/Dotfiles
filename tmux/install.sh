@@ -5,3 +5,5 @@ if ! command -v tmux >/dev/null 2>&1; then
     sudo apt-get install tmux
   fi
 fi
+
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
