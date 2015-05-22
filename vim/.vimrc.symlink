@@ -132,20 +132,26 @@ Plug 'vim-scripts/HTML-AutoCloseTag', { 'for': 'html'}
 Plug 'tpope/vim-endwise'
 "NeoBundle 'nathanaelkane/vim-indent-guides'
 Plug 'Yggdroot/indentLine', { 'on': 'IndentGuidesToggle'}
-Plug 'spf13/PIV', { 'for': ['php']}
+"Plug 'spf13/PIV', { 'for': ['php']}
 " YouCompleteMe only works on Linux/Mac and if vim is version > 7.3.584
 " Use supertab if YCM won't work
-if (has('win32') || has('win32unix')) || v:version < 704
+if (has('win32') || has('win32unix')) || (v:version < 704 && (has('python') || has('lua')))
+  \ || (v:version == 703 && ((!has('patch584') || !has('python')) ||  (!has('patch885') || !has('lua'))))
   Plug 'ervandew/supertab'
+  let g:completion_engine =
 else
-  function! YouCompleteMeInstall(info)
-    !./install.sh --clang-completer --system-libclang --omnisharp-completer
-  endfunction
-  " If we have a new enough version of cmake, use upsteam
-  if $UPSTEAM_YCM
-    Plug 'Valloric/YouCompleteMe', { 'do': function('YouCompleteMeInstall')}
+  if has('lua') && (v:version >= 704 || v:version == 703 && has('patch885'))
+    Plug 'Shougo/neocomplete.vim'
   else
-    Plug 'AdnoC/YouCompleteMe', { 'do': function('YouCompleteMeInstall')}
+    function! YouCompleteMeInstall(info)
+      !./install.sh --clang-completer --system-libclang --omnisharp-completer
+    endfunction
+    " If we have a new enough version of cmake, use upsteam
+    if $UPSTEAM_YCM
+      Plug 'Valloric/YouCompleteMe', { 'do': function('YouCompleteMeInstall')}
+    else
+      Plug 'AdnoC/YouCompleteMe', { 'do': function('YouCompleteMeInstall')}
+    endif
   endif
 endif
 Plug 'AdnoC/jcommenter.vim', { 'for': 'java'}
@@ -340,6 +346,39 @@ let g:syntastic_java_javac_config_file_enabled = 1
 nnoremap <leader>s] :lnext<CR>
 nnoremap <leader>s[ :lprevious<CR>
 
+"""" YouCompleteMe
+" If we are using YCM
+if exists(':YcmRestartServer')
+  " Semantic triggers for when YCM should activate
+  let g:ycm_semantic_triggers =  {
+    \   'c' : ['->', '.'],
+    \   'objc' : ['->', '.'],
+    \   'ocaml' : ['.', '#'],
+    \   'cpp,objcpp' : ['->', '.', '::'],
+    \   'perl' : ['->'],
+    \   'php' : ['->', '::'],
+    \   'cs,java,javascript,d,python,perl6,scala,vb,elixir,go' : ['.'],
+    \   'vim' : ['re![_a-zA-Z]+[_\w]*\.'],
+    \   'ruby' : ['.', '::'],
+    \   'lua' : ['.', ':'],
+    \   'erlang' : [':'],
+    \ }
+endif
+
+"""" Neocomplete
+" If we are using Neocomplete
+if exists(':NeoCompleteEnable')
+  " Start Neocomplete when we enter Vim
+  let g:neocomplete_enable_at_startup = 1
+  " <TAB>: completion.
+  inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+  " <C-h>, <BS>: close popup and delete backword char.
+  inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+  inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+  inoremap <expr><C-y>  neocomplete#close_popup()
+  inoremap <expr><C-e>  neocomplete#cancel_popup()
+endif
+
 """" Goyo:
 autocmd User GoyoEnter Limelight
 autocmd User GoyoLeave Limelight!
@@ -387,6 +426,7 @@ nmap <Leader>gr <Plug>GitGutterRevertHunk
 " Preview the changes                                                        }{
 nmap <Leader>gp <Plug>GitGutterPreviewHunk
 
+"""" Solarized:
 let g:solarized_termcolors=256
 let g:solarized_termtrans=1
 let g:solarized_visibility='high'
@@ -447,7 +487,7 @@ let g:indent_guides_guide_size=1
 
 """" Easy Motion:
 " NOTE: omaps are used when using 'c' and 'd' operators
-nmap <leader> <Plug>(easymotion-prefix)
+"nmap <leader> <Plug>(easymotion-prefix)
 omap <leader> <Plug>(easymotion-prefix)
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 " Make some easymotion binds                                                 }{
