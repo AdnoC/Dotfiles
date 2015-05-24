@@ -653,6 +653,9 @@ autocmd FileType tex exec "setlocal makeprg=latexmk\\ -outdir=\\\"" . expand('%:
 autocmd FileType tex set conceallevel=0
 let g:tex_conceal = ""
 
+" When editing plain text I don't need to see the ends of lines.
+autocmd FileType txt setlocal wrap linebreak nolist textwidth=0 wrapmargin=0
+
 " Vim doesn't play nice with javascript's anonymous function use. This makes the code actually have
 " colors.
 autocmd BufEnter *.js SemanticHighlight
