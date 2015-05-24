@@ -1,7 +1,6 @@
 #!/bin/bash
-if ! command -v apt-get >/dev/null 2>&1
-then
-  echo "  Updating apt-get for you"
+if ! hasCommand "apt-get"; then
+  info "  Updating apt-get for you"
   sudo apt-get update
   return 0
 else
