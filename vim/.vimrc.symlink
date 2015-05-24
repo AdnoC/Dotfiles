@@ -138,7 +138,6 @@ Plug 'Yggdroot/indentLine', { 'on': 'IndentGuidesToggle'}
 if (has('win32') || has('win32unix')) || (v:version < 704 && (has('python') || has('lua')))
   \ || (v:version == 703 && ((!has('patch584') || !has('python')) ||  (!has('patch885') || !has('lua'))))
   Plug 'ervandew/supertab'
-  let g:completion_engine =
 else
   if has('lua') && (v:version >= 704 || v:version == 703 && has('patch885'))
     Plug 'Shougo/neocomplete.vim'
