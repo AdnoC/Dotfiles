@@ -8,6 +8,8 @@
     } else if (a[i] > b[i]) {
       x = 1;
       break;
+    } else {
+      x = 0;
     }
   print x;
 }

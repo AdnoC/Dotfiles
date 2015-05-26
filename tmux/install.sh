@@ -7,5 +7,7 @@ if ! hasCommand "tmux"; then
   fi
 fi
 
-info "Cloning tmux plugin manager"
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+if [ ! -d ~/.tmux/plugins/tpm ]; then
+  info "Cloning tmux plugin manager"
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
