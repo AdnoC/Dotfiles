@@ -578,15 +578,21 @@ autocmd FileType javascript nmap <leader>cj :JsDoc<CR>
 
 """" VimJDE:
 if executable('ant')
-  let g:vjde_lib_path=system("ant -q cp | grep echo | cut -f2- -d] | tr -d ' ' | tr ':' '\n'")
+  function! s:Set_VJDE_Lib_Path()
+    if !exists("g:vjde_lib_path")
+      let g:vjde_lib_path=system("ant -q cp | grep echo | cut -f2- -d] | tr -d ' ' | tr ':' '\n'")
+    endif
+  endfunction
+  " The system call takes a long time (700 ms), so don't do it unless we are editing a java file
+  autocmd FileType java call s:Set_VJDE_Lib_Path()
 endif
+
 """" SemanticHighlight:
 let s:semanticTermColorsDark = [28,1,2,3,4,5,6,7,25,9,10,34,12,13,14,15,16,125,124,19]
 let s:semanticTermColorsLight = [28,1,2,3,4,5,6,8,25,9,10,34,12,13,14,17,16,125,124,19]
 
-
 """" VimOperatorSurround:
-"" operator mappings                                                         }{
+" operator mappings                                                         }{
 map <silent>sa <Plug>(operator-surround-append)
 map <silent>sd <Plug>(operator-surround-delete)
 map <silent>sc <Plug>(operator-surround-replace)
