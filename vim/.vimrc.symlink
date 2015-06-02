@@ -117,12 +117,14 @@ Plug 'mhinz/vim-signify'
 " Currently this breaks undo and repeat.
 "NeoBundle 'Raimondi/delimitMate'
 """ Syntax:
+Plug 'Konfekt/FastFold'
 "NeoBundleLazy 'LaTeX-Box-Team/LaTeX-Box'
 Plug 'elzr/vim-json'
 Plug 'groenewege/vim-less'
 Plug 'jaxbot/semantic-highlight.vim', { 'for': 'javascript'}
 Plug 'scrooloose/syntastic'
-Plug 'kien/rainbow_parentheses.vim'
+Plug 'luochen1990/rainbow'
+Plug 'myinst/indent-finder'
 Plug 'sheerun/vim-polyglot'
 " Highlights matching HTML tags
 Plug 'Valloric/MatchTagAlways', { 'for': ['html', 'php']}
@@ -166,8 +168,11 @@ Plug 'vim-scripts/csv.vim'
 " Python autocomplete
 "NeoBundle 'davidhalter/jedi-vim'
 """ Tools:
+" Close buffers without closing windows
+Plug 'qpkorr/vim-bufkill'
 Plug 'tomtom/tcomment_vim'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle'}
+" File Explorer Plugin
+Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'sjl/gundo.vim', { 'on': 'GundoToggle'}
 Plug 'kien/ctrlp.vim'", { 'on': ['CtrlPBuffer', 'CtrlP']}
 Plug 'szw/vim-ctrlspace', { 'on': 'CtrlSpace'}
@@ -430,35 +435,17 @@ let g:solarized_termcolors=256
 let g:solarized_termtrans=1
 let g:solarized_visibility='high'
 
-"""" Rainbow Parentheses:                                                    }{
-" Make rainbow parentheses an acual rainbow
-let g:rbpt_colorpairs = [
-  \ [ '13', '#6c71c4'],
-  \ [ '5',  '#d33682'],
-  \ [ '1',  '#dc322f'],
-  \ [ '9',  '#cb4b16'],
-  \ [ '3',  '#b58900'],
-  \ [ '2',  '#859900'],
-  \ [ '6',  '#2aa198'],
-  \ [ '4',  '#268bd2'],
-  \ ]
-" Calls all the functions to load rainbow parens
-function! LoadRainbow()
-  RainbowParenthesesActivate
-  RainbowParenthesesLoadRound
-  RainbowParenthesesLoadSquare
-  RainbowParenthesesLoadBraces
-  RainbowParenthesesLoadChevrons
-endfunction
-map <F6> :call LoadRainbow()<CR>
-" Wrapper function that only lets RainbowParens run if it works with the file
-" type
-function! MaybeRainbow()
-  if &ft != "php" && &ft != "html"
-    call LoadRainbow()
-  endif
-endfunction
-
+"""" Rainbow:
+let g:rainbow_active = 1
+let g:rainbow_conf = {
+\   'guifgs': ['#6c71c4', '#d33682', '#dc322f', '#cb4b16', '#b58900', '#859900', '#2aa198', '#268bd2'],
+\   'ctermfgs': ['13', '5', '1', '9', '3', '2', '6', '4'],
+\   'operators': '_,_',
+\   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+\   'separately': {
+\   }
+\}
+"
 " Fixes most gui problems (broken syntax coloring, status bar no color)      }{
 function! FixGUI()
   syntax enable
@@ -468,7 +455,6 @@ function! FixGUI()
     set background="dark"
   endif
   colorscheme solarized
-  call MaybeRainbow()
 endfunction
 map <F9> :call FixGUI()<CR>
 
@@ -477,14 +463,6 @@ map <F9> :call FixGUI()<CR>
 nnoremap <leader>tg :TagbarToggle<CR>
 let g:tagbar_autoclose=1
 let g:tagbar_autofocus=1
-
-
-"""" NERD Tree:
-" Bind a button to open NERD Tree                                            }{
-nnoremap <leader>nt :NERDTreeToggle<CR>
-let NERDTreeQuitOnOpen=1
-let NERDTreeDirArrows=0
-let NERDTreeShowHidden = 1
 
 """" Gundo:
 " Bind a button to open Gundo                                                }{
@@ -537,7 +515,7 @@ let g:ctrlp_custom_ignore={
   \ }
 let g:ctrlp_show_hidden = 1
 " Navigate to specific buffers quickly                                       }{
-map <leader><C-p> :CtrlPBuffer<CR>
+map <C-B> :CtrlPBuffer<CR>
 """" Vimux:                                                                  }{
 map <leader>vp :VimuxPromptCommand<CR>
 map <leader>vr :VimuxRunLastCommand<CR>
@@ -560,6 +538,7 @@ let g:PreserveNoEOL=1
 let g:PIVCreateDefaultMappings = 0
 " AutoPHPFolding really hits performance, making cursor movement and switching bufers laggy
 let g:DisableAutoPHPFolding = 1
+
 """" JCommenter:
 " Set author config
 autocmd FileType java let g:jcommenter_class_author='Adam Cutler'
@@ -569,6 +548,7 @@ autocmd FileType java let g:jcommenter_method_description_space = 1
 autocmd FileType java nmap <leader>cj :call JCommentWriter()<CR>
 autocmd FileType java nmap <leader>c] :call SearchInvalidComment(0)<cr>
 autocmd FileType java nmap <leader>c[ :call SearchInvalidComment(1)<cr>
+
 """" VimJSDoc:
 let g:jsdoc_allow_input_prompt=1
 let g:jsdoc_additional_descriptions=1
@@ -578,15 +558,21 @@ autocmd FileType javascript nmap <leader>cj :JsDoc<CR>
 
 """" VimJDE:
 if executable('ant')
-  let g:vjde_lib_path=system("ant -q cp | grep echo | cut -f2- -d] | tr -d ' ' | tr ':' '\n'")
+  function! s:Set_VJDE_Lib_Path()
+    if !exists("g:vjde_lib_path")
+      let g:vjde_lib_path=system("ant -q cp | grep echo | cut -f2- -d] | tr -d ' ' | tr ':' '\n'")
+    endif
+  endfunction
+  " The system call takes a long time (700 ms), so don't do it unless we are editing a java file
+  autocmd FileType java call s:Set_VJDE_Lib_Path()
 endif
+
 """" SemanticHighlight:
 let s:semanticTermColorsDark = [28,1,2,3,4,5,6,7,25,9,10,34,12,13,14,15,16,125,124,19]
 let s:semanticTermColorsLight = [28,1,2,3,4,5,6,8,25,9,10,34,12,13,14,17,16,125,124,19]
 
-
 """" VimOperatorSurround:
-"" operator mappings                                                         }{
+" operator mappings                                                         }{
 map <silent>sa <Plug>(operator-surround-append)
 map <silent>sd <Plug>(operator-surround-delete)
 map <silent>sc <Plug>(operator-surround-replace)
@@ -633,6 +619,8 @@ omap iX <Plug>(textobj-comment-big-i)
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
+
+au BufRead,BufNewFile *.sls setfiletype yaml
 autocmd FileReadPre *.inc set filetype=php
 autocmd FileReadPre *.module set filetype=php
 if executable('ant')
@@ -652,6 +640,9 @@ autocmd FileType tex  if ! isdirectory('LatexOutput') |  exec "!mkdir LatexOutpu
 autocmd FileType tex exec "setlocal makeprg=latexmk\\ -outdir=\\\"" . expand('%:p:h') . expand('/') . "LatexOutput\\\"\\ -pdf\\ %"
 autocmd FileType tex set conceallevel=0
 let g:tex_conceal = ""
+
+" When editing plain text I don't need to see the ends of lines.
+autocmd FileType txt setlocal wrap linebreak nolist textwidth=0 wrapmargin=0
 
 " Vim doesn't play nice with javascript's anonymous function use. This makes the code actually have
 " colors.
@@ -815,8 +806,6 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
     elseif has("gui_win32")
       set guifont=Inconsolata\ for\ Powerline:h12:cANSI
     endif
-    " If we open a new buffer, and after any final filetype changes
-    autocmd FileType,BufRead * call MaybeRainbow()
     " Highlight search matches
     set hlsearch
 endif

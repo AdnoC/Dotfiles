@@ -7,7 +7,7 @@ if [[ "$OSTYPE" == 'cygwin' ]]; then
   export ANT_HOME=$(echo ~)"/antdir/apache-ant-1.9.4/"
   export JAVA_HOME="/cygdrive/d/Program Files/Java/"
   # What about using 'which javac' to find it?
-  if [ -d "$JAVA_HOME"]; then
+  if [ -d "$JAVA_HOME" ]; then
     export JAVA_HOME=$(find "$JAVA_HOME" -name 'jdk*' | sed -n 1p)
   fi
   export PYTHON_HOME="/cygdrive/d/ProgrammingTools/Python33"
