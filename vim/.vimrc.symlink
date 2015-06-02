@@ -166,8 +166,11 @@ Plug 'vim-scripts/csv.vim'
 " Python autocomplete
 "NeoBundle 'davidhalter/jedi-vim'
 """ Tools:
+" Close buffers without closing windows
+Plug 'qpkorr/vim-bufkill'
 Plug 'tomtom/tcomment_vim'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle'}
+" File Explorer Plugin
+Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'sjl/gundo.vim', { 'on': 'GundoToggle'}
 Plug 'kien/ctrlp.vim'", { 'on': ['CtrlPBuffer', 'CtrlP']}
 Plug 'szw/vim-ctrlspace', { 'on': 'CtrlSpace'}
@@ -478,14 +481,6 @@ nnoremap <leader>tg :TagbarToggle<CR>
 let g:tagbar_autoclose=1
 let g:tagbar_autofocus=1
 
-
-"""" NERD Tree:
-" Bind a button to open NERD Tree                                            }{
-nnoremap <leader>nt :NERDTreeToggle<CR>
-let NERDTreeQuitOnOpen=1
-let NERDTreeDirArrows=0
-let NERDTreeShowHidden = 1
-
 """" Gundo:
 " Bind a button to open Gundo                                                }{
 nnoremap <leader>gu :GundoToggle<CR>
@@ -537,7 +532,7 @@ let g:ctrlp_custom_ignore={
   \ }
 let g:ctrlp_show_hidden = 1
 " Navigate to specific buffers quickly                                       }{
-map <leader><C-p> :CtrlPBuffer<CR>
+map <C-B> :CtrlPBuffer<CR>
 """" Vimux:                                                                  }{
 map <leader>vp :VimuxPromptCommand<CR>
 map <leader>vr :VimuxRunLastCommand<CR>
@@ -560,6 +555,7 @@ let g:PreserveNoEOL=1
 let g:PIVCreateDefaultMappings = 0
 " AutoPHPFolding really hits performance, making cursor movement and switching bufers laggy
 let g:DisableAutoPHPFolding = 1
+
 """" JCommenter:
 " Set author config
 autocmd FileType java let g:jcommenter_class_author='Adam Cutler'
@@ -569,6 +565,7 @@ autocmd FileType java let g:jcommenter_method_description_space = 1
 autocmd FileType java nmap <leader>cj :call JCommentWriter()<CR>
 autocmd FileType java nmap <leader>c] :call SearchInvalidComment(0)<cr>
 autocmd FileType java nmap <leader>c[ :call SearchInvalidComment(1)<cr>
+
 """" VimJSDoc:
 let g:jsdoc_allow_input_prompt=1
 let g:jsdoc_additional_descriptions=1
