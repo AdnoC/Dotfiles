@@ -619,6 +619,8 @@ omap iX <Plug>(textobj-comment-big-i)
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
+
+au BufRead,BufNewFile *.sls setfiletype yaml
 autocmd FileReadPre *.inc set filetype=php
 autocmd FileReadPre *.module set filetype=php
 if executable('ant')
