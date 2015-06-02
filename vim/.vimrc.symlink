@@ -117,12 +117,14 @@ Plug 'mhinz/vim-signify'
 " Currently this breaks undo and repeat.
 "NeoBundle 'Raimondi/delimitMate'
 """ Syntax:
+Plug 'Konfekt/FastFold'
 "NeoBundleLazy 'LaTeX-Box-Team/LaTeX-Box'
 Plug 'elzr/vim-json'
 Plug 'groenewege/vim-less'
 Plug 'jaxbot/semantic-highlight.vim', { 'for': 'javascript'}
 Plug 'scrooloose/syntastic'
-Plug 'kien/rainbow_parentheses.vim'
+Plug 'luochen1990/rainbow'
+Plug 'myinst/indent-finder'
 Plug 'sheerun/vim-polyglot'
 " Highlights matching HTML tags
 Plug 'Valloric/MatchTagAlways', { 'for': ['html', 'php']}
@@ -433,35 +435,17 @@ let g:solarized_termcolors=256
 let g:solarized_termtrans=1
 let g:solarized_visibility='high'
 
-"""" Rainbow Parentheses:                                                    }{
-" Make rainbow parentheses an acual rainbow
-let g:rbpt_colorpairs = [
-  \ [ '13', '#6c71c4'],
-  \ [ '5',  '#d33682'],
-  \ [ '1',  '#dc322f'],
-  \ [ '9',  '#cb4b16'],
-  \ [ '3',  '#b58900'],
-  \ [ '2',  '#859900'],
-  \ [ '6',  '#2aa198'],
-  \ [ '4',  '#268bd2'],
-  \ ]
-" Calls all the functions to load rainbow parens
-function! LoadRainbow()
-  RainbowParenthesesActivate
-  RainbowParenthesesLoadRound
-  RainbowParenthesesLoadSquare
-  RainbowParenthesesLoadBraces
-  RainbowParenthesesLoadChevrons
-endfunction
-map <F6> :call LoadRainbow()<CR>
-" Wrapper function that only lets RainbowParens run if it works with the file
-" type
-function! MaybeRainbow()
-  if &ft != "php" && &ft != "html"
-    call LoadRainbow()
-  endif
-endfunction
-
+"""" Rainbow:
+let g:rainbow_active = 1
+let g:rainbow_conf = {
+\   'guifgs': ['#6c71c4', '#d33682', '#dc322f', '#cb4b16', '#b58900', '#859900', '#2aa198', '#268bd2'],
+\   'ctermfgs': ['13', '5', '1', '9', '3', '2', '6', '4'],
+\   'operators': '_,_',
+\   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+\   'separately': {
+\   }
+\}
+"
 " Fixes most gui problems (broken syntax coloring, status bar no color)      }{
 function! FixGUI()
   syntax enable
@@ -471,7 +455,6 @@ function! FixGUI()
     set background="dark"
   endif
   colorscheme solarized
-  call MaybeRainbow()
 endfunction
 map <F9> :call FixGUI()<CR>
 
@@ -821,8 +804,6 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
     elseif has("gui_win32")
       set guifont=Inconsolata\ for\ Powerline:h12:cANSI
     endif
-    " If we open a new buffer, and after any final filetype changes
-    autocmd FileType,BufRead * call MaybeRainbow()
     " Highlight search matches
     set hlsearch
 endif
