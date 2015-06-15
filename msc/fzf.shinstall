@@ -12,8 +12,18 @@
 #fi
 
 if [ ! -d ~/.fzf ]; then
-  if [ "$(uname -s)" == "Linux" ]; then
+  if isLinux; then
     sudo apt-get install libncurses-ruby
+  elif isCygwin; then
+    if ! hasCommand gem; then
+      warn "FZF requires ruby with gems"
+      warn "Please install it via the cywin setup"
+      return;
+    elif gem list | grep curses; then
+      warn "curses gem not installed"
+      warn "Please install it (ruby-curses) via the cygwin setup to enable FZF"
+      return;
+    fi
   fi
   git clone https://github.com/junegunn/fzf.git ~/.fzf
   ~/.fzf/install

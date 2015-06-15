@@ -12,9 +12,9 @@ if ! hasCommand "ctags"; then
   elif isLinux; then
     info "Installing ctags from apt-get"
 
-  elif [ "$OSTYPE" == "cygwin" ]; then
-    info "Please install ctags through cygports. Intructions can be found here:"
-    info "http://cygwinports.org/"
+  elif isCygwin; then
+    warn "Please install ctags through cygports. Intructions can be found here: \
+      http://cygwinports.org/"
   fi
 fi
 
