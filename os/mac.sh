@@ -6,9 +6,8 @@
 # using Homebrew.
 
 # Check for Homebrew
-if ! command -v brew >/dev/null 2>&1
-then
-  echo "  Installing Homebrew for you."
+if ! hasCommand "brew"; then
+  info "  Installing Homebrew for you."
   ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)" > /tmp/homebrew-install.log
 else
   return 1

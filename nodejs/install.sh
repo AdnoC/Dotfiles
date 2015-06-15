@@ -1,14 +1,16 @@
-if ! command -v node >/dev/null 2>&1; then
-  if [ "$(uname -s)" == "Linux" ]; then
+if ! hasCommand "node"; then
+  if isLinux && hasCommand "apt-get"; then
     if [ "$NO_NODEJS_PPA" == "" ]; then
       sudo apt-get install python-software-properties
       sudo apt-add-repository ppa:chris-lea/node.js
       sudo apt-get update
     fi
+    info "Installing nodejs from apt-get"
     sudo apt-get install nodejs
   fi
 fi
 
-if command -v npm >/dev/null 2>&1; then
+if hasCommand "npm"; then
+  info "Installing jshint"
   sudo npm install jshint -g
 fi

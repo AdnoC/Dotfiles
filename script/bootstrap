@@ -10,12 +10,38 @@ set -e
 
 echo ''
 
+hasCommand () {
+  if command -v "$1" >/dev/null 2>&1; then
+    return 0;
+  else
+    return 1;
+  fi
+}
+
+isOSX () {
+  if [ "$(uname -s)" == "Darwin" ]; then
+    return 0;
+  else
+    return 1;
+  fi
+}
+
+# I know that the way I'm using this (basically if has apt-get) doesn't match what
+# this checks, but whatever.
+isLinux () {
+  if [ "$(uname -s)" == "Linux" ]; then
+    return 0;
+  else
+    return 1;
+  fi
+}
+
 info () {
-  printf "  [ \033[00;34m..\033[0m ] $1"
+  printf "  [ \033[00;34m..\033[0m ] $1\n"
 }
 
 user () {
-  printf "\r  [ \033[0;33m?\033[0m ] $1 "
+  printf "\r  [ \033[0;33m?\033[0m ] $1 \n"
 }
 
 success () {
@@ -139,11 +165,11 @@ install_dotfiles () {
 
 
 # If we're on a Mac, let's install and setup homebrew.
-if [ "$(uname -s)" == "Darwin" ]
+if isOSX
 then
   if ! command -v brew >/dev/null 2>&1; then
     info "installing Mac dependencies"
-    if source os/mac.sh > /tmp/dotfiles-dot 2>&1
+    if source os/mac.sh >/tmp/dotfiles-dot 2>&1
     then
       success "dependencies installed"
     else
@@ -151,10 +177,10 @@ then
     fi
   fi
 # If we're on linux, let's update apt-get
-elif [ "$(uname -s)" == "Linux" ]
+elif isLinux
 then
   info "installing Linux dependencies"
-  if source os/linux.sh > /tmp/dotfiles-dot 2>&1
+  if source os/linux.sh
   then
     success "dependencies installed"
   else
@@ -162,8 +188,8 @@ then
   fi
 fi
 
+setup_gitconfig
 source "$DOTFILES_ROOT"/script/install
-#setup_gitconfig
 install_dotfiles
 source "$DOTFILES_ROOT"/script/postinstall
 
