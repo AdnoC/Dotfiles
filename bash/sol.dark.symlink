@@ -1,3 +1,4 @@
+# vim: ft=sh
 #github.com/mavnn/mintty-colors-solarized
 export SOL_FLAVOR='dark'
 echo -ne   '\e]10;#839496\a'  # Foreground   -> base0

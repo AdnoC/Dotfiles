@@ -1,4 +1,4 @@
-# vim: set ft=sh :
+# vim: ft=sh :
 #if [ -f ~/.bash_prompt_color ]; then
 #source ~/.bash_prompt_color
 #fi

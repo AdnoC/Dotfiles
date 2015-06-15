@@ -1,4 +1,4 @@
-# vim: set ft=sh :
+# vim: ft=sh :
 set -o vi
 
 # '.' = run     '$_' = the last arg of the previous command

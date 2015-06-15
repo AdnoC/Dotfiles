@@ -1,3 +1,4 @@
+# vim: filetype=sh
 # NOTE: Make this work for everything later, when I'm not as sleepy.
 #if [ "$(uname)" == "Darwin" ]; then
   #brew install ctags-exuberant
@@ -13,7 +14,6 @@
 if [ ! -d ~/.fzf ]; then
   if [ "$(uname -s)" == "Linux" ]; then
     sudo apt-get install libncurses-ruby
-
   fi
   git clone https://github.com/junegunn/fzf.git ~/.fzf
   ~/.fzf/install

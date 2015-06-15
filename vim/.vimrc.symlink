@@ -620,9 +620,9 @@ omap iX <Plug>(textobj-comment-big-i)
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
 
-au BufRead,BufNewFile *.sls setfiletype yaml
-au BufRead,BufNewFile *.inc setfiletype php
-au BufRead,BufNewFile *.module setfiletype php
+au BufRead,BufNewFile *.sls set filetype=yaml
+au BufRead,BufNewFile *.inc set filetype=php
+au BufRead,BufNewFile *.module set filetype=php
 if executable('ant')
   autocmd FileType java setlocal makeprg=ant\ -find\ 'build.xml'
   autocmd FileType java compiler ant
@@ -666,6 +666,7 @@ nnoremap <leader>tbe :tabedit <c-r>=expand("%:p:h")<CR>/
 nmap dd d_
 " We aren't going to have any vim variables at the beginning or end of files
 set modelines=1
+set modeline
 " Turn on wild menu (Allow tab use with the command line)
 set wildmenu
 " Settings for wildmenu (:h wildmenu)
