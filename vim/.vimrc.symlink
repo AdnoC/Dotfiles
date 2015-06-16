@@ -134,7 +134,7 @@ Plug 'vim-scripts/HTML-AutoCloseTag', { 'for': 'html'}
 " Auto-close some structures (i.e. adds 'endfunction' after you type 'function!' in VimL)
 Plug 'tpope/vim-endwise'
 "NeoBundle 'nathanaelkane/vim-indent-guides'
-Plug 'Yggdroot/indentLine', { 'on': 'IndentGuidesToggle'}
+Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle'}
 " Plug 'spf13/PIV', { 'for': ['php']}
 " YouCompleteMe only works on Linux/Mac and if vim is version > 7.3.584
 " Use supertab if YCM won't work
@@ -201,6 +201,7 @@ Plug 'junegunn/limelight.vim', { 'on': 'Limelight'}
 " Removes distractions
 Plug 'junegunn/goyo.vim', { 'on': ['GoyoEnter', 'Limelight']}
 Plug 'bling/vim-bufferline'
+Plug 'luochen1990/rainbow'
 Plug 'edkolev/promptline.vim'
 """ Movement:
 Plug 'Lokaltog/vim-easymotion'
@@ -468,11 +469,9 @@ let g:tagbar_autofocus=1
 " Bind a button to open Gundo                                                }{
 nnoremap <leader>gu :GundoToggle<CR>
 
-"""" Indent Guides:
+"""" Indent Lines:
 " The default bind, just here so I remember
-nnoremap <leader>ig :IndentGuidesToggle<CR>
-let g:indent_guides_start_level=2
-let g:indent_guides_guide_size=1
+nnoremap <leader>ig :IndentLinesToggle<CR>
 
 
 """" Easy Motion:
@@ -511,7 +510,7 @@ autocmd FileType w3m nnoremap <buffer>o :W3mAddressBar<CR>
 " Ignore some folders and files for CtrlP indexing
 let g:ctrlp_custom_ignore={
   \ 'dir':  '\.git$\|\.yardoc\|public$|log\|tmp$',
-  \ 'file': '\.so$\|\.dat$|\.DS_Store$'
+  \ 'file': '\.so$\|\.dat$|\.DS_Store$|\.orig|\.bck'
   \ }
 let g:ctrlp_show_hidden = 1
 " Navigate to specific buffers quickly                                       }{
@@ -538,6 +537,9 @@ let g:PreserveNoEOL=1
 let g:PIVCreateDefaultMappings = 0
 " AutoPHPFolding really hits performance, making cursor movement and switching bufers laggy
 let g:DisableAutoPHPFolding = 1
+
+"""" TComment:
+let g:tcommentGuessFileType_php = "php"
 
 """" JCommenter:
 " Set author config
