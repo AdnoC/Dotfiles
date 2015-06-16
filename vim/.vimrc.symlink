@@ -775,6 +775,8 @@ endif
 " If using vimdiff, use a colorscheme that is actually readable.
 if &diff
   colorscheme blue
+  nmap <leader>> :diffget RE<CR>
+  nmap <leader>< :diffget LO<CR>
 endif
 
 " Refresh busted syntax highlighting (this happens too often)                }{
