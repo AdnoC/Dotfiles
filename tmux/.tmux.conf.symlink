@@ -28,6 +28,9 @@ set -s escape-time 0
 set-option -g prefix C-a
 # Double-tap a to move to previous window;
 bind-key a last-window
+# Pane movement
+bind-key J command-prompt -p "join pane from:"  "join-pane -s '%%'"
+bind-key S command-prompt -p "send pane to:"  "join-pane -t '%%'"
 
 bind-key v resize-pane -D 25
 
