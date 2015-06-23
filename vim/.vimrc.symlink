@@ -169,6 +169,10 @@ Plug 'vim-scripts/csv.vim', {'for': 'csv'}
 " Python autocomplete
 "NeoBundle 'davidhalter/jedi-vim'
 """ Tools:
+" Shows (vim) syntax info as well as color of stuff.
+Plug 'vim-scripts/SyntaxAttr.vim'
+" Commands for using git nicely in Vim
+Plug 'tpope/vim-fugitive'
 " Close buffers without closing windows
 Plug 'qpkorr/vim-bufkill'
 Plug 'tomtom/tcomment_vim'
@@ -580,6 +584,9 @@ if executable('ant')
   " The system call takes a long time (700 ms), so don't do it unless we are editing a java file
   autocmd FileType java call s:Set_VJDE_Lib_Path()
 endif
+
+"""" SyntaxAttr:
+nmap <leader>a :call SyntaxAttr()<CR>
 
 """" SemanticHighlight:
 let s:semanticTermColorsDark = [28,1,2,3,4,5,6,7,25,9,10,34,12,13,14,15,16,125,124,19]
