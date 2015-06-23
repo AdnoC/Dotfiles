@@ -80,7 +80,7 @@ export GREP_OPIONS='--color'
 if [[ "$OSTYPE" == darwin* ]] || [[ -n $MAC_TERM ]]; then
   echo "DAR"
   # Macs way of setting ls colors makes me cry. No compatability.
-  if [ "$SOL_FLAVOR" == "dark" ]; then
+  if [ "$TERM_COLOR" == "dark" ]; then
     export LSCOLORS="gxBxhxDxfxhxhxhxhxcxcx"
   else
     export LSCOLORS="gxBxhxAxfxaxaxaxaxcxcx"
@@ -93,7 +93,7 @@ else
     # A nice green color ex='00;32'
     # Blue ex='01;35'
     # Bright white with underline '04;97'
-  if [ "$SOL_FLAVOR" == "light" ]; then
+  if [ "$TERM_COLOR" == "light" ]; then
     di='04;36'
     #ex='00;34'
     ex='00;91'

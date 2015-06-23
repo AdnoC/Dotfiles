@@ -192,7 +192,11 @@ Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-fold'
 Plug 'glts/vim-textobj-comment'
 """ Looks:
-" Colorscheme
+" Colorschemes
+" A good solarized replacement. Has a grey background unless bash colors are overritten.
+Plug 'romainl/flattened'
+" A light colorscheme. Not sure about it.
+Plug 'NLKNguyen/papercolor-theme'
 Plug 'altercation/vim-colors-solarized'
 " Makes the status bar & buffer bar look nice and display useful info
 Plug 'bling/vim-airline'
@@ -450,7 +454,7 @@ let g:rainbow_conf = {
 " Fixes most gui problems (broken syntax coloring, status bar no color)      }{
 function! FixGUI()
   syntax enable
-  if expand("$SOL_FLAVOR") == 'light'
+  if expand("$TERM_COLOR") == 'light'
     set background="light"
   else
     set background="dark"
@@ -787,18 +791,22 @@ map <F12> :syntax sync fromstart<cr>
 " Don't turn syntax or highlight searching on unless there are enough colors
 " to make them look good
 if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
+  if !empty($TMUX)
+    set t_ut=
+    let g:asdf="YES"
+  endif
     " Use 256 colors
     set t_Co=256
     " Start vim with solarized theme of the correct flavor
     syntax enable
-    if expand("$SOL_FLAVOR") == 'light'
+    if expand("$TERM_COLOR") == 'light'
       set background="light"
       let g:semanticTermColors =s:semanticTermColorsLight
     else
       let g:semanticTermColors =s:semanticTermColorsDark
       set background="dark"
     endif
-    colorscheme solarized
+    colorscheme flattened_dark
 
     if has("gui_running")
       set guioptions-=T

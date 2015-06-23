@@ -6,14 +6,7 @@ test -f ~/.bashrc && . $_
 
 test -f ~/.profile && . $_
 
-# Mac has weird stuff going on... so we can't use the normal way of setting colors.
-if [[ "$OSTYPE" != darwin* ]]; then
-  test -f ~/sol.dark && . $_
-else
-  # We should assume that the terminal will be a dark flavor (Using iTerm2. If 
-  # using Terminal, set this to 'light')
-  export SOL_FLAVOR='dark'
-fi
+export TERM_COLOR='dark'
 
 test -f ~/.bash_prompt && . $_
 

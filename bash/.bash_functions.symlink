@@ -119,7 +119,7 @@ piaddress() {
 
 # Change colorscheme
 function solChange() {
-  if [ $SOL_FLAVOR = "light" ]; then
+  if [ $TERM_COLOR = "light" ]; then
     source ~/sol.dark
   else
     source ~/sol.light
