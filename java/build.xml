@@ -1,0 +1,170 @@
+<!-- While messy, this is my general-use build file. It works. Mostly. -->
+<project name="GroundStationMain" basedir="." default="main">
+
+  <!-- http://eureka.ykyuen.info/2013/11/08/apache-ant-string-to-uppercase-lowercase/ -->
+  <!-- To lower case -->
+  <scriptdef language="javascript" name="lower">
+    <attribute name="string" />
+    <attribute name="to" />
+    project.setProperty(attributes.get("to"),attributes.get("string").toLowerCase());
+  </scriptdef>
+
+  <lower string="${ant.project.name}" to="ant.project.name.lowercase" />
+
+  <!-- Environmental variables can be accessed as ${env.VARIABLE_NAME} -->
+  <property environment="env" />
+
+  <!-- Set important files and dirs for this project -->
+  <property name="lib.dir" value="libs"/>
+  <property name="src.dir" value="src"/>
+  <property name="build.dir" value="bin"/>
+  <property name="main-class" value="${ant.project.name.lowercase}/${ant.project.name}"/>
+  <property name="jar.dir" value="jar"/>
+  <property name="test.src.dir" value="test"/>
+  <property name="test.build.dir" value="${build.dir}/test" />
+  <property name="report.dir" value="reports" />
+  <!--Set value to empty quotes if there is no package-->
+  <property name="package.prefix" value="gui."/>
+
+  <!-- Locations of native JNI libraries -->
+  <path id="native.dirs.path">
+    <pathelement path="libs\native\Windows\win64"/>
+  </path>
+  <pathconvert property="native.dirs" refid="native.dirs.path"/>
+
+  <!-- Sets a boolean of whether or not we have native libraries -->
+  <condition property="has_native" value="false" else="true">
+    <equals arg1="${native.dirs}" arg2="" />
+  </condition>
+
+  <path id="jars">
+    <fileset dir="${lib.dir}" includes="**/*.jar"/>
+  </path>
+
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+    <delete dir="${jar.dir}"/>
+  </target>
+
+  <target name="compile">
+    <mkdir dir="${build.dir}"/>
+    <javac srcdir="${src.dir}" classpathref="jars" includeantruntime="false" debug="on" classpath="${build.dir}" destdir="${build.dir}" >
+      <compilerarg value="-Xlint:all" />
+    </javac>
+  </target>
+  <target name="build" depends="clean,compile"/>
+
+  <target name="jar" depends="compile">
+    <mkdir dir="${jar.dir}"/>
+    <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${build.dir}" filesetmanifest="skip">
+      <fileset dir="${build.dir}" includes="*.java"/>
+      <zipgroupfileset dir="${lib.dir}" includes="*.jar" excludes=""/>
+
+    <manifest>
+        <attribute name="Main-Class" value="${main-class}"/>
+        <attribute name="Class-Path" value="${mf.classpath}"/>
+    </manifest>
+    </jar>
+    <!--<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${build.dir}" filesetmanifest="skip">-->
+      <!--<fileset dir="${build.dir}" includes="*.java"/>-->
+      <!--<zipfileset dir="${lib.dir}" includes="*.jar" excludes=""/>-->
+      <!--<manifest>-->
+        <!--<attribute name="Main-Class" value="${main-class}"/>-->
+        <!--<attribute name="Class-Path" value="${mf.classpath}"/>-->
+      <!--</manifest>-->
+    <!--</jar>-->
+
+  </target>
+
+
+  <target name="run" depends="compile">
+    <java classname="${package.prefix}${ant.project.name}" fork="${has_native}" >
+      <classpath refid="run.cp" />
+      <jvmarg value="-Djava.library.path=${native.dirs}" />
+    </java>
+  </target>
+
+
+  <target name="runJar" depends="compile">
+    <java jar="${jar.dir}/${ant.project.name}.jar" failonerror="true" fork="true"/>
+  </target>
+
+  <target name="test" depends="compile">
+    <echo message="Compiling tests" />
+
+    <mkdir dir="${test.build.dir}" />
+    <javac srcdir="${test.src.dir}" destdir="${test.build.dir}" debug="on">
+      <classpath>
+        <path refid="run.cp" />
+        <pathelement location="${test.build.dir}" />
+      </classpath>
+    </javac>
+    <echo message="Running tests" />
+
+    <mkdir dir="${report.dir}" />
+    <junit showoutput="true" printsummary="on"> <!--haltonerror="true" haltonfailure="true"-->
+      <classpath>
+        <pathelement location="${test.build.dir}" />
+        <path refid="run.cp" />
+      </classpath>
+
+      <batchtest todir="${report.dir}">
+        <fileset dir="${test.src.dir}" includes="**/*Test*.java" />
+      </batchtest>
+      <formatter type="plain" usefile="false" />
+
+
+
+      <!--<test name="MyoMapSourceTest" />-->
+      <!--<test name="myo2key.MyoTest" methods="methondName" />-->
+    </junit>
+
+    <!--<junitreport todir="${report.dir}">-->
+      <!--<fileset dir="${report.dir}">-->
+        <!--<include name="TEST-*.xml" />-->
+      <!--</fileset>-->
+      <!--<report format="frames" todir="${report.dir}" />-->
+    <!--</junitreport>-->
+  </target>
+
+  <target name="main" depends="clean,run"/>
+
+
+  <!-- This stuff is for the Vim plugin Syntastic -->
+  <path id="lib.cp">
+    <fileset dir="${basedir}/">
+      <include name="${lib.dir}/*.jar"/>
+    </fileset>
+  </path>
+
+  <path id="build.cp">
+    <path refid="lib.cp"/>
+    <pathelement path="${src.dir}"/>
+  </path>
+
+  <path id="run.cp">
+    <path refid="lib.cp"/>
+    <pathelement path="${build.dir}"/>
+  </path>
+
+  <pathconvert property="run.classpath" refid="run.cp"/>
+  <target name="rcp">
+    <echo>${run.classpath};${src.dir}</echo>
+  </target>
+
+  <pathconvert property="lib.classpath">
+    <path refid="lib.cp"/>
+    <mapper>
+      <chainedmapper>
+        <flattenmapper/>
+        <globmapper from="*.jar" to="${lib.dir}/*.jar"/>
+      </chainedmapper>
+    </mapper>
+  </pathconvert>
+
+  <target name="cp">
+    <echo>${lib.classpath};${src.dir}</echo>
+  </target>
+
+</project>
+
