@@ -169,17 +169,26 @@ Plug 'vim-scripts/csv.vim', {'for': 'csv'}
 " Python autocomplete
 "NeoBundle 'davidhalter/jedi-vim'
 """ Tools:
+" Fixes <C-A> and <C-X> to correctly increment/decrement dates
+Plug 'tpope/vim-speeddating'
+" Makes ga show additional info about a character
+Plug 'tpope/vim-characterize'
 " Shows (vim) syntax info as well as color of stuff.
 Plug 'vim-scripts/SyntaxAttr.vim'
 " Commands for using git nicely in Vim
 Plug 'tpope/vim-fugitive'
+" Commands for using unix commands nicely in Vim
+Plug 'tpope/vim-eunuch'
 " Close buffers without closing windows
 Plug 'qpkorr/vim-bufkill'
 Plug 'tomtom/tcomment_vim'
 " File Explorer Plugin
 Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'sjl/gundo.vim', { 'on': 'GundoToggle'}
+" Fuzzy search for files, buffers, and recent files
 Plug 'kien/ctrlp.vim'", { 'on': ['CtrlPBuffer', 'CtrlP']}
+" Fuzzy search of functions
+Plug 'tacahiroy/ctrlp-funky', { 'on': 'CtrlPFunky'}
 Plug 'kana/vim-operator-user'
 Plug 'kana/vim-textobj-user'
 " Text Objects:
@@ -531,6 +540,10 @@ let g:ctrlp_custom_ignore={
 let g:ctrlp_show_hidden = 1
 " Navigate to specific buffers quickly                                       }{
 map <C-B> :CtrlPBuffer<CR>
+"
+"""" CtrlPFunky:
+nnoremap <leader>p :CtrlPFunky<CR>
+
 """" Vimux:                                                                  }{
 map <leader>vp :VimuxPromptCommand<CR>
 map <leader>vr :VimuxRunLastCommand<CR>
