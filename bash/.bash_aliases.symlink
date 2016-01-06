@@ -51,6 +51,11 @@ if [[ "$OSTYPE" == darwin* ]]; then
   alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
 fi
 
+# Shortcut for cygwinports
 if [[ "$OSTYPE" == cygwin ]]; then
   alias cygsetup="cygstart -- $CYG_SETUP -K http://cygwinports.org/ports.gpg"
 fi
+
+# School stuff
+alias cpNote="rsync -r $NOTE_HOME $caen_ssh:~/Notes/"
+alias dlNote="rsync -r $caen_ssh:~/Notes/ $NOTE_HOME "
