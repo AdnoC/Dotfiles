@@ -261,10 +261,10 @@ if executable('node')
       endif
     endif
   endfunction
-  Plug 'marijnh/tern_for_vim' , { 'do': function('TernInstall'), 'for': 'javascript'}
+  Plug 'marijnh/tern_for_vim', { 'do': function('TernInstall'), 'for': 'javascript'}
   " Install jsctags. Don't add it to the rtp since it isn't a vim plugin
   "TODO: Put this in the vim/install.sh file instead
-  Plug 'ramitos/jsctags' , { 'on': 'NeverCallThis'}
+  Plug 'ramitos/jsctags', { 'on': 'NeverCallThis'}
     "\ 'build' : {
       "\ 'cygwin' : 'npm install --update',
       "\ 'unix' : 'sudo npm install --update',
@@ -286,7 +286,7 @@ endif
 """ Tmux:
 if executable('tmux')
   Plug 'benmills/vimux'
-  Plug 'edkolev/tmuxline.vim'
+  Plug 'edkolev/tmuxline.vim', { 'on': ['Tmuxline', 'TmuxlineSnapshot'] }
 else
   if iCanHazVimPlug == 0
     echo 'Cannot find tmux. Not installing vimux or tmuxline'
@@ -429,18 +429,19 @@ let g:airline_powerline_fonts = 1
 " Only show git stats that are non-zero
 let g:airline#extensions#hunks#non_zero_only=1
 if executable('tmux')
-  " Tmuxline looks nice and should be used if we have tmux
-  let g:airline#extensions#tmuxline#enabled=1
+  " Don't load tmuxline unless I decide to. It adds 1000ms to startuptime
+  let g:airline#extensions#tmuxline#enabled=0
 endif
 " Clean up the status bar:
 " Just show the list of files/buffers in section c
 let g:airline_section_c = "%f%m %<%{bufname('#') != bufname('%') ? '('. bufname('#') .')' : ''}"
 if executable('ctags')
   " No need to show filetype in the status bar, the ctags section is enough
-  autocmd User AirlineAfterInit let g:airline_section_y = airline#section#create(['tagbar'])
+  " autocmd User AirlineAfterInit let g:airline_section_y = airline#section#create(['tagbar'])
+  let g:airline_section_y = airline#section#create(['tagbar'])
 endif
 " Also don't need to know the formatting. Just leave it empty
-  let g:airline_section_x=''
+let g:airline_section_x=''
 " Automatically refresh airline when changing colorschemes. This fixes the arrows.
 autocmd VimEnter * autocmd ColorScheme * AirlineRefresh
 
@@ -455,6 +456,8 @@ nmap <Leader>gs <Plug>GitGutterStageHunk
 nmap <Leader>gr <Plug>GitGutterRevertHunk
 " Preview the changes                                                        }{
 nmap <Leader>gp <Plug>GitGutterPreviewHunk
+let g:gitgutter_eager = 0
+
 
 """" Solarized:
 let g:solarized_termcolors=256
@@ -652,36 +655,47 @@ omap iX <Plug>(textobj-comment-big-i)
 
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
+ augroup UserFileTypeDefs
+   autocmd!
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
 
-au BufRead,BufNewFile *.sls set filetype=yaml
-au BufRead,BufNewFile *.inc set filetype=php
-au BufRead,BufNewFile *.module set filetype=php
+  au BufRead,BufNewFile *.sls set filetype=yaml
+  au BufRead,BufNewFile *.inc set filetype=php
+  au BufRead,BufNewFile *.module set filetype=php
+augroup END
+
 if executable('ant')
   autocmd FileType java setlocal makeprg=ant\ -find\ 'build.xml'
   autocmd FileType java compiler ant
   autocmd FileType java setlocal shellpipe=2>&1\ \|\ tee
 endif
 let java_highlight_all=1
-" Use the java docs for keyword help
-autocmd FileType java setlocal keywordprg=
-"nnoremap <Leader>ls :w <BAR> !lessc % > ../css/%:t:r.css<CR><space>
-autocmd FileType less setlocal makeprg=lessc\ %\ >\ ../css/%:t:r.css
-autocmd FileType plaintex set ft=tex
 
-autocmd FileType tex  if ! isdirectory('LatexOutput') |  exec "!mkdir LatexOutput" |  endif
+augroup FileTypeSpecificCmds
+  autocmd!
+  " Use the java docs for keyword help
+  autocmd FileType java setlocal keywordprg=
+  "nnoremap <Leader>ls :w <BAR> !lessc % > ../css/%:t:r.css<CR><space>
+  autocmd FileType less setlocal makeprg=lessc\ %\ >\ ../css/%:t:r.css
+  autocmd FileType plaintex set ft=tex
 
-autocmd FileType tex exec "setlocal makeprg=latexmk\\ -outdir=\\\"" . expand('%:p:h') . expand('/') . "LatexOutput\\\"\\ -pdf\\ %"
-autocmd FileType tex set conceallevel=0
+  autocmd FileType tex  if ! isdirectory('LatexOutput') |  exec "!mkdir LatexOutput" |  endif
+
+  autocmd FileType tex exec "setlocal makeprg=latexmk\\ -outdir=\\\"" . expand('%:p:h') . expand('/') . "LatexOutput\\\"\\ -pdf\\ %"
+  autocmd FileType tex set conceallevel=0
+
+  " When editing plain text I don't need to see the ends of lines.
+  autocmd FileType txt setlocal wrap linebreak nolist textwidth=0 wrapmargin=0
+augroup END
 let g:tex_conceal = ""
-
-" When editing plain text I don't need to see the ends of lines.
-autocmd FileType txt setlocal wrap linebreak nolist textwidth=0 wrapmargin=0
 
 " Vim doesn't play nice with javascript's anonymous function use. This makes the code actually have
 " colors.
-autocmd BufEnter *.js SemanticHighlight
-autocmd BufEnter *.js setlocal foldmethod=indent
+augroup JavascriptPls
+  autocmd!
+  autocmd BufEnter *.js SemanticHighlight
+  autocmd BufEnter *.js setlocal foldmethod=indent
+augroup END
 
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
 " Use Control-a to move to normal mode                                       }{
