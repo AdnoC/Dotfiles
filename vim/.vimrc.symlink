@@ -1,3 +1,4 @@
+" TODO: Add settings for if the term is not utf-8
 " Vim preferneces file
 " Sections:
 "   -> Initial
@@ -118,6 +119,8 @@ Plug 'airblade/vim-gitgutter'
 """ Syntax:
 Plug 'Konfekt/FastFold'
 "NeoBundleLazy 'LaTeX-Box-Team/LaTeX-Box'
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'elzr/vim-json'
 Plug 'groenewege/vim-less'
 Plug 'jaxbot/semantic-highlight.vim', { 'for': 'javascript'}
@@ -169,6 +172,8 @@ Plug 'vim-scripts/csv.vim', {'for': 'csv'}
 " Python autocomplete
 "NeoBundle 'davidhalter/jedi-vim'
 """ Tools:
+" Shows all 256 x-term colors in a nice table
+Plug 'guns/xterm-color-table.vim'
 " Fixes <C-A> and <C-X> to correctly increment/decrement dates
 Plug 'tpope/vim-speeddating'
 " Makes ga show additional info about a character
@@ -217,7 +222,7 @@ Plug 'bling/vim-airline'
 Plug 'junegunn/limelight.vim', { 'on': 'Limelight'}
 " Removes distractions
 Plug 'junegunn/goyo.vim', { 'on': ['GoyoEnter', 'Limelight']}
-Plug 'luochen1990/rainbow'
+" Plug 'luochen1990/rainbow'
 Plug 'edkolev/promptline.vim'
 """ Movement:
 Plug 'Lokaltog/vim-easymotion'
@@ -575,20 +580,26 @@ let g:tcommentGuessFileType_php = "php"
 
 """" JCommenter:
 " Set author config
-autocmd FileType java let g:jcommenter_class_author='Adam Cutler'
-autocmd FileType java let g:jcommenter_file_author='Adam Cutler'
-autocmd FileType java let g:jcommenter_method_description_space = 1
-" Create a bind to generate comments                                         }{
-autocmd FileType java nmap <leader>cj :call JCommentWriter()<CR>
-autocmd FileType java nmap <leader>c] :call SearchInvalidComment(0)<cr>
-autocmd FileType java nmap <leader>c[ :call SearchInvalidComment(1)<cr>
+augroup JCommenterSettings
+  autocmd!
+  autocmd FileType java let g:jcommenter_class_author='Adam Cutler'
+  autocmd FileType java let g:jcommenter_file_author='Adam Cutler'
+  autocmd FileType java let g:jcommenter_method_description_space = 1
+  " Create a bind to generate comments                                         }{
+  autocmd FileType java nmap <leader>cj :call JCommentWriter()<CR>
+  autocmd FileType java nmap <leader>c] :call SearchInvalidComment(0)<cr>
+  autocmd FileType java nmap <leader>c[ :call SearchInvalidComment(1)<cr>
+augroup END
 
 """" VimJSDoc:
 let g:jsdoc_allow_input_prompt=1
 let g:jsdoc_additional_descriptions=1
 let g:jsdoc_default_mapping=0
 "                                                                            }{
-autocmd FileType javascript nmap <leader>cj :JsDoc<CR>
+augroup VIMJSDOC
+  autocmd!
+  autocmd FileType javascript nmap <leader>cj :JsDoc<CR>
+augroup END
 
 """" VimJDE:
 if executable('ant')
@@ -607,6 +618,15 @@ nmap <leader>a :call SyntaxAttr()<CR>
 """" SemanticHighlight:
 let s:semanticTermColorsDark = [28,1,2,3,4,5,6,7,25,9,10,34,12,13,14,15,16,125,124,19]
 let s:semanticTermColorsLight = [28,1,2,3,4,5,6,8,25,9,10,34,12,13,14,17,16,125,124,19]
+
+"""" VimPandoc:
+let g:pandoc#keyboard#use_default_mappings = 0
+augroup PandocBinds
+  autocmd FileType pandoc nmap <buffer>go <Plug>(pandoc-keyboard-links-open)
+  autocmd FileType pandoc nmap <buffer>gb <Plug>(pandoc-keyboard-links-back)
+augroup END
+
+
 
 """" VimOperatorSurround:
 " operator mappings                                                         }{
@@ -655,19 +675,22 @@ omap iX <Plug>(textobj-comment-big-i)
 
 """""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
- augroup UserFileTypeDefs
+augroup UserFileTypeDefs
    autocmd!
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
 
-  au BufRead,BufNewFile *.sls set filetype=yaml
-  au BufRead,BufNewFile *.inc set filetype=php
-  au BufRead,BufNewFile *.module set filetype=php
+  au BufRead,BufFilePre,BufNewFile *.sls set filetype=yaml
+  au BufRead,BufFilePre,BufNewFile *.inc set filetype=php
+  au BufRead,BufFilePre,BufNewFile *.module set filetype=php
 augroup END
 
 if executable('ant')
-  autocmd FileType java setlocal makeprg=ant\ -find\ 'build.xml'
-  autocmd FileType java compiler ant
-  autocmd FileType java setlocal shellpipe=2>&1\ \|\ tee
+  augroup JavaMakeSettings
+    autocmd!
+    autocmd FileType java setlocal makeprg=ant\ -find\ 'build.xml'
+    autocmd FileType java compiler ant
+    autocmd FileType java setlocal shellpipe=2>&1\ \|\ tee
+  augroup END
 endif
 let java_highlight_all=1
 
@@ -682,12 +705,17 @@ augroup FileTypeSpecificCmds
   autocmd FileType tex  if ! isdirectory('LatexOutput') |  exec "!mkdir LatexOutput" |  endif
 
   autocmd FileType tex exec "setlocal makeprg=latexmk\\ -outdir=\\\"" . expand('%:p:h') . expand('/') . "LatexOutput\\\"\\ -pdf\\ %"
-  autocmd FileType tex set conceallevel=0
+
+  " autocmd FileType tex set conceallevel=0
+
+  autocmd FileType pandoc  if ! isdirectory('PandocOutput') |  exec "!mkdir PandocOutput" |  endif
+  " autocmd FileType markdown exec "setlocal makeprg=pandoc\\ -s\\ --to=html\\ --output=\\\"PandocOutput" . expand('/') . expand('%:r') . ".html\\\"\\ %"
+  autocmd FileType pandoc exec "setlocal makeprg=pandoc\\ -s\\ --output=\\\"PandocOutput" . expand('/') . expand('%:r') . ".pdf\\\"\\ %"
 
   " When editing plain text I don't need to see the ends of lines.
   autocmd FileType txt setlocal wrap linebreak nolist textwidth=0 wrapmargin=0
 augroup END
-let g:tex_conceal = ""
+" let g:tex_conceal = ""
 
 " Vim doesn't play nice with javascript's anonymous function use. This makes the code actually have
 " colors.
@@ -848,18 +876,18 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
       let g:semanticTermColors =s:semanticTermColorsDark
       set background="dark"
     endif
-    colorscheme flattened_dark
+    colorscheme solarized
 
     if has("gui_running")
       set guioptions-=T
     endif
     " If we are using a gui set the font in the proper format for that gui
     if has("gui_gtk2")
-      set guifont=Inconsolata\ for\ Powerline\ 12
+      set guifont= DejaVu\ Sans\ Mono\ for\ Powerline\ 12
     elseif has("gui_macvim")
-      set guifont=Inconsolata\ for\ Powerline:h12
+      set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h12
     elseif has("gui_win32")
-      set guifont=Inconsolata\ for\ Powerline:h12:cANSI
+      set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h12:cANSI
     endif
     " Highlight search matches
     set hlsearch
@@ -903,7 +931,12 @@ set encoding=utf-8
 " Show hidden chars
 set list
 " Set hidden chars to show (Show tabs and trailing spaces)
-set listchars=tab:›\ ,trail:·,eol:¬,nbsp:_
+if &encoding == "utf-8"
+  exe "set listchars=eol:\u00ac,nbsp:\u001f,conceal:\u2315,tab:\u2595\u2014,precedes:\u2026,extends:\u2026"
+  exe "set sbr=\u21b3"
+else
+  set listchars=eol:$,trail:-,tab:>-,extends:>,precedes:<,conceal:+
+endif
 " Turn off lazy redraw
 set nolazyredraw
 " We are using a fairly fast terminal connection most times
