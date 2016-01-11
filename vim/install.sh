@@ -41,7 +41,7 @@ if ! hasCommand "cmake" || [ "$(echo "$(cmake --version) 2.8.12 " | awk '{print 
   info "cmake is not high enough version for YouCompleteMe (Must be > 2.8.12)"
   if isLinux; then
     info "Trying to update cmake"
-    sudo apt-get -y install cmake
+    sudo apt-get -y install build-essential cmake python-dev
   fi
 fi
 # If the new version is high enough, make sure to tell Vim
