@@ -1,5 +1,5 @@
 #!/bin/bash
-if ! hasCommand "apt-get"; then
+if hasCommand "apt-get"; then
   info "  Updating apt-get for you"
   sudo apt-get update
   return 0

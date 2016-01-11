@@ -37,7 +37,7 @@ fi
 if hasCommand "cmake" && [ "$(echo \"$(cmake --version) 2.8.12 \" | awk '{print $3 " " $4}' | awk -f ~/dotfiles/script/version.awk)" -ge 0 ]; then
   info "Using upstream YouCompleteMe"
   # Make sure local preference file exists
-  [ -f "~/.bash_profile.local" ] || touch "~/.bash_profile.local"
+  [ -f "~/.bash_profile.local" ] || touch ~/.bash_profile.local
   # Set a variable to tell Vim that we are using this version
   echo 'export UPSTREAM_YCM=true' > ~/.bash_profile.local
   export UPSTEAM_YCM=true
@@ -45,7 +45,7 @@ else
 
   info "Using forked YouCompleteMe"
   # Make sure local preference file exists
-  [ -f "~/.bash_profile.local" ] || touch "~/.bash_profile.local"
+  [ -f "~/.bash_profile.local" ] || touch ~/.bash_profile.local
   # Since the new version is high enough, make sure to tell Vim
   echo 'export UPSTREAM_YCM=false' > ~/.bash_profile.local
   export UPSTEAM_YCM=false
@@ -55,6 +55,9 @@ fi
 if [ "$(echo \"$(vim --version | grep -o '7\.[0-9]') 7.4\" | awk -f ~/dotfiles/script/version.awk)" -lt 0 ]; then
   info "Current version of Vim is too low for YouCompleteMe"
   if isLinux; then
+    if ! hasCommand "add-apt-repository"; then
+      sudo apt-get install software-properties-common
+    fi
     info "Attempting to update vim using apt-get"
     sudo add-apt-repository ppa:fcwu-tw/ppa
     sudo apt-get update
