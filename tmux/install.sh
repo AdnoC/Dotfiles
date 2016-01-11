@@ -3,7 +3,7 @@ if ! hasCommand "tmux"; then
   if isOSX; then
     brew install tmux
   elif isLinux; then
-    sudo apt-get install tmux
+    sudo apt-get -y install tmux
   fi
 fi
 

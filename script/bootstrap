@@ -4,6 +4,8 @@
 # bootstrap installs things.
 # https://github.com/holman/dotfiles
 
+# NOTE: returning 0 == True, returning 1 == False
+
 cd "$(dirname "$0")/.."
 DOTFILES_ROOT=$(pwd)
 
@@ -12,37 +14,21 @@ set -e
 echo ''
 
 hasCommand () {
-  if command -v "$1" >/dev/null 2>&1; then
-    return 0;
-  else
-    return 1;
-  fi
+  command -v "$1" >/dev/null 2>&1 ;
 }
 
 isCygwin () {
-  if [ "$(uname -o)" == "Cygwin" ]; then
-    return 0;
-  else
-    return 1;
-  fi
+  [ "$(uname -o)" == "Cygwin" ];
 }
 
 isOSX () {
-  if [ "$(uname -s)" == "Darwin" ]; then
-    return 0;
-  else
-    return 1;
-  fi
+  [ "$(uname -s)" == "Darwin" ];
 }
 
 # I know that the way I'm using this (basically if has apt-get) doesn't match what
 # this checks, but whatever.
 isLinux () {
-  if [ "$(uname -s)" == "Linux" ]; then
-    return 0;
-  else
-    return 1;
-  fi
+  [ "$(uname -s)" == "Linux" ];
 }
 
 info () {
@@ -157,7 +143,7 @@ install_dotfiles () {
 # If we're on a Mac, let's install and setup homebrew.
 if isOSX
 then
-  if ! command -v brew >/dev/null 2>&1; then
+  if ! hasCommand brew; then
     info "installing Mac dependencies"
     if source os/mac.sh >/tmp/dotfiles-dot 2>&1
     then

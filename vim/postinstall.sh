@@ -1,5 +1,5 @@
 # Install plugins
-vim +NeoBundleCheck +qall
+vim +PlugInstall +qall
 
 # No longer needed because I made a fork that uses the correct commit of YCM
 #echo "Installing YouCompleteMe"

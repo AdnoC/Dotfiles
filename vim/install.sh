@@ -1,6 +1,6 @@
 if ! hasCommand "vim"; then
   if isLinux; then
-    sudo apt-get install vim
+    sudo apt-get -y install vim
   fi
 fi
 
@@ -18,23 +18,34 @@ if ! hasCommand "ctags"; then
   fi
 fi
 
+if ! hasCommand "php"; then
+  if isOSX; then
+    warn "Please install php"
+  elif isLinux; then
+    info "Installing php"
+    sudo apt-get -y install php
+  elif isCygwin; then
+    warn "Please install php"
+  fi
+fi
+
 if isLinux; then
   info "Installing clang from apt-get"
-  sudo apt-get install clang libclang1-3.4 libclang-3.4-dev exuberant-ctags
+  sudo apt-get -y install clang libclang1-3.4 libclang-3.4-dev exuberant-ctags
 else
   info "Make sure you install libclang for YouCompleteMe"
 fi
 
 # cmake needs to be at least version 2.8.12 to use upstream YouCompleteMe
-if ! hasCommand "cmake" || [ "$(echo \"$(cmake --version) 2.8.12 \" | awk '{print $3 " " $4}' | awk -f ~/dotfiles/script/version.awk)" -lt 0 ]; then
+if ! hasCommand "cmake" || [ "$(echo "$(cmake --version) 2.8.12 " | awk '{print $3 " " $4}' | awk -f ~/dotfiles/script/version.awk)" -lt 0 ]; then
   info "cmake is not high enough version for YouCompleteMe (Must be > 2.8.12)"
   if isLinux; then
     info "Trying to update cmake"
-    sudo apt-get install cmake
+    sudo apt-get -y install cmake
   fi
 fi
 # If the new version is high enough, make sure to tell Vim
-if hasCommand "cmake" && [ "$(echo \"$(cmake --version) 2.8.12 \" | awk '{print $3 " " $4}' | awk -f ~/dotfiles/script/version.awk)" -ge 0 ]; then
+if hasCommand "cmake" && [ "$(echo "$(cmake --version) 2.8.12 " | awk '{print $3 " " $4}' | awk -f ~/dotfiles/script/version.awk)" -ge 0 ]; then
   info "Using upstream YouCompleteMe"
   # Make sure local preference file exists
   [ -f "~/.bash_profile.local" ] || touch ~/.bash_profile.local
@@ -52,16 +63,13 @@ else
 fi
 
 # If the version of vim is too low for YouCompleteMe
-if [ "$(echo \"$(vim --version | grep -o '7\.[0-9]') 7.4\" | awk -f ~/dotfiles/script/version.awk)" -lt 0 ]; then
+if [ "$(echo "$(vim --version | grep -o '7\.[0-9]') 7.4" | awk -f ~/dotfiles/script/version.awk)" -lt 0 ]; then
   info "Current version of Vim is too low for YouCompleteMe"
   if isLinux; then
-    if ! hasCommand "add-apt-repository"; then
-      sudo apt-get install software-properties-common
-    fi
     info "Attempting to update vim using apt-get"
-    sudo add-apt-repository ppa:fcwu-tw/ppa
+    sudo add-apt-repository -y ppa:fcwu-tw/ppa
     sudo apt-get update
-    sudo apt-get install vim
+    sudo apt-get -y install vim
   fi
 fi
 
