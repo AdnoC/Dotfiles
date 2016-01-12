@@ -154,13 +154,13 @@ else
     " If we have a new enough version of cmake, use upsteam
     if $UPSTREAM_YCM
       function! YouCompleteMePYInstall(info)
-        !./install.py --clang-completer --omnisharp-completer --tern-completer
+        !./install.py --clang-completer --tern-completer
       endfunction
       Plug 'Valloric/YouCompleteMe', { 'do': function('YouCompleteMePYInstall')}
       Plug 'rdnetto/YCM-Generator'
     else
       function! YouCompleteMeSHInstall(info)
-        !./install.sh --clang-completer --system-libclang --omnisharp-completer
+        !./install.sh --clang-completer --system-libclang 
       endfunction
       Plug 'AdnoC/YouCompleteMe', { 'do': function('YouCompleteMeSHInstall')}
     endif
@@ -263,10 +263,11 @@ else
     echo 'Cannot find ctags. Not installing tagbar.'
   endif
 endif
+
 if executable('node') || executable('nodejs')
   if $UPSTREAM_YCM == 0
     Plug 'marijnh/tern_for_vim', { 'for': 'javascript'}
-  fi
+  endif
 else
   if iCanHazVimPlug == 0
     echo 'Cannot find nodejs. Not installing doctorjs/jsctags'
