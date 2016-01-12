@@ -427,7 +427,8 @@ endif
 " Clean up the status bar:
 " Just show the list of files/buffers in section c
 let g:airline_section_c = "%f%m %<%{bufname('#') != bufname('%') ? '('. bufname('#') .')' : ''}"
-if executable('ctags')
+" No need for tagbar if we don't have ctags. Also don't call functions if the plugin isn't " installed.
+if executable('ctags') && iCanHazVimPlug == 1
   " No need to show filetype in the status bar, the ctags section is enough
   " autocmd User AirlineAfterInit let g:airline_section_y = airline#section#create(['tagbar'])
   let g:airline_section_y = airline#section#create(['tagbar'])
@@ -863,7 +864,8 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
       let g:semanticTermColors =s:semanticTermColorsDark
       set background="dark"
     endif
-    colorscheme solarized
+    " Silent so that it doesn't throw an error if the colorscheme doesn't exist
+    silent! colorscheme solarized
 
     if has("gui_running")
       set guioptions-=T
