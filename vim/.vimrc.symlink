@@ -143,9 +143,11 @@ Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle'}
 " Use supertab if YCM won't work
 if (has('win32') || has('win32unix')) || (v:version < 704 && (has('python') || has('lua')))
   \ || (v:version == 703 && ((!has('patch584') || !has('python')) ||  (!has('patch885') || !has('lua'))))
+  let autocomplete_plugin="supertab"
   Plug 'ervandew/supertab'
 else
   if has('lua') && (v:version >= 704 || v:version == 703 && has('patch885'))
+    let autocomplete_plugin="neocomplete"
     Plug 'Shougo/neocomplete.vim'
   else
     let autocomplete_plugin="ycm"
