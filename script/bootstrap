@@ -9,6 +9,20 @@
 cd "$(dirname "$0")/.."
 DOTFILES_ROOT=$(pwd)
 
+# Make sure a log directory exists.
+if [ ! -d "$DOTFILES_ROOT/logs" ]; then
+  mkdir "$DOTFILES_ROOT"/logs
+fi
+# Find the name for the next log file.
+logFile="$DOTFILES_ROOT/logs/log"
+i="1"
+while [ -e "$logFile" ]
+do
+  logFile="$DOTFILES_ROOT/logs/log$i"
+  i=$[$i+1]
+done
+touch "$logFile"
+
 set -e
 
 echo ''
@@ -33,22 +47,27 @@ isLinux () {
 
 info () {
   printf "  [ \033[00;34m..\033[0m ] $1\n"
+  echo -e "Info: $1\n" >> "$logFile"
 }
 
 user () {
   printf "\r  [ \033[0;33m?\033[0m ] $1 \n"
+  echo -e "User: $1\n" >>  "$logFile"
 }
 
 success () {
   printf "\r\033[2K  [ \033[00;32mOK\033[0m ] $1\n"
+  echo -e "Success: $1\n" >>  "$logFile"
 }
 
 warn () {
   printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
+  echo -e "Warn: $1\n" >>  "$logFile"
 }
 
 fail () {
   printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
+  echo -e "Fail: $1\n" >>  "$logFile"
   echo ''
   exit
 }
