@@ -183,8 +183,8 @@ then
   fi
 fi
 
-source "$DOTFILES_ROOT"/script/install
 install_dotfiles
+source "$DOTFILES_ROOT"/script/install
 source "$DOTFILES_ROOT"/script/postinstall
 
 
