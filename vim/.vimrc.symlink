@@ -148,14 +148,21 @@ else
   if has('lua') && (v:version >= 704 || v:version == 703 && has('patch885'))
     Plug 'Shougo/neocomplete.vim'
   else
-    function! YouCompleteMeInstall(info)
-      !./install.sh --clang-completer --system-libclang --omnisharp-completer
-    endfunction
+    " function! YouCompleteMeInstall(info)
+    "   !./install.sh --clang-completer --system-libclang --omnisharp-completer
+    " endfunction
     " If we have a new enough version of cmake, use upsteam
-    if $UPSTEAM_YCM
-      Plug 'Valloric/YouCompleteMe', { 'do': function('YouCompleteMeInstall')}
+    if $UPSTREAM_YCM
+      function! YouCompleteMePYInstall(info)
+        !./install.py --clang-completer --omnisharp-completer --tern-completer
+      endfunction
+      Plug 'Valloric/YouCompleteMe', { 'do': function('YouCompleteMePYInstall')}
+      Plug 'rdnetto/YCM-Generator'
     else
-      Plug 'AdnoC/YouCompleteMe', { 'do': function('YouCompleteMeInstall')}
+      function! YouCompleteMeSHInstall(info)
+        !./install.sh --clang-completer --system-libclang --omnisharp-completer
+      endfunction
+      Plug 'AdnoC/YouCompleteMe', { 'do': function('YouCompleteMeSHInstall')}
     endif
   endif
 endif
@@ -247,42 +254,19 @@ Plug 'edsono/vim-matchit', { 'for': 'html'}
 " Ctags are a dependancy of tagbar
 if executable('ctags')
   Plug 'majutsushi/tagbar'
-  if !has('win32') "&& !has('win32unix')
-    Plug 'vim-php/phpctags', { 'do': 'make -f Makefile'}
-    Plug 'vim-php/tagbar-phpctags.vim', { 'do': 'make -f Makefile'}
+  if executable('php') && !has('win32') "&& !has('win32unix')
+    Plug 'vim-php/phpctags', { 'do': 'make'}
+    Plug 'vim-php/tagbar-phpctags.vim'
   endif
 else
   if iCanHazVimPlug == 0
     echo 'Cannot find ctags. Not installing tagbar.'
   endif
 endif
-if executable('node')
-  function! TernInstall(info)
-    if has('win32unix')
-      !npm install
-    else
-      if !has('win32')
-        !sudo npm install
-      endif
-    endif
-  endfunction
-  Plug 'marijnh/tern_for_vim', { 'do': function('TernInstall'), 'for': 'javascript'}
-  " Install jsctags. Don't add it to the rtp since it isn't a vim plugin
-  "TODO: Put this in the vim/install.sh file instead
-  Plug 'ramitos/jsctags', { 'on': 'NeverCallThis'}
-    "\ 'build' : {
-      "\ 'cygwin' : 'npm install --update',
-      "\ 'unix' : 'sudo npm install --update',
-      "\ 'mac' : 'sudo npm install --update',
-      "\ }
-    "\ }
-  "NeoBundle 'faceleg/doctorjs', {
-    "\ 'build' : {
-      "\ 'cygwin' : 'git submodule update --init; make -f Makefile install',
-      "\ 'unix' : 'git submodule update --init; sudo make -f Makefile install',
-      "\ 'mac' : 'git submodule update --init; sudo make -f Makefile install',
-      "\ }
-    "\ }
+if executable('node') || executable('nodejs')
+  if $UPSTREAM_YCM == 0
+    Plug 'marijnh/tern_for_vim', { 'for': 'javascript'}
+  fi
 else
   if iCanHazVimPlug == 0
     echo 'Cannot find nodejs. Not installing doctorjs/jsctags'
@@ -338,6 +322,8 @@ if iCanHazVimPlug == 0
   autocmd VimEnter * call InstallVimballs()
 endif
 
+"""" TagbarPHPCtags:
+let g:tagbar_phpctags_bin='~/.vim/phpctags/bin/phpctags'
 
 """" Syntastic:
 " Turn it on by default, so far no filetypes where it needs to be off.

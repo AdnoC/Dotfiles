@@ -23,7 +23,7 @@ if ! hasCommand "php"; then
     warn "Please install php"
   elif isLinux; then
     info "Installing php"
-    sudo apt-get -y install php
+    sudo apt-get -y install php5
   elif isCygwin; then
     warn "Please install php"
   fi
@@ -50,16 +50,16 @@ if hasCommand "cmake" && [ "$(echo "$(cmake --version) 2.8.12 " | awk '{print $3
   # Make sure local preference file exists
   [ -f "~/.bash_profile.local" ] || touch ~/.bash_profile.local
   # Set a variable to tell Vim that we are using this version
-  echo 'export UPSTREAM_YCM=true' > ~/.bash_profile.local
-  export UPSTEAM_YCM=true
+  echo 'export UPSTREAM_YCM=1' > ~/.bash_profile.local
+  export UPSTEAM_YCM=1
 else
 
   info "Using forked YouCompleteMe"
   # Make sure local preference file exists
   [ -f "~/.bash_profile.local" ] || touch ~/.bash_profile.local
   # Since the new version is high enough, make sure to tell Vim
-  echo 'export UPSTREAM_YCM=false' > ~/.bash_profile.local
-  export UPSTEAM_YCM=false
+  echo 'export UPSTREAM_YCM=0' > ~/.bash_profile.local
+  export UPSTEAM_YCM=0
 fi
 
 # If the version of vim is too low for YouCompleteMe
