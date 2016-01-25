@@ -258,8 +258,8 @@ Plug 'edsono/vim-matchit', { 'for': 'html'}
 if executable('ctags')
   Plug 'majutsushi/tagbar'
   if executable('php') && !has('win32') "&& !has('win32unix')
-    Plug 'vim-php/phpctags', { 'do': 'make'}
-    Plug 'vim-php/tagbar-phpctags.vim'
+    " Plug 'vim-php/phpctags'
+    Plug 'vim-php/tagbar-phpctags.vim', { 'do': 'make'}
   endif
 else
   if iCanHazVimPlug == 0
@@ -326,8 +326,6 @@ if iCanHazVimPlug == 0
   autocmd VimEnter * call InstallVimballs()
 endif
 
-"""" TagbarPHPCtags:
-let g:tagbar_phpctags_bin='~/.vim/phpctags/bin/phpctags'
 
 """" Syntastic:
 " Turn it on by default, so far no filetypes where it needs to be off.
@@ -816,7 +814,7 @@ exec "set directory=" . s:vimDirectoryPart . "swaps"
 " Was in default gVim vimrc
 if has('gui') && has('vim_starting')
   set diffexpr=MyDiff()
-  function MyDiff()
+  function! MyDiff()
     let opt = '-a --binary '
     if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
     if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
