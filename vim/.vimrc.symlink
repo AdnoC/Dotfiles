@@ -982,9 +982,10 @@ set fileformats=unix,dos,mac
 autocmd FileType * set foldcolumn=0
 " Show the gutter for only specified filetypes
 autocmd FileType javascript setlocal foldcolumn=6
-" Auto include folds based on syntax
-set foldmethod=syntax
-"set nofoldenable
+" Auto include folds based on indent. Syntax-based folds can slow down opening large files.
+set foldmethod=indent
+" Open files with all folds open by default
+set foldlevel=99
 " Reselect visual block after indent/outdent                                }{
 vnoremap < <gv
 vnoremap > >gv
