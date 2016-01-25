@@ -760,9 +760,22 @@ set lazyredraw
 
 " Disable some things if the file is very large.
 let g:LargeFile = 1024 * 1024 * 1
+let b:gitGutEnAu = 0
+function! LargeFileGitgutter()
+  let f=expand("<afile>")
+  if getfsize(f) > g:LargeFile
+    let g:gitgutter_enabled = 0
+    let g:gitgutter_realtime = 0
+    if b:gitGutEnAu == 0
+      autocmd BufWritePost <buffer> :GitGutterEnable
+    endif
+    let b:gitGutEnAu = 1
+  endif
+endfunction
 augroup LargeFile
+  autocmd!
   " Gitgutter slows vim to a halt if the file is to big, so turn it off in those cases.
-  autocmd BufReadPre * let f=expand("<afile>") | if getfsize(f) > g:LargeFile | let g:gitgutter_enabled = 0 | endif
+  autocmd BufReadPre * call LargeFileGitgutter()
 augroup END
 
 " Use generic omnicompletion if something more specific isn't already set
