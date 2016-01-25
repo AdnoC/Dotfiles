@@ -15,6 +15,8 @@ if ! hasCommand "node"; then
     fi
     info "Installing nodejs from apt-get"
     sudo apt-get -y install nodejs
+  elif isOSX; then
+    brew install nodejs
   fi
 fi
 
