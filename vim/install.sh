@@ -4,7 +4,8 @@ if ! hasCommand "vim"; then
   fi
 fi
 
-if ! hasCommand "ctags"; then
+# If we don't have ctags or the ctags we have isn't exuberant, install exuberant
+if ! hasCommand "ctags" || ctags --version | grep 'Exuberant' > /dev/null; then
   if isOSX; then
     info "Installing ctags from brew"
     brew install ctags-exuberant
@@ -42,6 +43,9 @@ if ! hasCommand "cmake" || [ "$(echo "$(cmake --version) 2.8.12 " | awk '{print 
   if isLinux; then
     info "Trying to update cmake"
     sudo apt-get -y install build-essential cmake python-dev
+  else
+    info "Trying to update cmake"
+    brew install cmake
   fi
 fi
 # If the new version is high enough, make sure to tell Vim
