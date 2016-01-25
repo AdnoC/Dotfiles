@@ -44,7 +44,17 @@ fi
 pathadd() {
   tmpvar="$(eval echo $1)"
   if [ -d "$tmpvar" ] && [[ ":$PATH:" != *":$tmpvar:"* ]]; then
-    PATH="${PATH:+"$tmpvar:"}$PATH"
+    # PATH="${PATH:+"$tmpvar:"}$PATH"
+    PATH="$tmpvar${PATH:+":$PATH"}"
+  fi
+  unset tmpvar
+}
+# Add the folder to the front of the path if it exists. Allows duplicates
+pathaddFront() {
+  tmpvar="$(eval echo $1)"
+  if [ -d "$tmpvar" ]; then
+    # PATH="$tmpvar:${PATH//$tmpvar//}"
+    PATH="$tmpvar:$PATH"
   fi
   unset tmpvar
 }
@@ -64,8 +74,9 @@ if [[ "$OSTYPE" == 'cygwin' ]]; then
   pathadd "~/programmingTools/android-sdk-windows/platform-tools"
   pathadd "/usr/local/lib"
 fi
-pathadd /usr/local/sbin
-pathadd ~/bin
+pathaddFront /usr/local/sbin
+pathaddFront /usr/local/bin
+pathaddFront ~/bin
 
 # Don't need pathadd or findversiondir anymore so we can unset them
 unset pathadd
@@ -100,7 +111,6 @@ export GREP_OPIONS='--color'
 
 # Set ls colors
 if [[ "$OSTYPE" == darwin* ]] || [[ -n $MAC_TERM ]]; then
-  echo "DAR"
   # Macs way of setting ls colors makes me cry. No compatability.
   if [ "$TERM_COLOR" == "dark" ]; then
     export LSCOLORS="gxBxhxDxfxhxhxhxhxcxcx"
