@@ -29,6 +29,8 @@
   whitespace = red reverse
 [core]
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+	fscache = false
+	preloadindex = false
 # URL shorthands
 [url "git@github.com:"]
   insteadOf = "gh:"
