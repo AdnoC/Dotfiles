@@ -38,6 +38,8 @@ if hasCommand "npm"; then
     npm install -g jshint
     npm install -g tern
     npm install -g jsctags
+    npm install -g syntastic-react
+    npm install -g react-tools
   fi
 fi
 
