@@ -107,11 +107,9 @@ Plug 'vim-scripts/TeTrIs.vim', { 'on': 'LoadTetris'}
 function! LoadTetris()
 endfunction
 """ Git:
-" So that gitv can work
 " NOTE: fugitive makes vim very laggy sometimes
-"NeoBundle 'tpope/vim-fugitive'
-"NeoBundle 'gregsexton/gitv', {
-  "\ 'depends' : 'vim-fugitive' }
+" Commands for using git nicely in Vim
+Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 """ Auto Formatting:
 " Currently this breaks undo and repeat.
@@ -124,21 +122,23 @@ Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'elzr/vim-json'
 Plug 'groenewege/vim-less'
 Plug 'jaxbot/semantic-highlight.vim', { 'for': 'javascript'}
-Plug 'scrooloose/syntastic'
-
-if has('python') && executable('python')
-  Plug 'myint/indent-finder'
+if !&diff
+  Plug 'scrooloose/syntastic'
 endif
+" Set indent options based on what is used in the file
+" Plug 'tpope/vim-sleuth'
+" General language pack
 Plug 'sheerun/vim-polyglot'
+" Adds syntax highlighting for some keywords in React. vim-polyglot already provides JSX syntax.
+Plug 'othree/javascript-libraries-syntax.vim'
 " Highlights matching HTML tags
-Plug 'Valloric/MatchTagAlways', { 'for': ['html', 'php']}
+" Plug 'Valloric/MatchTagAlways', { 'for': ['html', 'php']}
 " Auto-close HTML tags
-Plug 'vim-scripts/HTML-AutoCloseTag', { 'for': 'html'}
+" Plug 'vim-scripts/HTML-AutoCloseTag', { 'for': 'html'}
 " Auto-close some structures (i.e. adds 'endfunction' after you type 'function!' in VimL)
 Plug 'tpope/vim-endwise'
 "NeoBundle 'nathanaelkane/vim-indent-guides'
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle'}
-" Plug 'spf13/PIV', { 'for': ['php']}
 " YouCompleteMe only works on Linux/Mac and if vim is version > 7.3.584
 " Use supertab if YCM won't work
 if (has('win32') || has('win32unix')) || (v:version < 704 && (has('python') || has('lua')))
@@ -151,6 +151,7 @@ else
     Plug 'Shougo/neocomplete.vim'
   else
     let autocomplete_plugin="ycm"
+      let g:myymc_version="toBeDecided"
     " function! YouCompleteMeInstall(info)
     "   !./install.sh --clang-completer --system-libclang --omnisharp-completer
     " endfunction
@@ -159,9 +160,12 @@ else
       function! YouCompleteMePYInstall(info)
         !./install.py --clang-completer --tern-completer
       endfunction
+      let g:myymc_version="Upstream"
       Plug 'Valloric/YouCompleteMe', { 'do': function('YouCompleteMePYInstall')}
-      Plug 'rdnetto/YCM-Generator'
+      Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
     else
+      let g:myymc_version="Fork"
+      let autocomplete_plugin="ycm"
       function! YouCompleteMeSHInstall(info)
         !./install.sh --clang-completer --system-libclang 
       endfunction
@@ -169,9 +173,10 @@ else
     endif
   endif
 endif
+Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
 Plug 'AdnoC/jcommenter.vim', { 'for': 'java'}
 Plug 'heavenshell/vim-jsdoc', { 'for': 'javascript'}
-Plug 'jelera/vim-javascript-syntax', { 'for': 'javascript'}
+" Plug 'jelera/vim-javascript-syntax', { 'for': 'javascript'}
 "autocmd FileType java NeoBundleSource jcommenter.vim
 "NeoBundleLazy 'vim-scripts/Vim-JDE'
 "autocmd FileType java NeoBundleSource Vim-JDE
@@ -190,8 +195,6 @@ Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-characterize'
 " Shows (vim) syntax info as well as color of stuff.
 Plug 'vim-scripts/SyntaxAttr.vim'
-" Commands for using git nicely in Vim
-Plug 'tpope/vim-fugitive'
 " Commands for using unix commands nicely in Vim
 Plug 'tpope/vim-eunuch'
 " Close buffers without closing windows
@@ -201,9 +204,9 @@ Plug 'tomtom/tcomment_vim'
 Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'sjl/gundo.vim', { 'on': 'GundoToggle'}
 " Fuzzy search for files, buffers, and recent files
-Plug 'kien/ctrlp.vim'", { 'on': ['CtrlPBuffer', 'CtrlP']}
-" Fuzzy search of functions
-Plug 'tacahiroy/ctrlp-funky', { 'on': 'CtrlPFunky'}
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+
 Plug 'kana/vim-operator-user'
 Plug 'kana/vim-textobj-user'
 " Text Objects:
@@ -233,13 +236,11 @@ Plug 'junegunn/limelight.vim', { 'on': 'Limelight'}
 " Removes distractions
 Plug 'junegunn/goyo.vim', { 'on': ['GoyoEnter', 'Limelight']}
 " Plug 'luochen1990/rainbow'
-Plug 'edkolev/promptline.vim'
 """ Movement:
 Plug 'Lokaltog/vim-easymotion'
 Plug 'wikitopian/hardmode', { 'on': ['ToggleHardMode', 'HardMode']}
 " Lets you press 'f'/'F' for repeated movements
 "NeoBundle 'rhysd/clever-f.vim'
-
 Plug 'othree/html5.vim', { 'for': 'html'}
 "NeoBundle 'tpope/vim-surround'
 Plug 'rhysd/vim-operator-surround'
@@ -247,8 +248,6 @@ Plug 'rhysd/vim-operator-surround'
 Plug 'kana/vim-operator-replace'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'
-" Opens a buffer with documentation on language functions. Sources must be installed first
-Plug 'thinca/vim-ref', { 'on': 'Ref'}
 " matchit breaks [] jumping. Only use it when 100% useful
 Plug 'edsono/vim-matchit', { 'for': 'html'}
 
@@ -278,6 +277,8 @@ else
 endif
 """ Tmux:
 if executable('tmux')
+  " Lets you use <C-hjkl> to move between both tmux and vim panes.
+  Plug 'christoomey/vim-tmux-navigator'
   Plug 'benmills/vimux'
   Plug 'edkolev/tmuxline.vim', { 'on': ['Tmuxline', 'TmuxlineSnapshot'] }
 else
@@ -329,9 +330,9 @@ endif
 
 """" Syntastic:
 " Turn it on by default, so far no filetypes where it needs to be off.
-let g:syntastic_mode_map = { 'mode': 'active',
-  \ 'active_filetypes': [],
-  \ 'passive_filetypes': ['java'] }
+" let g:syntastic_mode_map = { 'mode': 'active',
+"   \ 'active_filetypes': [],
+"   \ 'passive_filetypes': ['java'] }
 " Bind a button to check syntax when in passive mode                         }{
 autocmd FileType java nnoremap <leader>cc :SyntasticCheck<CR>
 " Better :sign interface symbols
@@ -358,12 +359,13 @@ let g:syntastic_cpp_compiler_options = ' -std=c++11'
 " Shortcuts to prev/next errors                                              }{
 let g:syntastic_java_javac_config_file_enabled = 1
 let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_javascript_jsxhint_exec = 'jsx-jshint-wrapper'
 nnoremap <leader>s] :lnext<CR>
 nnoremap <leader>s[ :lprevious<CR>
 
 """" YouCompleteMe
 " If we are using YCM
-if exists(':YcmRestartServer')
+if exists(':YcmRestartServer') && UPSTREAM_YCM == 0
   " Semantic triggers for when YCM should activate
   let g:ycm_semantic_triggers =  {
     \   'c' : ['->', '.'],
@@ -394,9 +396,13 @@ if exists(':NeoCompleteEnable')
   inoremap <expr><C-e>  neocomplete#cancel_popup()
 endif
 
+"""" BufKill:
+let g:BufKillCreateMappings=0
+
 """" Goyo:
 autocmd User GoyoEnter Limelight
 autocmd User GoyoLeave Limelight!
+
 """" Limelight:
 let g:limelight_conceal_ctermfg = 'DarkGray'
 
@@ -533,18 +539,16 @@ nnoremap <leader>w3 :W3m http://
 autocmd FileType w3m nnoremap <buffer>q :W3mClose<CR>
 autocmd FileType w3m nnoremap <buffer>o :W3mAddressBar<CR>
 
-"""" CtrlP:
-" Ignore some folders and files for CtrlP indexing
-let g:ctrlp_custom_ignore={
-  \ 'dir':  '\.git$\|\.yardoc\|public$|log\|tmp$',
-  \ 'file': '\.so$\|\.dat$|\.DS_Store$|\.orig|\.bck'
-  \ }
-let g:ctrlp_show_hidden = 1
-" Navigate to specific buffers quickly                                       }{
-map <C-B> :CtrlPBuffer<CR>
-"
-"""" CtrlPFunky:
-nnoremap <leader>p :CtrlPFunky<CR>
+"""" FZF:
+let g:fzf_command_prefix="Fzf"
+nmap <leader>p :FZF<CR>
+nmap <leader>b :FzfBuffers<CR>
+nmap <leader>t :FzfBTags<CR>
+autocmd FileType javascript command! -buffer FzfBTags
+  \ call fzf#vim#buffer_tags([
+    \ printf('jsctags %s -f', expand('%:S'))], {})
+    " \ printf('ctags -f - --sort=no --excmd=number --language-force=%s %s', &filetype, expand('%:S')),
+    " \ printf('ctags -f - --sort=no --excmd=number %s', expand('%:S'))], {})
 
 """" Vimux:                                                                  }{
 map <leader>vp :VimuxPromptCommand<CR>
@@ -868,7 +872,7 @@ endif
 if &diff
   colorscheme blue
   nmap <leader>. :diffget RE<CR>
-  nmap <leader>, :diffget LO<CR>
+  nmap <leader>m :diffget LO<CR>
 endif
 
 if has('win32unix')
@@ -917,13 +921,14 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
 endif
 
 " Use relative line numbers if we can
-if exists("&relativenumber")
-  set relativenumber
-  "au BufReadPost * set relativenumber
-else
+" if exists("&relativenumber")
+"   " This caused lag (like when there is no v-sync) when scrolling.
+"   set relativenumber
+"   "au BufReadPost * set relativenumber
+" else
   " If there is no relative numbering on the system, use static numbers
-  set number
-endif
+set number
+" endif
 
 " Show on status bar line & column number, relative % in file
 set ruler
@@ -932,7 +937,8 @@ set noshowcmd
 " Shut the fuck up (Screen flashes instead of making a beep)
 set visualbell
 " Highlight current line (Horizontal underline)
-set cursorline
+" This caused lag (like when there is no v-sync) when scrolling.
+" set cursorline
 " No need to show the mode, as airline will show it for us
 set noshowmode
 " Always show the status line (I use airline, so I want to see it)
@@ -1025,7 +1031,7 @@ set incsearch   " Search incrementally
 
 """""""""""""""""""""""""""""""""""" Msc. """""""""""""""""""""""""""""""""""""
 " Remove the Windows ^M - when the encodings gets messed up                  }{
-noremap <Leader>m mmHmt:%s/<C-V><CR>//ge<CR>'tzt'm
+noremap <Leader>^m mmHmt:%s/<C-V><CR>//ge<CR>'tzt'm
 " Allow backspacing over everything in insert mode (:h bs)
 set backspace=indent,eol,start
 " Be smart about case when using autocomplete
@@ -1042,6 +1048,8 @@ set splitright
 nnoremap Y y$
 " Replace a word with yanked text                                            }{
 nnoremap <leader>rp viw"0p
+" Don't take too long if a mapping is an incomplete version of another
+set timeoutlen=250
 """" Help
 " Press Enter to follow a help tag
 au filetype help nnoremap <buffer><CR> <c-]>
