@@ -10,11 +10,19 @@ set -g terminal-overrides 'xterm*:smcup@:rmcup@'
 setw -g mode-keys vi
 set -g status-keys vi
 
-# hjkl pane traversal
-bind h select-pane -L
-bind j select-pane -D
-bind k select-pane -U
-bind l select-pane -R
+# Smart pane switching with awareness of vim splits
+# See: https://github.com/christoomey/vim-tmux-navigator
+is_vim='echo "#{pane_current_command}" | grep -iqE "(^|\/)g?(view|n?vim?x?)(diff)?$"'
+bind -n C-h if-shell "$is_vim" "send-keys C-h" "select-pane -L"
+bind -n C-j if-shell "$is_vim" "send-keys C-j" "select-pane -D"
+bind -n C-k if-shell "$is_vim" "send-keys C-k" "select-pane -U"
+bind -n C-l if-shell "$is_vim" "send-keys C-l" "select-pane -R"
+bind -n C-\ if-shell "$is_vim" "send-keys C-\\" "select-pane -l"
+# # hjkl pane traversal
+# bind h select-pane -L
+# bind j select-pane -D
+# bind k select-pane -U
+# bind l select-pane -R
 
 set-window-option -g utf8 on
 if-shell "test -f ~/tmuxline.conf" "source ~/tmuxline.conf"
@@ -24,10 +32,10 @@ set -g base-index 1
 set -g pane-base-index 1
 # No delay after escape key press
 set -s escape-time 0
-# Use Ctrl-a as tmux prefix. Easier to hit than Ctrl-b.
-set-option -g prefix C-a
+# Use Ctrl-s as tmux prefix. Easier to hit than Ctrl-b.
+set-option -g prefix C-s
 # Double-tap a to move to previous window;
-bind-key a last-window
+bind-key s last-window
 # Pane movement
 bind-key J command-prompt -p "join pane from:"  "join-pane -s '%%'"
 bind-key S command-prompt -p "send pane to:"  "join-pane -t '%%'"
