@@ -37,3 +37,5 @@
 # Use pull --rebase instead of normal pull
 [pull]
   rebase = true
+[merge]
+	tool = vimdiff
