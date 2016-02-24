@@ -173,7 +173,6 @@ else
     endif
   endif
 endif
-Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
 Plug 'AdnoC/jcommenter.vim', { 'for': 'java'}
 Plug 'heavenshell/vim-jsdoc', { 'for': 'javascript'}
 " Plug 'jelera/vim-javascript-syntax', { 'for': 'javascript'}
