@@ -396,6 +396,9 @@ if exists(':NeoCompleteEnable')
   inoremap <expr><C-e>  neocomplete#cancel_popup()
 endif
 
+"""" DelimitMate:
+let g:delimitMate_expand_cr=1
+
 """" BufKill:
 let g:BufKillCreateMappings=0
 
@@ -503,6 +506,7 @@ let g:tagbar_autofocus=1
 nnoremap <leader>gu :UndotreeToggle<CR>
 
 """" Indent Lines:
+let g:indentLine_enabled=0
 " The default bind, just here so I remember
 nnoremap <leader>ig :IndentLinesToggle<CR>
 
@@ -816,11 +820,11 @@ endif
 endif
  if has('persistent_undo')
   " Store undo data in a file for persistence between sessions
-  set undofile
   if ! isdirectory(s:vimDirectoryPart . 'undo')
     call mkdir(s:vimDirectoryPart . 'undo')
   endif
   exec "set undodir=" . s:vimDirectoryPart . "undo"
+  set undofile
 endif
 exec "set backupdir=" . s:vimDirectoryPart . "backups"
 exec "set directory=" . s:vimDirectoryPart . "swaps"
