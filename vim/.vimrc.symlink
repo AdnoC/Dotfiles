@@ -201,7 +201,7 @@ Plug 'qpkorr/vim-bufkill'
 Plug 'tomtom/tcomment_vim'
 " File Explorer Plugin
 Plug 'jeetsukumaran/vim-filebeagle'
-Plug 'sjl/gundo.vim', { 'on': 'GundoToggle'}
+Plug 'mbbill/undotree'
 " Fuzzy search for files, buffers, and recent files
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
@@ -230,6 +230,7 @@ Plug 'NLKNguyen/papercolor-theme'
 Plug 'altercation/vim-colors-solarized'
 " Makes the status bar & buffer bar look nice and display useful info
 Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 " Dims paragraphs besides the one you are working on
 Plug 'junegunn/limelight.vim', { 'on': 'Limelight'}
 " Removes distractions
@@ -497,9 +498,9 @@ nnoremap <leader>tg :TagbarToggle<CR>
 let g:tagbar_autoclose=1
 let g:tagbar_autofocus=1
 
-"""" Gundo:
-" Bind a button to open Gundo                                                }{
-nnoremap <leader>gu :GundoToggle<CR>
+"""" UndoTree:
+" Bind a button to open UntoDree                                             }{
+nnoremap <leader>gu :UndotreeToggle<CR>
 
 """" Indent Lines:
 " The default bind, just here so I remember
