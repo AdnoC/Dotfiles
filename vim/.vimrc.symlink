@@ -453,8 +453,8 @@ autocmd VimEnter * autocmd ColorScheme * AirlineRefresh
 " Tell gitgutter not to set any keybinds by itself. They will all be rebound.
 let g:gitgutter_map_keys = 0
 " Move from to the next/prev change                                          }{
-nmap <leader>g] <Plug>GitGutterNextHunk
-nmap <leader>g[ <Plug>GitGutterPrevHunk
+nmap ]g <Plug>GitGutterNextHunk
+nmap [g <Plug>GitGutterPrevHunk
 " Stage or revert the lines the cursor is on                                 }{
 nmap <Leader>gs <Plug>GitGutterStageHunk
 nmap <Leader>gr <Plug>GitGutterRevertHunk
