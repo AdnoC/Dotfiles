@@ -543,9 +543,10 @@ let g:fzf_command_prefix="Fzf"
 nmap <leader>p :FZF<CR>
 nmap <leader>b :FzfBuffers<CR>
 nmap <leader>t :FzfBTags<CR>
-autocmd FileType javascript command! -buffer FzfBTags
-  \ call fzf#vim#buffer_tags([
-    \ printf('jsctags %s -f', expand('%:S'))], {})
+autocmd FileType javascript command! -buffer -bang -nargs=* FzfBTags
+  \ call fzf#vim#buffer_tags(<q-args>,
+  \ [printf('jsctags %s -f', expand('%:S'))],
+  \ <bang>0 ? {} : copy(get(g:, 'fzf_layout', g:fzf#vim#default_layout)))
     " \ printf('ctags -f - --sort=no --excmd=number --language-force=%s %s', &filetype, expand('%:S')),
     " \ printf('ctags -f - --sort=no --excmd=number %s', expand('%:S'))], {})
 
