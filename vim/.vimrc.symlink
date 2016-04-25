@@ -112,11 +112,11 @@ endfunction
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 """ Auto Formatting:
-" Currently this breaks undo and repeat.
-"NeoBundle 'Raimondi/delimitMate'
+Plug 'Raimondi/delimitMate'
 """ Syntax:
 Plug 'Konfekt/FastFold'
 "NeoBundleLazy 'LaTeX-Box-Team/LaTeX-Box'
+Plug 'fatih/vim-go'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'elzr/vim-json'
