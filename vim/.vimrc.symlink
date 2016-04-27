@@ -104,17 +104,6 @@ endif
 " Required:
 call plug#begin(s:vimDirectoryPart . 'bundle')
 "Add your plugins here
-" Does anything rely on vimproc?
-"let vimproc_updcmd = has('win64') ?
-  "\ 'tools\\update-dll-mingw 64' : 'tools\\update-dll-mingw 32'
-"execute "NeoBundle 'Shougo/vimproc.vim'," . string({
-  "\ 'build' : {
-  "\     'windows' : vimproc_updcmd,
-  "\     'cygwin' : 'make -f make_cygwin.mak',
-  "\     'mac' : 'make -f make_mac.mak',
-  "\     'unix' : 'make -f make_unix.mak',
-  "\    },
-  "\ })
 "" Games:
 Plug 'vim-scripts/TeTrIs.vim', { 'on': 'LoadTetris'}
 function! LoadTetris()
@@ -128,7 +117,6 @@ Plug 'airblade/vim-gitgutter'
 Plug 'Raimondi/delimitMate'
 """ Syntax:
 Plug 'Konfekt/FastFold'
-"NeoBundleLazy 'LaTeX-Box-Team/LaTeX-Box'
 function! InstallGoBins(info)
   if a:info.status == 'installed'
     GoInstallBinaries
@@ -150,14 +138,8 @@ endif
 Plug 'sheerun/vim-polyglot'
 " Adds syntax highlighting for some keywords in React. vim-polyglot already provides JSX syntax.
 Plug 'othree/javascript-libraries-syntax.vim'
-" Highlights matching HTML tags
-" Plug 'Valloric/MatchTagAlways', { 'for': ['html', 'php']}
-" Auto-close HTML tags
-" Plug 'vim-scripts/HTML-AutoCloseTag', { 'for': ['html', 'jsx']}
-" Plug 'alvan/vim-closetag'
 " Auto-close some structures (i.e. adds 'endfunction' after you type 'function!' in VimL)
 Plug 'tpope/vim-endwise'
-"NeoBundle 'nathanaelkane/vim-indent-guides'
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle'}
 " YouCompleteMe only works on Linux/Mac and if vim is version > 7.3.584
 " Use supertab if YCM won't work
@@ -205,18 +187,17 @@ else
   endif
 endif
 Plug 'Shougo/neosnippet.vim'| Plug 'Shougo/neosnippet-snippets'
+Plug 'vim-scripts/csv.vim', {'for': 'csv'}
+
+" Helpers for creating comments
 Plug 'AdnoC/jcommenter.vim', { 'for': 'java'}
 Plug 'heavenshell/vim-jsdoc', { 'for': 'javascript'}
-" Plug 'jelera/vim-javascript-syntax', { 'for': 'javascript'}
-"autocmd FileType java NeoBundleSource jcommenter.vim
-"NeoBundleLazy 'vim-scripts/Vim-JDE'
-"autocmd FileType java NeoBundleSource Vim-JDE
+
+
+" Add docs for Java on 'J' keybind
 Plug 'davetron5000/javax-xml-javadoc-vim', { 'for': 'java'}
 Plug 'davetron5000/javax-javadoc-vim', { 'for': 'java'}
 Plug 'davetron5000/java-javadoc-vim', { 'for': 'java'}
-Plug 'vim-scripts/csv.vim', {'for': 'csv'}
-" Python autocomplete
-"NeoBundle 'davidhalter/jedi-vim'
 """ Tools:
 " Shows all 256 x-term colors in a nice table
 Plug 'guns/xterm-color-table.vim'
@@ -271,10 +252,7 @@ Plug 'junegunn/goyo.vim', { 'on': ['GoyoEnter', 'Limelight']}
 """ Movement:
 Plug 'Lokaltog/vim-easymotion'
 Plug 'wikitopian/hardmode', { 'on': ['ToggleHardMode', 'HardMode']}
-" Lets you press 'f'/'F' for repeated movements
-"NeoBundle 'rhysd/clever-f.vim'
 Plug 'othree/html5.vim', { 'for': 'html'}
-"NeoBundle 'tpope/vim-surround'
 Plug 'rhysd/vim-operator-surround'
 " Lets you replace text with something from a register (like pasting from register)
 Plug 'kana/vim-operator-replace'
@@ -330,7 +308,6 @@ call plug#end()
 "if iCanHazVimPlug == 0
   "echo "Installing Plugins, please ignore key map error messages"
   "echo ""
-  "NeoBundleCheck
 "endif
 
 """" Vimballs:
@@ -419,9 +396,6 @@ imap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 """" DeopleteGo:
 let g:deoplete#sources#go#align_class = 1
 
-"""" VimCloseTag:
-let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.jsx"
-
 """" DelimitMate:
 let g:delimitMate_expand_cr=1
 
@@ -479,7 +453,7 @@ let g:airline_section_x=''
 " Automatically refresh airline when changing colorschemes. This fixes the arrows.
 autocmd VimEnter * autocmd ColorScheme * AirlineRefresh
 
-"""" Vim Gitgutter:
+"""" Vim GitGutter:
 " Tell gitgutter not to set any keybinds by itself. They will all be rebound.
 let g:gitgutter_map_keys = 0
 " Move from to the next/prev change                                          }{
@@ -630,17 +604,6 @@ augroup VIMJSDOC
   autocmd FileType javascript nmap <leader>cj :JsDoc<CR>
 augroup END
 
-"""" VimJDE:
-if executable('ant')
-  function! s:Set_VJDE_Lib_Path()
-    if !exists("g:vjde_lib_path")
-      let g:vjde_lib_path=system("ant -q cp | grep echo | cut -f2- -d] | tr -d ' ' | tr ':' '\n'")
-    endif
-  endfunction
-  " The system call takes a long time (700 ms), so don't do it unless we are editing a java file
-  autocmd FileType java call s:Set_VJDE_Lib_Path()
-endif
-
 """" SyntaxAttr:
 nmap <leader>a :call SyntaxAttr()<CR>
 
@@ -654,8 +617,6 @@ augroup PandocBinds
   autocmd FileType pandoc nmap <buffer>go <Plug>(pandoc-keyboard-links-open)
   autocmd FileType pandoc nmap <buffer>gb <Plug>(pandoc-keyboard-links-back)
 augroup END
-
-
 
 """" VimOperatorSurround:
 " operator mappings                                                         }{
@@ -702,7 +663,7 @@ omap iX <Plug>(textobj-comment-big-i)
 "call s:setCommentOperator('<leader>cx', 'uncomment')
 
 
-"""""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
 augroup UserFileTypeDefs
    autocmd!
