@@ -257,7 +257,7 @@ Plug 'kana/vim-operator-replace'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'
 " matchit breaks [] jumping. Only use it when 100% useful
-Plug 'edsono/vim-matchit', { 'for': 'html'}
+Plug 'k-takata/matchit.vim'
 
 
 """ Tagbar:
