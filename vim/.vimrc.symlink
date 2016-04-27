@@ -34,6 +34,8 @@ endfunction
 " Vim looks for plugins in vimfiles instead of .vim in Windows
 if has('gui_win32')
   let s:vimDirectory=expand("$HOME/vimfiles")
+elseif has('nvim')
+  let s:vimDirectory=expand("$HOME/.config/nvim")
 else
   let s:vimDirectory=expand("$HOME/.vim")
 endif
@@ -83,7 +85,20 @@ if empty(glob(expand(s:vimDirectory . '/autoload/plug.vim')))
       \ " installing plugins without Git."
   endif
 
-  autocmd VimEnter * PlugInstall
+  if has('nvim')
+    " Install python client
+    silent exec '!pip install neovim'
+    if executable('pip3')
+      silent exec '!pip3 install neovim'
+    endif
+  endif
+  function! InstallMyPlugs()
+    PlugInstall
+    if has('nvim')
+      UpdateRemotePlugins
+    endif
+  endfunction
+  autocmd VimEnter * call InstallMyPlugs()
 endif
 
 " Required:
@@ -100,8 +115,6 @@ call plug#begin(s:vimDirectoryPart . 'bundle')
   "\     'unix' : 'make -f make_unix.mak',
   "\    },
   "\ })
-function! NeverCallThis(info)
-endfunction
 "" Games:
 Plug 'vim-scripts/TeTrIs.vim', { 'on': 'LoadTetris'}
 function! LoadTetris()
@@ -116,9 +129,15 @@ Plug 'Raimondi/delimitMate'
 """ Syntax:
 Plug 'Konfekt/FastFold'
 "NeoBundleLazy 'LaTeX-Box-Team/LaTeX-Box'
-Plug 'fatih/vim-go'
-Plug 'vim-pandoc/vim-pandoc'
-Plug 'vim-pandoc/vim-pandoc-syntax'
+function! InstallGoBins(info)
+  if a:info.status == 'installed'
+    GoInstallBinaries
+  elseif a:info.status == 'updated'
+    GoUpdateBinaries
+  endif
+endfunction
+Plug 'fatih/vim-go', { 'do': function('InstallGoBins')}
+Plug 'vim-pandoc/vim-pandoc' | Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'elzr/vim-json'
 Plug 'groenewege/vim-less'
 Plug 'jaxbot/semantic-highlight.vim', { 'for': 'javascript'}
@@ -134,45 +153,58 @@ Plug 'othree/javascript-libraries-syntax.vim'
 " Highlights matching HTML tags
 " Plug 'Valloric/MatchTagAlways', { 'for': ['html', 'php']}
 " Auto-close HTML tags
-" Plug 'vim-scripts/HTML-AutoCloseTag', { 'for': 'html'}
+" Plug 'vim-scripts/HTML-AutoCloseTag', { 'for': ['html', 'jsx']}
+" Plug 'alvan/vim-closetag'
 " Auto-close some structures (i.e. adds 'endfunction' after you type 'function!' in VimL)
 Plug 'tpope/vim-endwise'
 "NeoBundle 'nathanaelkane/vim-indent-guides'
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle'}
 " YouCompleteMe only works on Linux/Mac and if vim is version > 7.3.584
 " Use supertab if YCM won't work
-if (has('win32') || has('win32unix')) || (v:version < 704 && (has('python') || has('lua')))
-  \ || (v:version == 703 && ((!has('patch584') || !has('python')) ||  (!has('patch885') || !has('lua'))))
-  let autocomplete_plugin="supertab"
-  Plug 'ervandew/supertab'
-else
-  if has('lua') && (v:version >= 704 || v:version == 703 && has('patch885'))
+if (has('lua') || has('nvim'))
+  if has('nvim')
+    let autocomplete_plugin="deoplete"
+    Plug 'Shougo/deoplete.nvim'
+  else
     let autocomplete_plugin="neocomplete"
     Plug 'Shougo/neocomplete.vim'
+  endif
+  " if executable('clang')
+  "   Plug 'zchee/deoplete-clang'
+  " elseif iCanHazVimPlug == 0
+  "   echo 'Cannot find clang, not installing clang completion'
+  " endif
+  if executable('tern')
+    Plug 'carlitux/deoplete-ternjs', { 'for': 'javascript'}
+  elseif iCanHazVimPlug == 0
+    echo 'Cannot find tern, not installing javascript completion'
+  endif
+  if executable('gocode')
+    Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go'}
+  elseif iCanHazVimPlug == 0
+    echo 'Cannot find gocode, not installing go completion'
+  endif
+  "
+  if (! executable('jedi') && iCanHazVimPlug == 0)
+    silent exec '!pip install jedi'
+  endif
+  Plug 'zchee/deoplete-jedi', { 'for': 'python'}
+  " if executable('php')
+  "   Plug 'm2mdas/phpcomplete-extended', { 'for': 'php'}
+  " endif
+else
+  if 1 == 1
+    let autocomplete_plugin="supertab"
+    Plug 'ervandew/supertab'
   else
     let autocomplete_plugin="ycm"
-      let g:myymc_version="toBeDecided"
-    " function! YouCompleteMeInstall(info)
-    "   !./install.sh --clang-completer --system-libclang --omnisharp-completer
-    " endfunction
     " If we have a new enough version of cmake, use upsteam
-    if $UPSTREAM_YCM
-      function! YouCompleteMePYInstall(info)
-        !./install.py --clang-completer --tern-completer
-      endfunction
-      let g:myymc_version="Upstream"
-      Plug 'Valloric/YouCompleteMe', { 'do': function('YouCompleteMePYInstall')}
-      Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
-    else
-      let g:myymc_version="Fork"
-      let autocomplete_plugin="ycm"
-      function! YouCompleteMeSHInstall(info)
-        !./install.sh --clang-completer --system-libclang 
-      endfunction
-      Plug 'AdnoC/YouCompleteMe', { 'do': function('YouCompleteMeSHInstall')}
-    endif
+    let g:ycmInstallCommand = "/install.py --clang-completer --tern-completer --go-completer"
+    Plug 'Valloric/YouCompleteMe', { 'do': g:ycmInstallCommand}
+          \ | Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
   endif
 endif
+Plug 'Shougo/neosnippet.vim'| Plug 'Shougo/neosnippet-snippets'
 Plug 'AdnoC/jcommenter.vim', { 'for': 'java'}
 Plug 'heavenshell/vim-jsdoc', { 'for': 'javascript'}
 " Plug 'jelera/vim-javascript-syntax', { 'for': 'javascript'}
@@ -203,7 +235,7 @@ Plug 'tomtom/tcomment_vim'
 Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'mbbill/undotree'
 " Fuzzy search for files, buffers, and recent files
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 Plug 'kana/vim-operator-user'
@@ -289,13 +321,9 @@ endif
 """ W3M:
 if executable('w3m')
   Plug 'yuratomo/w3m.vim'
-  if iCanHazVimPlug == 0
-    echo 'Cannot find W3m. Not installing w3m.vim'
-  endif
+elseif iCanHazVimPlug == 0
+  echo 'Cannot find W3m. Not installing w3m.vim'
 endif
-
-
-
 
 call plug#end()
     "...All your other bundles...
@@ -304,7 +332,6 @@ call plug#end()
   "echo ""
   "NeoBundleCheck
 "endif
-
 
 """" Vimballs:
 " Installs all vimballs in the vimball directory
@@ -363,38 +390,37 @@ let g:syntastic_javascript_jsxhint_exec = 'jsx-jshint-wrapper'
 nnoremap <leader>s] :lnext<CR>
 nnoremap <leader>s[ :lprevious<CR>
 
-"""" YouCompleteMe
-" If we are using YCM
-if exists(':YcmRestartServer') && UPSTREAM_YCM == 0
-  " Semantic triggers for when YCM should activate
-  let g:ycm_semantic_triggers =  {
-    \   'c' : ['->', '.'],
-    \   'objc' : ['->', '.'],
-    \   'ocaml' : ['.', '#'],
-    \   'cpp,objcpp' : ['->', '.', '::'],
-    \   'perl' : ['->'],
-    \   'php' : ['->', '::'],
-    \   'cs,java,javascript,d,python,perl6,scala,vb,elixir,go' : ['.'],
-    \   'vim' : ['re![_a-zA-Z]+[_\w]*\.'],
-    \   'ruby' : ['.', '::'],
-    \   'lua' : ['.', ':'],
-    \   'erlang' : [':'],
-    \ }
-endif
+"""" NeoSnippet:
+imap <expr><TAB>
+ \ pumvisible() ? "\<C-n>" :
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
-"""" Neocomplete
-" If we are using Neocomplete
-if exists(':NeoCompleteEnable')
-  " Start Neocomplete when we enter Vim
-  let g:neocomplete_enable_at_startup = 1
-  " <TAB>: completion.
-  inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-  " <C-h>, <BS>: close popup and delete backword char.
-  inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-  inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-  inoremap <expr><C-y>  neocomplete#close_popup()
-  inoremap <expr><C-e>  neocomplete#cancel_popup()
-endif
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+imap <C-j>     <Plug>(neosnippet_expand_or_jump)
+smap <C-j>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-j>     <Plug>(neosnippet_expand_target)
+
+"""" Deoplete:
+"" Run deoplete.nvim automatically
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#auto_complete_start_length=1
+"
+"""" Neocomplete:
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#auto_complete_start_length=1
+let g:neocomplete#enable_smart_case = 1
+
+" imap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+imap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
+"""" DeopleteGo:
+let g:deoplete#sources#go#align_class = 1
+
+"""" VimCloseTag:
+let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.jsx"
 
 """" DelimitMate:
 let g:delimitMate_expand_cr=1
