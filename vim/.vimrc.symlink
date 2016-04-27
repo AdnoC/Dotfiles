@@ -128,7 +128,6 @@ Plug 'fatih/vim-go', { 'do': function('InstallGoBins')}
 Plug 'vim-pandoc/vim-pandoc' | Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'elzr/vim-json'
 Plug 'groenewege/vim-less'
-Plug 'jaxbot/semantic-highlight.vim', { 'for': 'javascript'}
 if !&diff
   Plug 'scrooloose/syntastic'
 endif
@@ -252,7 +251,6 @@ Plug 'junegunn/goyo.vim', { 'on': ['GoyoEnter', 'Limelight']}
 """ Movement:
 Plug 'Lokaltog/vim-easymotion'
 Plug 'wikitopian/hardmode', { 'on': ['ToggleHardMode', 'HardMode']}
-Plug 'othree/html5.vim', { 'for': 'html'}
 Plug 'rhysd/vim-operator-surround'
 " Lets you replace text with something from a register (like pasting from register)
 Plug 'kana/vim-operator-replace'
@@ -607,10 +605,6 @@ augroup END
 """" SyntaxAttr:
 nmap <leader>a :call SyntaxAttr()<CR>
 
-"""" SemanticHighlight:
-let s:semanticTermColorsDark = [28,1,2,3,4,5,6,7,25,9,10,34,12,13,14,15,16,125,124,19]
-let s:semanticTermColorsLight = [28,1,2,3,4,5,6,8,25,9,10,34,12,13,14,17,16,125,124,19]
-
 """" VimPandoc:
 let g:pandoc#keyboard#use_default_mappings = 0
 augroup PandocBinds
@@ -716,11 +710,8 @@ augroup FileTypeSpecificCmds
 augroup END
 " let g:tex_conceal = ""
 
-" Vim doesn't play nice with javascript's anonymous function use. This makes the code actually have
-" colors.
-augroup JavascriptPls
+augroup BufEnterFileTypeCmds
   autocmd!
-  autocmd BufEnter *.js SemanticHighlight
   autocmd BufEnter *.js setlocal foldmethod=indent
 augroup END
 
@@ -889,9 +880,7 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
     syntax enable
     if expand("$TERM_COLOR") == 'light'
       set background="light"
-      let g:semanticTermColors =s:semanticTermColorsLight
     else
-      let g:semanticTermColors =s:semanticTermColorsDark
       set background="dark"
     endif
     " Silent so that it doesn't throw an error if the colorscheme doesn't exist
