@@ -116,6 +116,12 @@ piaddress() {
   unset IP_ADDR
 }
 
+piEthernetAddress() {
+  IP_ADDR=$(hostname -I | cut -f2 -d' ')
+  nmap -sn $IP_ADDR/24 | awk '/^Nmap/{ip=$NF}/b8:27:eb:96:74:59/{print ip}'
+  unset IP_ADDR
+}
+
 
 # Change colorscheme
 function solChange() {
