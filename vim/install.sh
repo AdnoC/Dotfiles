@@ -4,6 +4,30 @@ if ! hasCommand "vim"; then
   fi
 fi
 
+if ! hasCommand "nvim"; then
+  if isOSX; then
+    brew install neovim/neovim/neovim
+  elif isLinux; then
+    sudo add-apt-repository ppa:neovim-ppa/unstable
+    sudo apt-get update
+    sudo apt-get install neovim
+    # Python deps
+    sudo apt-get install python-dev python-pip python3-dev python3-pip
+
+    # Update alternatives
+    sudo update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
+    sudo update-alternatives --config vi
+    sudo update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
+    sudo update-alternatives --config vim
+    sudo update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
+    sudo update-alternatives --config editor
+  fi
+fi
+
+# Place neovim config in the right place
+mkdir -p "$XDG_CONFIG_HOME/.config/nvim"
+ln -s "$DOTFILES_ROOT/vim/.vimrc.symlink" "$XDG_CONFIG_HOME/nvim/init.vim"
+
 # If we don't have ctags or the ctags we have isn't exuberant, install exuberant
 if ! hasCommand "ctags" || ctags --version | grep 'Exuberant' > /dev/null; then
   if isOSX; then

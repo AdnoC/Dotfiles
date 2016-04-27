@@ -84,6 +84,9 @@ unset findversiondir
 
 # Set the default editor to vim
 export EDITOR=vim
+if command -v nvim >/dev/null 2>&1; then
+  export EDITOR=nvim
+fi
 
 # Don't keep track of repeated commands or empty commands
 export HISTCONTROL=ignoreboth

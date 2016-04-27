@@ -6,6 +6,10 @@
 
 # NOTE: returning 0 == True, returning 1 == False
 
+if [ -z "$XDG_CONFIG_HOME"]; then
+  export XDG_CONFIG_HOME="$HOME/.config"
+fi
+
 cd "$(dirname "$0")/.."
 DOTFILES_ROOT=$(pwd)
 
