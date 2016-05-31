@@ -557,7 +557,7 @@ map <F9> :call FixGUI()<CR>
 
 """" Tagbar:
 " Bind a button to open the tagbar                                         }{
-nnoremap <leader>tg :TagbarToggle<CR>
+nnoremap <leader>cb :TagbarToggle<CR>
 let g:tagbar_autoclose=1
 let g:tagbar_autofocus=1
 
@@ -1091,8 +1091,6 @@ set splitright
 nnoremap Y y$
 " Replace a word with yanked text                                            }{
 nnoremap <leader>rp viw"0p
-" Don't take too long if a mapping is an incomplete version of another
-set timeoutlen=250
 """" Help
 " Press Enter to follow a help tag
 au filetype help nnoremap <buffer><CR> <c-]>
