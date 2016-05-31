@@ -42,7 +42,6 @@ endif
 let s:vimDirectoryPart=expand(s:vimDirectory . "/")
 let g:vimDirectory=s:vimDirectory
 
-
 """"""""""""""""""""""""""""""""""" Plugins """""""""""""""""""""""""""""""""""
 """" Plugin Manager: (Vim-Plug)
 let iCanHazVimPlug=1
@@ -156,7 +155,11 @@ if (has('lua') || has('nvim'))
   "   echo 'Cannot find clang, not installing clang completion'
   " endif
   if executable('tern')
-    Plug 'carlitux/deoplete-ternjs', { 'for': 'javascript'}
+    if has('nvim')
+      Plug 'carlitux/deoplete-ternjs', { 'for': 'javascript'}
+    else
+      Plug 'ternjs/tern_for_vim'
+    endif
   elseif iCanHazVimPlug == 0
     echo 'Cannot find tern, not installing javascript completion'
   endif
@@ -170,9 +173,14 @@ if (has('lua') || has('nvim'))
     silent exec '!pip install jedi'
   endif
   Plug 'zchee/deoplete-jedi', { 'for': 'python'}
-  " if executable('php')
-  "   Plug 'm2mdas/phpcomplete-extended', { 'for': 'php'}
-  " endif
+
+  if executable('php')
+    if has('nvim')
+      Plug 'phpvim/phpcd.vim', { 'for': 'php', 'do': 'composer install'}
+    else
+      Plug 'Shougo/vimproc.vim', { 'do': 'make'} | Plug 'pjio/phpcomplete-extended'
+    endif
+  endif
 else
   if 1 == 1
     let autocomplete_plugin="supertab"
@@ -264,7 +272,7 @@ Plug 'k-takata/matchit.vim'
 " Ctags are a dependancy of tagbar
 if executable('ctags')
   Plug 'majutsushi/tagbar'
-  if executable('php') && !has('win32') "&& !has('win32unix')
+  if executable('php') && !has('win32')
     " Plug 'vim-php/phpctags'
     Plug 'vim-php/tagbar-phpctags.vim', { 'do': 'make'}
   endif
@@ -274,15 +282,6 @@ else
   endif
 endif
 
-if executable('node') || executable('nodejs')
-  if $UPSTREAM_YCM == 0
-    Plug 'marijnh/tern_for_vim', { 'for': 'javascript'}
-  endif
-else
-  if iCanHazVimPlug == 0
-    echo 'Cannot find nodejs. Not installing doctorjs/jsctags'
-  endif
-endif
 """ Tmux:
 if executable('tmux')
   " Lets you use <C-hjkl> to move between both tmux and vim panes.
@@ -302,6 +301,7 @@ elseif iCanHazVimPlug == 0
 endif
 
 call plug#end()
+
     "...All your other bundles...
 "if iCanHazVimPlug == 0
   "echo "Installing Plugins, please ignore key map error messages"
@@ -328,7 +328,6 @@ if iCanHazVimPlug == 0
   " Intall vimballs (UseVimball needs to be called after startup, therefore au)
   autocmd VimEnter * call InstallVimballs()
 endif
-
 
 """" Syntastic:
 " Turn it on by default, so far no filetypes where it needs to be off.
@@ -396,6 +395,24 @@ let g:deoplete#sources#go#align_class = 1
 
 """" DelimitMate:
 let g:delimitMate_expand_cr=1
+""" TernForVim:
+let g:tern_show_signature_in_pum = 1
+" Make neocomplete understand that we are getting syntax info from tern
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+let g:neocomplete#sources#omni#input_patterns.javascript =
+  \ '\h\w*\|[^. \t]\.\w*'
+
+"""" VimGo:
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+let g:neocomplete#sources#omni#input_patterns.go =
+  \ '\h\w*\|[^. \t]\.\w*'
+
+"""" AutoPairs:
+imap <expr><BS> pumvisible() ? "<C-y><C-h>" : "\<Plug>AutoPairsDelete"
 
 """" BufKill:
 let g:BufKillCreateMappings=0
