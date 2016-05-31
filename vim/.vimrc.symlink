@@ -1240,10 +1240,10 @@ nnoremap <leader>[ :bprev<CR>
 " switch to last used tab                                                    }{
 nnoremap tt :b#<CR>
 " make window navigation easier.                                             }{
-map <c-h> <c-w>h
-map <c-j> <c-w>j
-map <c-k> <c-w>k
-map <c-l> <c-w>l
+nnoremap <c-h> <c-w>h
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-l> <c-w>l
 
 
 """" Notes
