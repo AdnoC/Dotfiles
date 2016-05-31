@@ -812,7 +812,7 @@ set lazyredraw
 
 " Disable some things if the file is very large.
 let g:LargeFile = 1024 * 1024 * 1
-let b:gitGutEnAu = 0
+autocmd BufNew * let b:gitGutEnAu = 0
 function! LargeFileGitgutter()
   let f=expand("<afile>")
   if getfsize(f) > g:LargeFile
