@@ -22,8 +22,8 @@ if has('vim_starting')
   set nocompatible
 endif
 " Remap leader. Needs to be done before any mappings involving the leader.   }{
-nnoremap <SPACE> <NOP>
-onoremap <SPACE> <NOP>
+nnoremap <SPACE> <Nop>
+onoremap <SPACE> <Nop>
 let mapleader=" "
 
 " Get SID prefix of vimrc (see :h <SID>)
@@ -799,9 +799,9 @@ set wildmenu
 " Settings for wildmenu (:h wildmenu)
 set wildmode=list:longest,list:full
 " Get rid of the help key
-inoremap <F1> <ESC>
-nnoremap <F1> <ESC>
-vnoremap <F1> <ESC>
+inoremap <F1> <Nop>
+nnoremap <F1> <Nop>
+vnoremap <F1> <Nop>
 
 " Don't redraw while executing macros (good performance config)
 set lazyredraw
@@ -1225,10 +1225,10 @@ nnoremap <Down> :echom "Use j"<CR>
 " Turn off up and down arrows completely in insert mode, as the mouse scroll
 " is interpreted as scroll and gets past any other mapping and goes back to
 " default behavior. Also preceding command with <Esc> isn't ideal.           }{
-inoremap <Up> <nop>
-inoremap <Down> <nop>
-nnoremap <Up> <nop>
-nnoremap <Down> <nop>
+inoremap <Up> <Nop>
+inoremap <Down> <Nop>
+nnoremap <Up> <Nop>
+nnoremap <Down> <Nop>
 
 " Allows one to switch buffers without having to save or undo changes first.
 set hidden
