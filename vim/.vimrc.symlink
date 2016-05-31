@@ -139,6 +139,7 @@ Plug 'othree/javascript-libraries-syntax.vim'
 " Auto-close some structures (i.e. adds 'endfunction' after you type 'function!' in VimL)
 Plug 'tpope/vim-endwise'
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle'}
+Plug 'xolox/vim-misc' | Plug 'xolox/vim-easytags'
 " YouCompleteMe only works on Linux/Mac and if vim is version > 7.3.584
 " Use supertab if YCM won't work
 if (has('lua') || has('nvim'))
@@ -484,6 +485,21 @@ nmap <Leader>gr <Plug>GitGutterRevertHunk
 nmap <Leader>gp <Plug>GitGutterPreviewHunk
 let g:gitgutter_eager = 0
 
+"""" EasyTags
+let g:easytags_async=1
+let g:easytags_always_enabled = 1
+let g:easytags_always_enabled = 1
+let g:easytags_auto_highlight = 0
+let g:easytags_on_cursorhold = 0
+let g:easytags_languages = {
+\ 'javascript': {
+  \ 'cmd': 'jsctags',
+  \ 'args': [],
+  \ 'fileoutput_opt': '-f',
+  \ 'stdout_opt': '-f-',
+  \ 'recurse_flag': '-R'
+  \  }
+\}
 
 """" Solarized:
 let g:solarized_termcolors=256
