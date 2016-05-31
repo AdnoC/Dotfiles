@@ -861,7 +861,7 @@ endif
  if ! isdirectory(s:vimDirectoryPart . 'swaps')
   call mkdir(s:vimDirectoryPart . 'swaps')
 endif
- if has('persistent_undo')
+if has('persistent_undo')
   " Store undo data in a file for persistence between sessions
   if ! isdirectory(s:vimDirectoryPart . 'undo')
     call mkdir(s:vimDirectoryPart . 'undo')
@@ -966,15 +966,14 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
     set hlsearch
 endif
 
-" Use relative line numbers if we can
-" if exists("&relativenumber")
-"   " This caused lag (like when there is no v-sync) when scrolling.
-"   set relativenumber
-"   "au BufReadPost * set relativenumber
-" else
-  " If there is no relative numbering on the system, use static numbers
+" Always use absolute line numbers
 set number
-" endif
+
+" Use relative line numbers if we can
+if exists("&relativenumber")
+"   " This can cause lag (like when there is no v-sync) when scrolling.
+  set relativenumber
+endif
 
 " Show on status bar line & column number, relative % in file
 set ruler
