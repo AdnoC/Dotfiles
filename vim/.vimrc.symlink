@@ -134,6 +134,7 @@ endif
 " Plug 'tpope/vim-sleuth'
 " General language pack
 Plug 'sheerun/vim-polyglot'
+Plug '2072/php-indenting-for-vim'
 " Adds syntax highlighting for some keywords in React. vim-polyglot already provides JSX syntax.
 Plug 'othree/javascript-libraries-syntax.vim'
 " Auto-close some structures (i.e. adds 'endfunction' after you type 'function!' in VimL)
@@ -623,11 +624,14 @@ map <leader>vc :VimuxCloseRunner<CR>
 """" PreserveNoEOL:
 let g:PreserveNoEOL=1
 
-"""" PIV
+"""" PIV:
 " Don't let it map, because it causes ',' to hava a delay
 let g:PIVCreateDefaultMappings = 0
 " AutoPHPFolding really hits performance, making cursor movement and switching bufers laggy
 let g:DisableAutoPHPFolding = 1
+
+"""" Polyglot:
+" let g:polyglot_disabled = ['php']
 
 """" TComment:
 let g:tcommentGuessFileType_php = "php"
@@ -760,6 +764,11 @@ augroup FileTypeSpecificCmds
 
   " When editing plain text I don't need to see the ends of lines.
   autocmd FileType txt setlocal wrap linebreak nolist textwidth=0 wrapmargin=0
+  if has('nvim')
+    autocmd FileType php setlocal omnifunc=phpcd#CompletePHP
+  else
+    autocmd FileType php setlocal omnifunc=phpcomplete_extended#CompletePHP
+  endif
 augroup END
 " let g:tex_conceal = ""
 
