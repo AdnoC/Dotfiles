@@ -371,7 +371,7 @@ nnoremap <leader>s[ :lprevious<CR>
 imap <expr><TAB>
  \ pumvisible() ? "\<C-n>" :
  \ neosnippet#expandable_or_jumpable() ?
- \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "<TAB>
 
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
       \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
@@ -379,18 +379,43 @@ imap <C-j>     <Plug>(neosnippet_expand_or_jump)
 smap <C-j>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-j>     <Plug>(neosnippet_expand_target)
 
+
 """" Deoplete:
 "" Run deoplete.nvim automatically
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
 let g:deoplete#auto_complete_start_length=1
-"
+let g:deoplete#max_menu_width = 500
+let g:deoplete#max_abbr_width = 500
+if has('nvim')
+  imap <expr><C-h> deoplete#mappings#smart_close_popup()."\<C-h>"
+  imap <expr><CR> <SID>my_cr_function()
+
+  function! s:my_cr_function()
+    " return deoplete#mappings#close_popup() . "\<Plug>AutoPairsReturn"
+    return (pumvisible() ? "\<C-y>" : "" ) . "\<Plug>AutoPairsReturn"
+  endfunction
+
+endif
+
 """" Neocomplete:
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#auto_complete_start_length=1
 let g:neocomplete#enable_smart_case = 1
+if (!has('nvim'))
+  autocmd VimEnter * if exists(':autocmd VimEnter *') | call s:neocomp_settings()<CR>
+  function! s:neocomp_settings()
+    imap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
 
-" imap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+    inoremap <silent><CR> <C-r>=<SID>my_cr_function()<CR>
+
+  endfunction
+
+  function! s:my_cr_function()
+    return (pumvisible() ? "\<C-y>" : "" ) . "\<Plug>AutoPairsReturn"
+  endfunction
+endif
+
 imap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 """" DeopleteGo:
