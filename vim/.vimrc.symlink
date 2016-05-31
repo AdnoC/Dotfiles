@@ -769,6 +769,8 @@ augroup FileTypeSpecificCmds
   else
     autocmd FileType php setlocal omnifunc=phpcomplete_extended#CompletePHP
   endif
+
+  autocmd FileType gitcommit set spell
 augroup END
 " let g:tex_conceal = ""
 
