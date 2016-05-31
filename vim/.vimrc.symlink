@@ -113,7 +113,7 @@ endfunction
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 """ Auto Formatting:
-Plug 'Raimondi/delimitMate'
+Plug 'jiangmiao/auto-pairs'
 """ Syntax:
 Plug 'Konfekt/FastFold'
 function! InstallGoBins(info)
@@ -225,6 +225,8 @@ Plug 'mbbill/undotree'
 " Fuzzy search for files, buffers, and recent files
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+" Align text
+Plug 'tommcdo/vim-lion'
 
 Plug 'kana/vim-operator-user'
 Plug 'kana/vim-textobj-user'
@@ -393,8 +395,6 @@ imap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 """" DeopleteGo:
 let g:deoplete#sources#go#align_class = 1
 
-"""" DelimitMate:
-let g:delimitMate_expand_cr=1
 """ TernForVim:
 let g:tern_show_signature_in_pum = 1
 " Make neocomplete understand that we are getting syntax info from tern
@@ -416,6 +416,9 @@ imap <expr><BS> pumvisible() ? "<C-y><C-h>" : "\<Plug>AutoPairsDelete"
 
 """" BufKill:
 let g:BufKillCreateMappings=0
+
+"""" Characterize:
+nmap gch <Plug>(characterize)
 
 """" Goyo:
 autocmd User GoyoEnter Limelight
