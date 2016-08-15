@@ -171,24 +171,29 @@ if (has('lua') || has('nvim'))
   elseif iCanHazVimPlug == 0
     echo 'Cannot find tern, not installing javascript completion'
   endif
+
   if executable('gocode')
     Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go'}
   elseif iCanHazVimPlug == 0
     echo 'Cannot find gocode, not installing go completion'
   endif
-  "
-  if (! executable('jedi') && iCanHazVimPlug == 0)
-    silent exec '!pip install jedi'
-  endif
-  Plug 'zchee/deoplete-jedi', { 'for': 'python'}
 
-  if executable('php')
-    if has('nvim')
-      Plug 'phpvim/phpcd.vim', { 'for': 'php', 'do': 'composer install'}
-    else
-      Plug 'Shougo/vimproc.vim', { 'do': 'make'} | Plug 'pjio/phpcomplete-extended'
+  if executable('python')
+    if (! executable('jedi') && iCanHazVimPlug == 0)
+      silent exec '!pip install jedi'
     endif
+    Plug 'zchee/deoplete-jedi', { 'for': 'python'}
   endif
+
+  " Vim autocomplete
+  Plug 'Shougo/neco-vim'
+
+  " File completion
+  Plug 'Shougo/neoinclude.vim'
+
+  " Syntx-based autocomplete TODO: Figure out if this is useful
+  Plug 'Shougo/neco-syntax'
+
 else
   if 1 == 1
     let autocomplete_plugin="supertab"
