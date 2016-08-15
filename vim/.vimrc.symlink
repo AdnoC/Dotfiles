@@ -151,11 +151,17 @@ if (has('lua') || has('nvim'))
     let autocomplete_plugin="neocomplete"
     Plug 'Shougo/neocomplete.vim'
   endif
-  " if executable('clang')
-  "   Plug 'zchee/deoplete-clang'
-  " elseif iCanHazVimPlug == 0
-  "   echo 'Cannot find clang, not installing clang completion'
-  " endif
+
+  if executable('clang') && !empty($LIBCLANG_PATH)
+    if has('nvim') && !empty($CLANG_INCLUDE_PATH)
+      Plug 'zchee/deoplete-clang'
+    else
+      Plug 'Rip-Rip/clang_complete'
+    endif
+  elseif iCanHazVimPlug == 0
+    echo 'Cannot find clang, not installing clang completion'
+  endif
+
   if executable('tern')
     if has('nvim')
       Plug 'carlitux/deoplete-ternjs', { 'for': 'javascript'}
@@ -421,6 +427,13 @@ imap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 """" DeopleteGo:
 let g:deoplete#sources#go#align_class = 1
+
+"""" DeopleteClang:
+let g:deoplete#sources#clang#libclang_path = $LIBCLANG_PATH
+let g:deoplete#sources#clang#clang_header = $CLANG_INCLUDE_PATH
+
+"""" ClangComplete:
+let g:clang_library_path = $LIBCLANG_PATH
 
 """ TernForVim:
 let g:tern_show_signature_in_pum = 1
