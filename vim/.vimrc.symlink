@@ -789,11 +789,6 @@ augroup FileTypeSpecificCmds
 
   " When editing plain text I don't need to see the ends of lines.
   autocmd FileType txt setlocal wrap linebreak nolist textwidth=0 wrapmargin=0
-  if has('nvim')
-    autocmd FileType php setlocal omnifunc=phpcd#CompletePHP
-  else
-    autocmd FileType php setlocal omnifunc=phpcomplete_extended#CompletePHP
-  endif
 
   autocmd FileType gitcommit set spell
 augroup END
