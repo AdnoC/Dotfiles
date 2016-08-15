@@ -1208,6 +1208,10 @@ nnoremap k gk
 vnoremap j gj
 vnoremap k gk
 
+" Make single quote jump to the character where the mark was placed at instead
+" of just the line
+nnoremap ' `
+nnoremap ` '
 
 " Only jumps around the current buffer.                                      }{
 function! JumpInFile(back, forw)
