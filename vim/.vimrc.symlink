@@ -623,10 +623,18 @@ omap <leader><ENTER> <Plug>(easymotion-sn)
 let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 
 """" W3m:
-" Bind w3m to an easy key and add http so it doesn't search.                 }{
-nnoremap <leader>w3 :W3m http://
-autocmd FileType w3m nnoremap <buffer>q :W3mClose<CR>
-autocmd FileType w3m nnoremap <buffer>o :W3mAddressBar<CR>
+if executable('w3m')
+  " Bind w3m to an easy key and add http so it doesn't search.                 }{
+  nnoremap <leader>w3 :W3m http://
+  autocmd FileType w3m setlocal colorcolumn=
+  autocmd FileType w3m setlocal scrolloff=3
+  autocmd FileType w3m nnoremap <buffer>q :W3mClose<CR>
+  autocmd FileType w3m nnoremap <buffer>o :W3mAddressBar<CR>
+  " Shift j/k scrolls down/up
+  autocmd FileType w3m nnoremap <buffer><S-j> <C-e>
+  autocmd FileType w3m nnoremap <buffer><S-k> <C-y>
+
+endif
 
 """" FZF:
 let g:fzf_command_prefix="Fzf"
