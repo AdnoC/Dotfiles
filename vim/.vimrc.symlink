@@ -818,8 +818,6 @@ set pastetoggle=<F11>
 map <F11> :set invpaste paste?<CR>
 " Change vim pwd to dir of file to easily open other files in dir            }{
 nnoremap <leader>cd :cd %:p:h<CR>
-" Open the current directory in a new tab                                    }{
-nnoremap <leader>tbe :tabedit <c-r>=expand("%:p:h")<CR>/
 " Fix broken default mappings
 nmap dd d_
 " We aren't going to have any vim variables at the beginning or end of files
