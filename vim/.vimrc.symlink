@@ -517,6 +517,12 @@ let g:airline_section_x=''
 " Automatically refresh airline when changing colorschemes. This fixes the arrows.
 autocmd VimEnter * autocmd ColorScheme * AirlineRefresh
 
+"""" VimTmuxNavigator:
+if has('nvim')
+  " A hackey solution to C-h not working
+  nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
+endif
+
 """" Vim GitGutter:
 " Tell gitgutter not to set any keybinds by itself. They will all be rebound.
 let g:gitgutter_map_keys = 0
@@ -1263,6 +1269,13 @@ nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
 
+if has('nvim')
+  augroup FZFNvim
+    autocmd!
+    autocmd TermOpen */*fzf* tnoremap <buffer><c-k> <UP>
+    autocmd TermOpen */*fzf* tnoremap <buffer><c-j> <DOWN>
+  augroup END
+endif
 
 """" Notes
 ":bro ol (AKA :browse oldfiles) lists previously opened files and allows you to open one
