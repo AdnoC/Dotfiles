@@ -93,7 +93,7 @@ if [ "$OSTYPE" == "cygwin" ]; then
   }
 
   open() {
-    /cygdrive/c/WINNT/explorer.exe /e,`cygpath -w "$@"`
+    explorer.exe /e,`cygpath -w "$@"`
   }
 fi
 
