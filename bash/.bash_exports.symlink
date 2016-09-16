@@ -78,6 +78,9 @@ pathaddFront /usr/local/sbin
 pathaddFront /usr/local/bin
 pathaddFront ~/bin
 
+export GOPATH="$HOME/go"
+pathadd "$GOPATH/bin"
+
 # Don't need pathadd or findversiondir anymore so we can unset them
 unset pathadd
 unset findversiondir
