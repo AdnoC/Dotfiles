@@ -44,3 +44,5 @@
 	tool = vimdiff
 [push]
 	default = current
+[init]
+	templatedir = ~/dotfiles/gitTemplateDir
