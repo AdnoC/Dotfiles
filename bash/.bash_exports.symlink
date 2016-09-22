@@ -1,6 +1,14 @@
 # vim: ft=sh :
 # exports
 
+# If we can check the osrelease and the osrelease mentions Microsoft we are
+# probably in the Windows Subsystem for Linux.
+if [ -f /proc/sys/kernel/osrelease ] && \
+  [[ "$(cat /proc/sys/kernel/osrelease)" == *"Microsoft" ]]; then
+  export IN_WSL=true
+fi
+
+
 # School stuff
 export caen_ssh='arcutler@login.engin.umich.edu'
 export NOTE_HOME='~/School/Notes'
