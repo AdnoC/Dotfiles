@@ -1,4 +1,4 @@
-BoldAsFont=no
+BoldAsFont=yes
 Term=xterm-256color
 Columns=102
 Rows=60
@@ -29,3 +29,4 @@ Cyan=42,161,152
 BoldCyan=147,161,161
 White=238,232,213
 BoldWhite=253,246,227
+BoldAsColour=no
