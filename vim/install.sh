@@ -25,8 +25,10 @@ if ! hasCommand "nvim"; then
 fi
 
 # Place neovim config in the right place
-mkdir -p "$XDG_CONFIG_HOME/.config/nvim"
-ln -s "$DOTFILES_ROOT/vim/.vimrc.symlink" "$XDG_CONFIG_HOME/nvim/init.vim"
+mkdir -p "${XDG_CONFIG_HOME:=~/.config}/nvim"
+if ! [ -f "$XDG_CONFIG_HOME/nvim/init.vim" ]; then
+  ln -s "$DOTFILES_ROOT/vim/.vimrc.symlink" "$XDG_CONFIG_HOME/nvim/init.vim"
+fi
 
 # If we don't have ctags or the ctags we have isn't exuberant, install exuberant
 if ! hasCommand "ctags" || ctags --version | grep 'Exuberant' > /dev/null; then
@@ -36,6 +38,7 @@ if ! hasCommand "ctags" || ctags --version | grep 'Exuberant' > /dev/null; then
 
   elif isLinux; then
     info "Installing ctags from apt-get"
+    sudo apt-get install -y exuberant-ctags
 
   elif isCygwin; then
     warn "Please install ctags through cygports. Intructions can be found here: \
