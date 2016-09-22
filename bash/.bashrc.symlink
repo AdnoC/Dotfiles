@@ -7,12 +7,12 @@ for file in ~/.bash_{exports,functions,aliases}; do
   test -f $file && . $_
 done
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-#if [ -f /etc/bash_completion ]; then
-    #. /etc/bash_completion
-#fi
+# enable programmable completion features
+if [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+fi
+[[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && \
+    . /usr/share/bash-completion/bash_completion
 
 unset file
 test -f ~/.fzf.bash && . $_

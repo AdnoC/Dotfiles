@@ -15,8 +15,8 @@ test -f ~/.git-completion.bash && . $_
 # Fix auto-complete when using a sudo command
 complete -cf sudo
 
-# Don't let tty put proccesses to sleep (I think)
-#http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
+# Don't stop terminal output due to Ctrl+s
+# http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
 stty -ixon
 
 shopt -s globstar
