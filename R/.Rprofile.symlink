@@ -1,14 +1,16 @@
+is_cyg <- grep("cygwin", Sys.info(), ignore.case = TRUE)
 # If this is running in Cygwin
-if (grep("cygwin", Sys.info(), ignore.case = TRUE)) {
+if (!!length(is_cyg)){
+  # Use HTML help pages, since text help pages seem to be missing
+  # large chunks of text
+  options(help_type = "html")
+
   # Use the OS default for handling URLS.
   # This lets the default browser open the help page
   options(browser = "cygstart")
   options(pdfviewer = "cygstart")
 }
 
-# Use HTML help pages, since text help pages seem to be missing
-# large chunks of text
-options(help_type = "html")
 
 # Helper function 
 set_jpeg <- function(filename) {
