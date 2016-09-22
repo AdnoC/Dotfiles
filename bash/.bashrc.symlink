@@ -16,3 +16,9 @@ fi
 
 unset file
 test -f ~/.fzf.bash && . $_
+
+# If we are running interactively but haven't sourced .bash_profile yet
+# (AKA if this is the first file sourced), source it.
+if [ ${#BASH_SOURCE[@]} -eq 1 ]; then
+  source ~/.bash_profile
+fi
