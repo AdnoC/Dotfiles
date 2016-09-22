@@ -20,6 +20,9 @@ findversiondir() {
 }
 
 if [[ "$OSTYPE" == 'cygwin' ]]; then
+  # Cygwin will by default `cd "${HOME}"` if CHERE_INVOKING isn't defined
+  export CHERE_INVOKING=1
+
   # Different tools' homes
   # Figure out where the primary storage (store OS on an SSD, everything else on an HDD)
   if [ -d "/cygdrive/d" ]; then
