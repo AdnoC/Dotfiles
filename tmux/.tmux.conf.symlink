@@ -7,7 +7,7 @@ set-environment -g 'SSH_AUTH_SOCK' ~/.ssh/ssh_auth_sock
 
 set -g terminal-overrides 'xterm*:smcup@:rmcup@'
 # Auto-rename windows based on the command
-set-option automatic-rename on
+set-option -g automatic-rename on
 #set-window-option -g xterm-keys on
 setw -g mode-keys vi
 set -g status-keys vi
@@ -27,7 +27,14 @@ bind -n C-\ if-shell "$is_vim || $is_fzf" "send-keys C-\\" "select-pane -l"
 # bind k select-pane -U
 # bind l select-pane -R
 
-set-window-option -g utf8 on
+# Use utf8
+set-window-option -gq utf8 on
+set-option -gq status-utf8 on
+
+# Mouse settings
+set-window-option -gq mouse off
+set-window-option -gq mode-mouse off
+
 if-shell "test -f ~/tmuxline.conf" "source ~/tmuxline.conf"
 # Start numbering windows with 1. It is easier to press than 0.
 set -g base-index 1
@@ -54,4 +61,4 @@ set -g @tpm_plugins '              \
 
 # Initializes TMUX plugin manager.
 # Keep this line at the very bottom of tmux.conf.
-run-shell '~/.tmux/plugins/tpm/tpm'
+# run-shell '~/.tmux/plugins/tpm/tpm'
