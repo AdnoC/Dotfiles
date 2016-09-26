@@ -158,4 +158,10 @@ else
 
 fi
 
+# Use source-highlight to syntax highlight less files
+# https://www.gnu.org/software/src-highlite/
+if [ -f /usr/share/source-highlight/src-hilite-lesspipe.sh ]; then
+  export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
+  export LESS=' -R'
+fi
 
