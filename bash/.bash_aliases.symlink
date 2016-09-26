@@ -34,6 +34,12 @@ alias ips="ifconfig -a | grep -o 'inet6\? \(\([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+
 # Enhanced WHOIS lookups
 alias whois="whois -h whois-servers.net"
 
+# ATM WSL hasn't implemented the timer_create function.
+# This is a workaround
+if [ -n $IN_WSL ]; then
+  alias pandoc='pandoc +RTS -V0 -RTS'
+fi
+
 # Do these things if this is a mac.
 if [[ "$OSTYPE" == darwin* ]]; then
 # Empty the Trash on all mounted volumes and the main HDD

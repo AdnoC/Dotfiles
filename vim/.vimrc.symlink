@@ -783,10 +783,16 @@ augroup FileTypeSpecificCmds
 
   " autocmd FileType tex set conceallevel=0
 
+  " Workaround for lack of timer_create in WSL
+  if !empty($IN_WSL)
+    let s:pandoc="pandoc\\ +RTS\\ -V0\\ -RTS"
+  else
+    let s:pandoc="pandoc"
+  endif
   autocmd FileType pandoc  if ! isdirectory('PandocOutput') |  exec "!mkdir PandocOutput" |  endif
   " autocmd FileType markdown exec "setlocal makeprg=pandoc\\ -s\\ --to=html\\ --output=\\\"" . expand('%:h') . expand('/') . "PandocOutput" . expand('/') . expand('%:r') . ".html\\\"\\ %"
   " autocmd FileType pandoc exec "setlocal makeprg=pandoc\\ -s\\ --output=\\\"" . expand('%:h') . expand('/') . "PandocOutput" . expand('/') . expand('%:r') . ".pdf\\\"\\ %"
-  autocmd FileType pandoc exec "setlocal makeprg=pandoc\\ -s\\ --output=\\\"" . expand('%:h') . expand('/') . "PandocOutput" . expand('/') . expand('%:r') . ".html\\\"\\ %"
+  autocmd FileType pandoc exec "setlocal makeprg=" . s:pandoc . "\\ -s\\ --output=\\\"" . expand('%:h') . expand('/') . "PandocOutput" . expand('/') . expand('%:r') . ".html\\\"\\ %"
   function! ViewPandoc()
     exec "!cat " . expand('%:h') . expand('/') . "PandocOutput" . expand('/') . expand('%:r') . ".html \| w3m -T text/html"
   endfunction
