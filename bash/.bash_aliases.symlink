@@ -25,8 +25,6 @@ alias fn='find . -name'
 # Allow the use of sudo with aliases.
 alias sudo='sudo '
 alias path='echo -e ${PATH//:/\\n}'
-#My habbit is to just type "vi"
-alias vi='vim'
 
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
