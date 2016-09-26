@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Get the contents of the clipboard
+wcmd : '%USERPROFILE%\bin\paste.exe' | \
+# Get rid of Windows line endings 
+  sed 's///'
+

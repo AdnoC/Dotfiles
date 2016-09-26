@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Read from stdin
+ cat | \
+# Transform line endings into Windows /r/n format
+ sed 's/$//' | \
+# Remove non-printable control characters (besides newlines)
+  sed 's/\x1b\[[0-9;]*m//g' | \
+# Pipe anything from stdin to clip and pass any args
+# Run clip from %USERPROFILE% so that we don't get errors when in a VolFs path
+   wrun : clip "$*"

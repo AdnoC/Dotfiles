@@ -1,0 +1,15 @@
+# vim: ft=sh
+if isWSL; then
+  if [ ! -f ~/bin ]; then
+    mkdir ~/bin
+  fi
+
+  link_file "$DOTFILES_ROOT"/msc/clip.sym ~/bin/clip
+  # Need to install paste.exe
+  # Found here: http://www.c3scripts.com/tutorials/msdos/paste.html#exe
+  link_file "$DOTFILES_ROOT"/msc/paste.sym ~/bin/paste
+
+  # Used to spoof MacOSX clipboard utils to allow clipboard access in nvim
+  link_file "$DOTFILES_ROOT"/msc/clip.sym ~/bin/pbcopy
+  link_file "$DOTFILES_ROOT"/msc/paste.sym ~/bin/pbpaste
+fi
