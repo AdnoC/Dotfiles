@@ -43,6 +43,11 @@ isOSX () {
   [ "$(uname -s)" == "Darwin" ];
 }
 
+isWSL () {
+  [ -f /proc/sys/kernel/osrelease ] && \
+    [[ "$(cat /proc/sys/kernel/osrelease)" == *"Microsoft" ]];
+}
+
 # I know that the way I'm using this (basically if has apt-get) doesn't match what
 # this checks, but whatever.
 isLinux () {
