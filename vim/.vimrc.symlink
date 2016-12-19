@@ -4,6 +4,7 @@
 "   -> Initial
 "   -> Plugins
 "   -> File Types
+"   -> Chained Keybinds
 "   -> Meta
 "   -> Looks
 "   -> Formatting
@@ -42,6 +43,10 @@ endif
 let s:vimDirectoryPart=expand(s:vimDirectory . "/")
 let g:vimDirectory=s:vimDirectory
 
+let s:autocomplete_ycm = 'ycm'
+let s:autocomplete_neocomplete = 'neocomplete'
+let s:autocomplete_deoplete = 'deoplete'
+let s:autocomplete_supertab = 'supertab'
 """"""""""""""""""""""""""""""""""" Plugins """""""""""""""""""""""""""""""""""
 """" Plugin Manager: (Vim-Plug)
 let iCanHazVimPlug=1
@@ -145,15 +150,18 @@ Plug 'xolox/vim-misc' | Plug 'xolox/vim-easytags'
 " Use supertab if YCM won't work
 if (has('lua') || has('nvim'))
   if has('nvim')
-    let autocomplete_plugin="deoplete"
+    let g:autocomplete_plugin = s:autocomplete_deoplete
     Plug 'Shougo/deoplete.nvim'
   else
-    let autocomplete_plugin="neocomplete"
+    let g:autocomplete_plugin = s:autocomplete_neocomplete
     Plug 'Shougo/neocomplete.vim'
   endif
 
   if executable('clang') && !empty($LIBCLANG_PATH)
-    if has('nvim') && !empty($CLANG_INCLUDE_PATH)
+    " NOTE: deoplete-clang needs to point to clang's dynamic library, not just
+    " where it can find the library
+    if (g:autocomplete_plugin == s:autocomplete_deoplete &&
+          \ !empty($CLANG_INCLUDE_PATH) && !isdirectory($LIBCLANG_PATH))
       Plug 'zchee/deoplete-clang'
     else
       Plug 'Rip-Rip/clang_complete'
@@ -163,7 +171,7 @@ if (has('lua') || has('nvim'))
   endif
 
   if executable('tern')
-    if has('nvim')
+    if g:autocomplete_plugin == s:autocomplete_deoplete
       Plug 'carlitux/deoplete-ternjs', { 'for': 'javascript'}
     else
       Plug 'ternjs/tern_for_vim'
@@ -391,6 +399,11 @@ imap <C-j>     <Plug>(neosnippet_expand_or_jump)
 smap <C-j>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-j>     <Plug>(neosnippet_expand_target)
 
+"""" General Completion:
+function! s:completion_prev() abort
+  return pumvisible() ? "\<C-p>" : "\<S-TAB>"
+endfunction
+imap <silent><S-TAB> <C-r>=<SID>completion_prev()<CR>
 
 """" Deoplete:
 "" Run deoplete.nvim automatically
@@ -399,36 +412,13 @@ let g:deoplete#enable_smart_case = 1
 let g:deoplete#auto_complete_start_length=1
 let g:deoplete#max_menu_width = 500
 let g:deoplete#max_abbr_width = 500
-if has('nvim')
-  imap <expr><C-h> deoplete#mappings#smart_close_popup()."\<C-h>"
-  imap <expr><CR> <SID>my_cr_function()
-
-  function! s:my_cr_function()
-    " return deoplete#mappings#close_popup() . "\<Plug>AutoPairsReturn"
-    return (pumvisible() ? "\<C-y>" : "" ) . "\<Plug>AutoPairsReturn"
-  endfunction
-
-endif
+let g:deoplete#ignore_sources = {}
+let g:deoplete#ignore_sources.cpp = ['buffer', 'syntax']
 
 """" Neocomplete:
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#auto_complete_start_length=1
 let g:neocomplete#enable_smart_case = 1
-if (!has('nvim'))
-  autocmd VimEnter * if exists(':autocmd VimEnter *') | call s:neocomp_settings()<CR>
-  function! s:neocomp_settings()
-    imap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-
-    inoremap <silent><CR> <C-r>=<SID>my_cr_function()<CR>
-
-  endfunction
-
-  function! s:my_cr_function()
-    return (pumvisible() ? "\<C-y>" : "" ) . "\<Plug>AutoPairsReturn"
-  endfunction
-endif
-
-imap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 """" DeopleteGo:
 let g:deoplete#sources#go#align_class = 1
@@ -438,7 +428,11 @@ let g:deoplete#sources#clang#libclang_path = $LIBCLANG_PATH
 let g:deoplete#sources#clang#clang_header = $CLANG_INCLUDE_PATH
 
 """" ClangComplete:
-let g:clang_library_path = $LIBCLANG_PATH
+let s:clang_library_path = $LIBCLANG_PATH
+if ((!has('nvim') || !empty($CLANG_INCLUDE_PATH)) && !isdirectory(s:clang_library_path))
+  let s:clang_library_path = fnamemodify(s:clang_library_path, ':h')
+endif
+let g:clang_library_path = s:clang_library_path
 
 """ TernForVim:
 let g:tern_show_signature_in_pum = 1
@@ -457,7 +451,12 @@ let g:neocomplete#sources#omni#input_patterns.go =
   \ '\h\w*\|[^. \t]\.\w*'
 
 """" AutoPairs:
-imap <expr><BS> pumvisible() ? "<C-y><C-h>" : "\<Plug>AutoPairsDelete"
+let g:AutoPairsMapCh=0
+let g:AutoPairsMapBS=0
+
+"""" Endwise:
+let g:endwise_no_mappings = 1
+
 
 """" BufKill:
 let g:BufKillCreateMappings=0
@@ -491,7 +490,7 @@ if !exists('g:airline_theme')
   let g:airline_theme = 'solarized'
 endif
 " Use fancy fonts
-if autocomplete_plugin == "ycm" && $UPSTREAM_YCM == 0
+if g:autocomplete_plugin == s:autocomplete_ycm && $UPSTREAM_YCM == 0
   let g:airline_powerline_fonts = 0
 else
   let g:airline_powerline_fonts = 1
@@ -747,6 +746,61 @@ omap iX <Plug>(textobj-comment-big-i)
 "call s:setCommentOperator('<leader>cv', 'comment')
 "call s:setCommentOperator('<leader>cx', 'uncomment')
 
+
+
+"""""""""""""""""""""""""""""" Chained Keybinds """"""""""""""""""""""""""""""
+"""""""" Insert:
+"""" Enter:
+" Deoplete:
+if has('nvim')
+  imap <silent><CR> <C-r>=<SID>my_cr_function()<CR>
+
+  " Close the completion popup if it is visible. If it is not, press Enter.
+  function! s:my_cr_function()
+    let cr_str = pumvisible() ? "" : "\<CR>"
+    return deoplete#close_popup() . cr_str
+    " return (pumvisible() ? "\<C-y>" : "" ) . "\<Plug>AutoPairsReturn"
+  endfunction
+
+" Neocomplete:
+else
+  imap <silent><CR> <C-r>=<SID>my_cr_function()<CR>
+
+  function! s:my_cr_function()
+    let cr_str = pumvisible() ? "" : "\<CR>"
+    return neocomplete#close_popup() . cr_str
+  endfunction
+endif
+
+" Endwise:
+exe "imap <silent><CR> ".maparg('<CR>','i')."<Plug>DiscretionaryEnd"
+
+"""" CtrlH:
+
+" Deoplete:
+if has('nvim')
+  imap <silent><C-h> <C-r>=deoplete#smart_close_popup()<CR>
+
+" Neocomplete:
+else
+  imap <silent><C-h> <C-r>=neocomplete#smart_close_popup()<CR>
+endif
+
+" AutoPairs:
+exe "imap <silent><C-h> ".maparg('<C-h>', 'i')."<C-r>=AutoPairsDelete()<CR>"
+
+"""" Backspace:
+" Deoplete:
+if has('nvim')
+  imap <silent><BS> <C-r>=deoplete#smart_close_popup()<CR>
+
+" Neocomplete:
+else
+  imap <silent><BS> <C-r>=neocomplete#smart_close_popup()<CR>
+endif
+
+" AutoPairs:
+exe "imap <silent><BS> ".maparg('<BS>', 'i')."<C-r>=AutoPairsDelete()<CR>"
 
 """"""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
 " How to set filetypes: (an example of setting one as ruby)
