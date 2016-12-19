@@ -1,20 +1,20 @@
 # vim: ft=sh :
 findhosts(){
   nmap -sP -n -oG - "$1"/24 | grep "Up" | awk '{print $2}' -
-  echo "To scan those do: nmap $1-254" 
-  echo "To scan and OS detect those do: sudo nmap -O $1-254" 
+  echo "To scan those do: nmap $1-254"
+  echo "To scan and OS detect those do: sudo nmap -O $1-254"
   echo "To intensly scan one do: sudo nmap -sV -vv -PN $1"
 }
 
 #functions
 cs(){
- 	cd "$@" && ls .
+  cd "$@" && ls .
 }
 
-function sdlCompileMulti() {
+sdlCompileMulti() {
       g++   -o $@ -g -O2 -I/usr/local/include/SDL2 -I/usr/include/mingw -Dmain=SDL_main -DHAVE_OPENGL -g -lSDL2_test -L/usr/local/lib -lcygwin -lSDL2main -lSDL2 -mwindows -lSDL2_image -std=c++11
 }
-function sdlCompile() {
+sdlCompile() {
   if [ ! -z "$1" ]; then
     if [ ! -z "$2" ]; then
       g++  "$1" -o "$2" -g -O2 -I/usr/local/include/SDL2 -I/usr/include/mingw -Dmain=SDL_main -DHAVE_OPENGL -g -lSDL2_test -L/usr/local/lib -lcygwin -lSDL2main -lSDL2 -mwindows -lSDL2_image -std=c++11
@@ -25,8 +25,8 @@ function sdlCompile() {
 }
 
 # Create a new directory and enter it
-function md() {
-	mkdir -p "$@" && cd "$@"
+md() {
+  mkdir -p "$@" && cd "$@"
 }
 
 # Copy w/ progress
@@ -34,7 +34,7 @@ cp_p () {
   rsync -WavP --human-readable --progress $1 $2
 }
 
-function up()
+up()
 {
     dir=""
     if [ -z "$1" ]; then
@@ -51,7 +51,7 @@ function up()
     cd "$dir";
 }
 
-function upstr()
+upstr()
 {
     echo "$(up "$1" && pwd)";
 }
@@ -75,7 +75,7 @@ psgrep() {
 }
 
 eject() {
-	sudo umount -f "/Volumes/$@"
+  sudo umount -f "/Volumes/$@"
 }
 if [ "$OSTYPE" == "cygwin" ]; then
 # Wrapper for Tmux to fix on Cygin
@@ -92,14 +92,14 @@ if [ "$OSTYPE" == "cygwin" ]; then
     x86_64-w64-mingw32-g++.exe -static "$@" -L /usr/local/lib -I /usr/local/include/  -lglfw3  -lopengl32 -lgdi32
   }
 
-  open() {
+  open_path() {
     explorer.exe /e,`cygpath -w "$@"`
   }
 fi
 
 if [ "$(uname)" == "Darwin" ]; then
   # Clear Apple’s System Logs
-  function dstore-clean() {
+  dstore_clean() {
     find $@ -type f -name .DS_Store -print0 | xargs -0 rm
   }
 fi
@@ -124,7 +124,7 @@ piEthernetAddress() {
 
 
 # Change colorscheme
-function solChange() {
+solChange() {
   if [ $TERM_COLOR = "light" ]; then
     source ~/sol.dark
   else
