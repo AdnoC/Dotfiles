@@ -1009,6 +1009,7 @@ if &diff
   nmap <leader>m :diffget LO<CR>
 endif
 
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 if has('win32unix') || !empty($IN_WSL)
   let &t_ti.="\e[1 q"
   let &t_SI.="\e[5 q"
@@ -1158,13 +1159,17 @@ vnoremap / /\v
 nnoremap ? ?\v
 vnoremap ? ?\v
 set incsearch   " Search incrementally
+" If we have 'live substitution', enable it
+if exists('&inccommand')
+  set inccommand=split
+endif
 
 
 """""""""""""""""""""""""""""""""""" Msc. """""""""""""""""""""""""""""""""""""
 " Remove the Windows ^M - when the encodings gets messed up                  }{
 noremap <Leader>^m mmHmt:%s/<C-V><CR>//ge<CR>'tzt'm
 " Look for tag files in paths relative to cwd, not the file being edited
-set cpoptions=d
+set cpoptions+=d
 " Allow backspacing over everything in insert mode (:h bs)
 set backspace=indent,eol,start
 " Be smart about case when using autocomplete
