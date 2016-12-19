@@ -282,6 +282,7 @@ Plug 'romainl/flattened'
 " A light colorscheme. Not sure about it.
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'altercation/vim-colors-solarized'
+Plug 'lifepillar/vim-solarized8'
 " Makes the status bar & buffer bar look nice and display useful info
 Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -1076,8 +1077,12 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
     else
       set background="dark"
     endif
-    " Silent so that it doesn't throw an error if the colorscheme doesn't exist
-    silent! colorscheme solarized
+    if has("termguicolors")
+      silent! colorscheme solarized8_dark
+    else
+      " Silent so that it doesn't throw an error if the colorscheme doesn't exist
+      silent! colorscheme solarized
+    endif
 
     if has("gui_running")
       set guioptions-=T
@@ -1092,6 +1097,10 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
     endif
     " Highlight search matches
     set hlsearch
+endif
+
+if has("termguicolors")
+  set termguicolors
 endif
 
 " Always use absolute line numbers
