@@ -43,6 +43,8 @@ endif
 let s:vimDirectoryPart=expand(s:vimDirectory . "/")
 let g:vimDirectory=s:vimDirectory
 
+let s:syntax_syntastic = 'syntastic'
+let s:syntax_neomake = 'neomake'
 let s:autocomplete_ycm = 'ycm'
 let s:autocomplete_neocomplete = 'neocomplete'
 let s:autocomplete_deoplete = 'deoplete'
@@ -133,7 +135,13 @@ Plug 'vim-pandoc/vim-pandoc' | Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'elzr/vim-json'
 Plug 'groenewege/vim-less'
 if !&diff
-  Plug 'scrooloose/syntastic'
+  if (has('nvim') || v:version >= 8)
+    let g:syntax_plugin = s:syntax_neomake
+    Plug 'neomake/neomake'
+  else
+    let g:syntax_plugin = s:syntax_syntastic
+    Plug 'scrooloose/syntastic'
+  endif
 endif
 " Set indent options based on what is used in the file
 " Plug 'tpope/vim-sleuth'
@@ -204,10 +212,10 @@ if (has('lua') || has('nvim'))
 
 else
   if 1 == 1
-    let autocomplete_plugin="supertab"
+    let g:autocomplete_plugin = s:autocomplete_supertab
     Plug 'ervandew/supertab'
   else
-    let autocomplete_plugin="ycm"
+    let g:autocomplete_plugin = s:autocomplete_ycm
     " If we have a new enough version of cmake, use upsteam
     let g:ycmInstallCommand = "/install.py --clang-completer --tern-completer --go-completer"
     Plug 'Valloric/YouCompleteMe', { 'do': g:ycmInstallCommand}
@@ -352,6 +360,29 @@ if iCanHazVimPlug == 0
   autocmd VimEnter * call InstallVimballs()
 endif
 
+"""" Neomake:
+if g:syntax_plugin == s:syntax_neomake
+  " Check syntax every time I save
+  autocmd! BufWritePost * Neomake
+  " Use gcc by default
+  let g:neomake_cpp_enabled_makers = ['gcc']
+  " Use different gcc args
+  let g:neomake_cpp_gcc_maker = neomake#makers#ft#cpp#gcc()
+  let g:neomake_cpp_gcc_maker.args = g:neomake_cpp_gcc_maker.args
+        \ + ['-std=c++14', '-Wall', '-Werror', '-Wextra', '-pedantic']
+  let g:neomake_cpp_clang_maker = neomake#makers#ft#cpp#clang()
+  let g:neomake_cpp_clang_maker.args = g:neomake_cpp_clang_maker.args
+        \ + ['-std=c++14', '-Wall', '-Werror', '-Wextra', '-pedantic']
+  " Open location list when errors occur
+  let g:neomake_open_list = 1
+
+  augroup NeomakeErrorSigns
+    au!
+    autocmd ColorScheme *
+          \ hi NeomakeErrorSign ctermfg=124
+  augroup END
+endif
+
 """" Syntastic:
 " Turn it on by default, so far no filetypes where it needs to be off.
 " let g:syntastic_mode_map = { 'mode': 'active',
@@ -472,7 +503,11 @@ autocmd User GoyoLeave Limelight!
 let g:limelight_conceal_ctermfg = 'DarkGray'
 
 """" Vim Airline:
-let g:airline#extensions#syntastic#enabled = 1
+if g:syntax_plugin == s:syntax_syntastic
+  let g:airline#extensions#syntastic#enabled = 1
+elseif g:syntax_plugin == s:syntax_neomake
+  let g:airline#extensions#neomake#enabled = 1
+endif
 " Show a list of files on the top of the screen
 let g:airline#extensions#tabline#enabled = 1
 " let g:airline#extensions#tabline#buffer_nr_show = 1
