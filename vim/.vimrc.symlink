@@ -414,7 +414,7 @@ let g:syntastic_cpp_check_header = 1
 " Tell syntastic where SDL is located so it stops complaining
 let g:syntastic_cpp_include_dirs = ['/usr/local/include/SDL2']
 " Use modern C++ compile options
-let g:syntastic_cpp_compiler_options = ' -std=c++11'
+let g:syntastic_cpp_compiler_options = ' -std=c++14'
 " Shortcuts to prev/next errors                                              }{
 let g:syntastic_java_javac_config_file_enabled = 1
 let g:syntastic_javascript_checkers = ['eslint']
