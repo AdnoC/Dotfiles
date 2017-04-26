@@ -1213,6 +1213,16 @@ set tabstop=2
 set expandtab
 " At start of line, <Tab> inserts shiftwidth spaces, <Bs> deletes
 set smarttab
+" Align indentation in case block with the label istelf instead of after
+" the label.
+set cinoptions+=l1
+" Align indentation of labels in switch blocks with the switch statement
+set cinoptions+=:0
+" Align indentation of jump labels in general blocks with the block
+set cinoptions+=Ls
+" Align new lines in open parenthesis with the first item in the parenthesis
+set cinoptions+=(0
+
 " The maximum width of a line of text. Lines that go longer will be broken
 " after a whitespace
 set textwidth=100
