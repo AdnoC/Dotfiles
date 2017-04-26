@@ -895,26 +895,40 @@ augroup FileTypeSpecificCmds
   autocmd FileType less setlocal makeprg=lessc\ %\ >\ ../css/%:t:r.css
   autocmd FileType plaintex set ft=tex
 
-  autocmd FileType tex  if ! isdirectory('LatexOutput') |  exec "!mkdir LatexOutput" |  endif
+  autocmd FileType tex  if ! isdirectory('.LatexOutput') |  exec "!mkdir .LatexOutput" |  endif
 
-  autocmd FileType tex exec "setlocal makeprg=latexmk\\ -outdir=\\\"" . expand('%:p:h') . expand('/') . "LatexOutput\\\"\\ -pdf\\ %"
+  autocmd FileType tex exec "setlocal makeprg=latexmk\\ -outdir=\\\"" . expand('%:p:h') . expand('/') . ".LatexOutput\\\"\\ -pdf\\ %"
 
   " autocmd FileType tex set conceallevel=0
 
   " Workaround for lack of timer_create in WSL
   if !empty($IN_WSL)
     let s:pandoc="pandoc\\ +RTS\\ -V0\\ -RTS"
+    let s:pandocPDF="pandoc +RTS -V0 -RTS"
   else
     let s:pandoc="pandoc"
+    let s:pandocPDF="pandoc"
   endif
-  autocmd FileType pandoc  if ! isdirectory('PandocOutput') |  exec "!mkdir PandocOutput" |  endif
-  " autocmd FileType markdown exec "setlocal makeprg=pandoc\\ -s\\ --to=html\\ --output=\\\"" . expand('%:h') . expand('/') . "PandocOutput" . expand('/') . expand('%:r') . ".html\\\"\\ %"
-  " autocmd FileType pandoc exec "setlocal makeprg=pandoc\\ -s\\ --output=\\\"" . expand('%:h') . expand('/') . "PandocOutput" . expand('/') . expand('%:r') . ".pdf\\\"\\ %"
-  autocmd FileType pandoc exec "setlocal makeprg=" . s:pandoc . "\\ -s\\ --output=\\\"" . expand('%:h') . expand('/') . "PandocOutput" . expand('/') . expand('%:r') . ".html\\\"\\ %"
+
+  autocmd FileType pandoc  if ! isdirectory('.PandocOutput') |  exec "!mkdir .PandocOutput" |  endif
+  " autocmd FileType markdown exec "setlocal makeprg=pandoc\\ -s\\ --to=html\\ --output=\\\""
+    \ . expand('%:h') . expand('/') . ".PandocOutput" . expand('/') . expand('%:r') . ".html\\\"\\ %"
+
+  " autocmd FileType pandoc exec "setlocal makeprg=pandoc\\ -s\\ --output=\\\"" . expand('%:h') . expand('/')
+    \ . ".PandocOutput" . expand('/') . expand('%:r') . ".pdf\\\"\\ %"
+
+  autocmd FileType pandoc exec "setlocal makeprg=" . s:pandoc . "\\ --highlight-style=pygments\\ -s\\ --output=\\\""
+    \ . expand('%:h') . expand('/') . ".PandocOutput" . expand('/') . expand('%:r') . ".html\\\"\\ %"
+
   function! ViewPandoc()
-    exec "!cat " . expand('%:h') . expand('/') . "PandocOutput" . expand('/') . expand('%:r') . ".html \| w3m -T text/html"
+    exec "!cat " . expand('%:h') . expand('/') . ".PandocOutput" . expand('/') . expand('%:r') . ".html \| w3m -T text/html"
   endfunction
   autocmd FileType pandoc command! -nargs=0 -buffer ViewPandoc call ViewPandoc()
+  function! PandocMakePDF()
+    exec "!" . s:pandocPDF . " --highlight-style=pygments -s --output=\"" . expand('%:h') . expand('/') . ".PandocOutput" . expand('/') . expand('%:r') . ".pdf\" %"
+  endfunction
+  autocmd FileType pandoc command! -nargs=0 -buffer PandocMakePDF call PandocMakePDF()
+
   " Turn spellcheck off because we are going to be using words that aren't in the dictionary
   autocmd FileType pandoc setlocal nospell
   " Use 4 spaces per tab since thats the magic number for pandoc
