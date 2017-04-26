@@ -1,9 +1,29 @@
+
+" A simpler plugin setup is available for environments where some things are not
+" available.
+" It disables some plugins that have a usage cost.
+" To enable it, set the environmental variable SIMPLE_VIM_PLUGINS.
+
+" If you want to setup a plugin config for a minimal environment (such as a phone),
+" set the environmental variable STANDALONE_VIM_PLUGINS.
+" It will make sure that the only plugins enabled are those that depend wholly on
+" vimL.
+
+" Set that we decided to use plugins
+let g:USE_PLUGINS=1
+
+
 " Get SID prefix of vimrc (see :h <SID>)
 function! s:SID_PREFIX()
     return matchstr(expand('<sfile>'), '<SNR>\d\+_')
 endfunction
 
-let g:USE_PLUGINS=1
+" Check whether there is an executable with a given name
+" If we are using standalone plugins we automatically return false
+function! s:has_exec(prog_name)
+  return empty($STANDALONE_VIM_PLUGINS) && executable(a:prog_name)
+endfunction
+
 
 let s:syntax_syntastic = 'syntastic'
 let s:syntax_neomake = 'neomake'
@@ -55,8 +75,10 @@ if empty(glob(expand(g:vimDirectory . '/autoload/plug.vim')))
 
   if has('nvim')
     " Install python client
-    silent exec '!pip install neovim'
-    if executable('pip3')
+    if s:has_exec('pip')
+      silent exec '!pip install neovim'
+    endif
+    if s:has_exec('pip3')
       silent exec '!pip3 install neovim'
     endif
   endif
@@ -80,8 +102,10 @@ endfunction
 """ Git:
 " NOTE: fugitive makes vim very laggy sometimes
 " Commands for using git nicely in Vim
-Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
+if s:has_exec('git')
+  Plug 'tpope/vim-fugitive'
+  Plug 'airblade/vim-gitgutter'
+endif
 """ Auto Formatting:
 Plug 'jiangmiao/auto-pairs'
 """ Syntax:
@@ -93,9 +117,14 @@ function! InstallGoBins(info)
     GoUpdateBinaries
   endif
 endfunction
-Plug 'fatih/vim-go', { 'do': function('InstallGoBins')}
+if s:has_exec('go') && empty($SIMPLE_VIM_PLUGINS)
+  Plug 'fatih/vim-go', { 'do': function('InstallGoBins')}
+endif
 Plug 'rust-lang/rust.vim'
-Plug 'vim-pandoc/vim-pandoc' | Plug 'vim-pandoc/vim-pandoc-syntax'
+if s:has_exec('pandoc') && empty($SIMPLE_VIM_PLUGINS)
+  Plug 'vim-pandoc/vim-pandoc'
+endif
+Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'elzr/vim-json'
 Plug 'groenewege/vim-less'
 if !&diff
@@ -117,10 +146,15 @@ Plug 'othree/javascript-libraries-syntax.vim'
 " Auto-close some structures (i.e. adds 'endfunction' after you type 'function!' in VimL)
 Plug 'tpope/vim-endwise'
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle'}
-Plug 'xolox/vim-misc' | Plug 'xolox/vim-easytags'
+if s:has_exec('ctags')
+  Plug 'xolox/vim-misc' | Plug 'xolox/vim-easytags'
+endif
 " YouCompleteMe only works on Linux/Mac and if vim is version > 7.3.584
 " Use supertab if YCM won't work
-if (has('lua') || has('nvim'))
+if !empty($SIMPLE_VIM_PLUGINS)
+  let g:autocomplete_plugin = s:autocomplete_supertab
+  Plug 'ervandew/supertab'
+elseif (has('lua') || has('nvim'))
   if has('nvim')
     let g:autocomplete_plugin = s:autocomplete_deoplete
     Plug 'Shougo/deoplete.nvim'
@@ -129,7 +163,7 @@ if (has('lua') || has('nvim'))
     Plug 'Shougo/neocomplete.vim'
   endif
 
-  if executable('clang') && !empty($LIBCLANG_PATH)
+  if s:has_exec('clang') && !empty($LIBCLANG_PATH)
     " NOTE: deoplete-clang needs to point to clang's dynamic library, not just
     " where it can find the library
     if (g:autocomplete_plugin == s:autocomplete_deoplete &&
@@ -142,7 +176,7 @@ if (has('lua') || has('nvim'))
     echo 'Cannot find clang, not installing clang completion'
   endif
 
-  if executable('tern')
+  if s:has_exec('tern')
     if g:autocomplete_plugin == s:autocomplete_deoplete
       Plug 'carlitux/deoplete-ternjs', { 'for': 'javascript'}
     else
@@ -152,17 +186,18 @@ if (has('lua') || has('nvim'))
     echo 'Cannot find tern, not installing javascript completion'
   endif
 
-  if executable('gocode')
+  if s:has_exec('gocode')
     Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go'}
   elseif iCanHazVimPlug == 0
     echo 'Cannot find gocode, not installing go completion'
   endif
 
-  if executable('python')
-    if (! executable('jedi') && iCanHazVimPlug == 0)
+  if s:has_exec('python')
+    if s:has_exec('jedi')
+      Plug 'zchee/deoplete-jedi', { 'for': 'python'}
+    elseif (iCanHazVimPlug == 0 && s:has_exec('pip'))
       silent exec '!pip install jedi'
     endif
-    Plug 'zchee/deoplete-jedi', { 'for': 'python'}
   endif
 
   " Vim autocomplete. Uncomment when you have something for it.
@@ -175,23 +210,26 @@ if (has('lua') || has('nvim'))
   Plug 'Shougo/neco-syntax'
 
 else
-  if 1 == 1
-    let g:autocomplete_plugin = s:autocomplete_supertab
-    Plug 'ervandew/supertab'
-  else
-    let g:autocomplete_plugin = s:autocomplete_ycm
-    " If we have a new enough version of cmake, use upsteam
-    let g:ycmInstallCommand = "/install.py --clang-completer --tern-completer --go-completer"
-    Plug 'Valloric/YouCompleteMe', { 'do': g:ycmInstallCommand}
-          \ | Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
-  endif
+  let g:autocomplete_plugin = s:autocomplete_ycm
+  " If we have a new enough version of cmake, use upsteam
+  let g:ycmInstallCommand = "/install.py --clang-completer --tern-completer --go-completer"
+  Plug 'Valloric/YouCompleteMe', { 'do': g:ycmInstallCommand}
+        \ | Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 endif
 " Show function signature for auto-completed functions
 Plug 'Shougo/echodoc.vim'
 
-Plug 'racer-rust/vim-racer'
+if empty($SIMPLE_VIM_PLUGINS)
+  if s:has_exec('racer')
+    Plug 'racer-rust/vim-racer'
+  elseif (iCanHazVimPlug == 0 && s:has_exec('cargo'))
+    silent exec '!cargo install racer'
+  endif
+endif
 
-Plug 'Shougo/neosnippet.vim'| Plug 'Shougo/neosnippet-snippets'
+if empty($SIMPLE_VIM_PLUGINS)
+  Plug 'Shougo/neosnippet.vim'| Plug 'Shougo/neosnippet-snippets'
+endif
 Plug 'vim-scripts/csv.vim', {'for': 'csv'}
 
 " Helpers for creating comments
@@ -221,8 +259,12 @@ Plug 'tomtom/tcomment_vim'
 Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'mbbill/undotree'
 " Fuzzy search for files, buffers, and recent files
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+if empty($STANDALONE_VIM_PLUGINS) && empty($SIMPLE_VIM_PLUGINS)
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'junegunn/fzf.vim'
+else
+  Plug 'ctrlpvim/ctrlp.vim'
+endif
 " Align text
 Plug 'tommcdo/vim-lion'
 
@@ -250,8 +292,12 @@ Plug 'NLKNguyen/papercolor-theme'
 Plug 'altercation/vim-colors-solarized'
 Plug 'lifepillar/vim-solarized8'
 " Makes the status bar & buffer bar look nice and display useful info
-Plug 'bling/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+if empty($SIMPLE_VIM_PLUGINS)
+  Plug 'bling/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+else
+  Plug 'bling/vim-bufferline'
+endif
 " Dims paragraphs besides the one you are working on
 Plug 'junegunn/limelight.vim', { 'on': 'Limelight'}
 " Removes distractions
@@ -271,9 +317,9 @@ Plug 'k-takata/matchit.vim'
 
 """ Tagbar:
 " Ctags are a dependancy of tagbar
-if executable('ctags')
+if s:has_exec('ctags')
   Plug 'majutsushi/tagbar'
-  if executable('php') && !has('win32')
+  if s:has_exec('php') && !has('win32')
     " Plug 'vim-php/phpctags'
     Plug 'vim-php/tagbar-phpctags.vim', { 'do': 'make'}
   endif
@@ -284,7 +330,7 @@ else
 endif
 
 """ Tmux:
-if executable('tmux')
+if s:has_exec('tmux')
   " Lets you use <C-hjkl> to move between both tmux and vim panes.
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'benmills/vimux'
@@ -295,7 +341,7 @@ else
   endif
 endif
 """ W3M:
-if executable('w3m')
+if s:has_exec('w3m')
   Plug 'yuratomo/w3m.vim'
 elseif iCanHazVimPlug == 0
   echo 'Cannot find W3m. Not installing w3m.vim'
@@ -367,7 +413,9 @@ endif
 "   \ 'active_filetypes': [],
 "   \ 'passive_filetypes': ['java'] }
 " Bind a button to check syntax when in passive mode                         }{
-autocmd FileType java nnoremap <leader>cc :SyntasticCheck<CR>
+if g:syntax_plugin == s:syntax_syntastic
+  autocmd FileType java nnoremap <leader>cc :SyntasticCheck<CR>
+endif
 " Better :sign interface symbols
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
@@ -393,20 +441,20 @@ let g:syntastic_cpp_compiler_options = ' -std=c++14'
 let g:syntastic_java_javac_config_file_enabled = 1
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_javascript_jsxhint_exec = 'jsx-jshint-wrapper'
-nnoremap <leader>s] :lnext<CR>
-nnoremap <leader>s[ :lprevious<CR>
 
 """" NeoSnippet:
-imap <expr><TAB>
- \ pumvisible() ? "\<C-n>" :
- \ neosnippet#expandable_or_jumpable() ?
- \    "\<Plug>(neosnippet_expand_or_jump)" : "<TAB>"
+if empty($SIMPLE_VIM_PLUGINS)
+  imap <expr><TAB>
+   \ pumvisible() ? "\<C-n>" :
+   \ neosnippet#expandable_or_jumpable() ?
+   \    "\<Plug>(neosnippet_expand_or_jump)" : "<TAB>"
 
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-imap <C-j>     <Plug>(neosnippet_expand_or_jump)
-smap <C-j>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-j>     <Plug>(neosnippet_expand_target)
+  smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+        \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+  imap <C-j>     <Plug>(neosnippet_expand_or_jump)
+  smap <C-j>     <Plug>(neosnippet_expand_or_jump)
+  xmap <C-j>     <Plug>(neosnippet_expand_target)
+endif
 
 """" General Completion:
 function! s:completion_prev() abort
@@ -445,13 +493,15 @@ let g:clang_library_path = s:clang_library_path
 
 """" VimRacer:
 let g:racer_experimental_completer = 1
-augroup RacerBinds
-  autocmd!
-  autocmd FileType rust nmap gd <Plug>(rust-def)
-  autocmd FileType rust nmap gs <Plug>(rust-def-split)
-  autocmd FileType rust nmap gx <Plug>(rust-def-vertical)
-  autocmd FileType rust nmap <leader>gd <Plug>(rust-doc)
-augroup END
+if s:has_exec('racer') && empty($SIMPLE_VIM_PLUGINS)
+  augroup RacerBinds
+    autocmd!
+    autocmd FileType rust nmap gd <Plug>(rust-def)
+    autocmd FileType rust nmap gs <Plug>(rust-def-split)
+    autocmd FileType rust nmap gx <Plug>(rust-def-vertical)
+    autocmd FileType rust nmap <leader>gd <Plug>(rust-doc)
+  augroup END
+endif
 
 """ TernForVim:
 let g:tern_show_signature_in_pum = 1
@@ -494,56 +544,58 @@ autocmd User GoyoLeave Limelight!
 let g:limelight_conceal_ctermfg = 'DarkGray'
 
 """" Vim Airline:
-if g:syntax_plugin == s:syntax_syntastic
-  let g:airline#extensions#syntastic#enabled = 1
-elseif g:syntax_plugin == s:syntax_neomake
-  let g:airline#extensions#neomake#enabled = 1
-endif
-" Show a list of files on the top of the screen
-let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#tabline#buffer_nr_show = 1
-let s:tablineBuffWidth = winwidth(0) / 5
-if s:tablineBuffWidth < 20
-  let s:tablineBuffWidth = 20
-endif
-let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
-let g:airline#extensions#tabline#tab_nr_type = 2
+if empty($SIMPLE_VIM_PLUGINS)
+  if g:syntax_plugin == s:syntax_syntastic
+    let g:airline#extensions#syntastic#enabled = 1
+  elseif g:syntax_plugin == s:syntax_neomake
+    let g:airline#extensions#neomake#enabled = 1
+  endif
+  " Show a list of files on the top of the screen
+  let g:airline#extensions#tabline#enabled = 1
+  " let g:airline#extensions#tabline#buffer_nr_show = 1
+  let s:tablineBuffWidth = winwidth(0) / 5
+  if s:tablineBuffWidth < 20
+    let s:tablineBuffWidth = 20
+  endif
+  let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+  let g:airline#extensions#tabline#tab_nr_type = 2
 
-let g:airline#extensions#tabline#show_tab_type = 1
+  let g:airline#extensions#tabline#show_tab_type = 1
 
-" Set the theme to solarized
-if !exists('g:airline_theme')
-  let g:airline_theme = 'solarized'
-endif
-" Use fancy fonts
-if g:autocomplete_plugin == s:autocomplete_ycm && $UPSTREAM_YCM == 0
-  let g:airline_powerline_fonts = 0
-else
-  let g:airline_powerline_fonts = 1
-endif
+  " Set the theme to solarized
+  if !exists('g:airline_theme')
+    let g:airline_theme = 'solarized'
+  endif
+  " Use fancy fonts
+  if g:autocomplete_plugin == s:autocomplete_ycm && $UPSTREAM_YCM == 0
+    let g:airline_powerline_fonts = 0
+  else
+    let g:airline_powerline_fonts = 1
+  endif
 
-" Only show git stats that are non-zero
-let g:airline#extensions#hunks#non_zero_only=1
-if executable('tmux')
-  " Don't load tmuxline unless I decide to. It adds 1000ms to startuptime
-  let g:airline#extensions#tmuxline#enabled=0
+  " Only show git stats that are non-zero
+  let g:airline#extensions#hunks#non_zero_only=1
+  if s:has_exec('tmux')
+    " Don't load tmuxline unless I decide to. It adds 1000ms to startuptime
+    let g:airline#extensions#tmuxline#enabled=0
+  endif
+  " Clean up the status bar:
+  " Just show the list of files/buffers in section c
+  let g:airline_section_c = "%f%m %<%{bufname('#') != bufname('%') ? '('. bufname('#') .')' : ''}"
+  " No need for tagbar if we don't have ctags. Also don't call functions if the plugin isn't " installed.
+  if s:has_exec('ctags') && iCanHazVimPlug == 1
+    " No need to show filetype in the status bar, the ctags section is enough
+    " autocmd User AirlineAfterInit let g:airline_section_y = airline#section#create(['tagbar'])
+    let g:airline_section_y = airline#section#create(['tagbar'])
+  endif
+  " Also don't need to know the formatting. Just leave it empty
+  let g:airline_section_x=''
+  " Automatically refresh airline when changing colorschemes. This fixes the arrows.
+  autocmd VimEnter * autocmd ColorScheme * AirlineRefresh
 endif
-" Clean up the status bar:
-" Just show the list of files/buffers in section c
-let g:airline_section_c = "%f%m %<%{bufname('#') != bufname('%') ? '('. bufname('#') .')' : ''}"
-" No need for tagbar if we don't have ctags. Also don't call functions if the plugin isn't " installed.
-if executable('ctags') && iCanHazVimPlug == 1
-  " No need to show filetype in the status bar, the ctags section is enough
-  " autocmd User AirlineAfterInit let g:airline_section_y = airline#section#create(['tagbar'])
-  let g:airline_section_y = airline#section#create(['tagbar'])
-endif
-" Also don't need to know the formatting. Just leave it empty
-let g:airline_section_x=''
-" Automatically refresh airline when changing colorschemes. This fixes the arrows.
-autocmd VimEnter * autocmd ColorScheme * AirlineRefresh
 
 """" VimTmuxNavigator:
-if has('nvim')
+if has('nvim') && s:has_exec('tmux')
   " A hackey solution to C-h not working
   nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
 endif
@@ -551,35 +603,37 @@ endif
 """" Vim GitGutter:
 " Tell gitgutter not to set any keybinds by itself. They will all be rebound.
 let g:gitgutter_map_keys = 0
-" Move from to the next/prev change                                          }{
-nmap ]g <Plug>GitGutterNextHunk
-nmap [g <Plug>GitGutterPrevHunk
-" Stage or revert the lines the cursor is on                                 }{
-nmap <Leader>gs <Plug>GitGutterStageHunk
-nmap <Leader>gr <Plug>GitGutterRevertHunk
-" Preview the changes                                                        }{
-nmap <Leader>gp <Plug>GitGutterPreviewHunk
-let g:gitgutter_eager = 0
+if s:has_exec('git')
+  " Move from to the next/prev change                                          }{
+  nmap ]g <Plug>GitGutterNextHunk
+  nmap [g <Plug>GitGutterPrevHunk
+  " Stage or revert the lines the cursor is on                                 }{
+  nmap <Leader>gs <Plug>GitGutterStageHunk
+  nmap <Leader>gr <Plug>GitGutterRevertHunk
+  " Preview the changes                                                        }{
+  nmap <Leader>gp <Plug>GitGutterPreviewHunk
+  let g:gitgutter_eager = 0
 
-" Disable some things if the file is very large.
-let g:LargeFile = 1024 * 1024 * 1
-autocmd BufNew * let b:gitGutEnAu = 0
-function! LargeFileGitgutter()
-  let f=expand("<afile>")
-  if getfsize(f) > g:LargeFile
-    let g:gitgutter_enabled = 0
-    let g:gitgutter_realtime = 0
-    if b:gitGutEnAu == 0
-      autocmd BufWritePost <buffer> :GitGutterEnable
+  " Disable some things if the file is very large.
+  let g:LargeFile = 1024 * 1024 * 1
+  autocmd BufNew * let b:gitGutEnAu = 0
+  function! LargeFileGitgutter()
+    let f=expand("<afile>")
+    if getfsize(f) > g:LargeFile
+      let g:gitgutter_enabled = 0
+      let g:gitgutter_realtime = 0
+      if b:gitGutEnAu == 0
+        autocmd BufWritePost <buffer> :GitGutterEnable
+      endif
+      let b:gitGutEnAu = 1
     endif
-    let b:gitGutEnAu = 1
-  endif
-endfunction
-augroup LargeFile
-  autocmd!
-  " Gitgutter slows vim to a halt if the file is to big, so turn it off in those cases.
-  autocmd BufReadPre * call LargeFileGitgutter()
-augroup END
+  endfunction
+  augroup LargeFile
+    autocmd!
+    " Gitgutter slows vim to a halt if the file is to big, so turn it off in those cases.
+    autocmd BufReadPre * call LargeFileGitgutter()
+  augroup END
+endif
 
 """" EasyTags
 let g:easytags_async=1
@@ -628,7 +682,9 @@ map <F9> :call FixGUI()<CR>
 
 """" Tagbar:
 " Bind a button to open the tagbar                                         }{
-nnoremap <leader>cb :TagbarToggle<CR>
+if s:has_exec('ctags')
+  nnoremap <leader>cb :TagbarToggle<CR>
+endif
 let g:tagbar_autoclose=1
 let g:tagbar_autofocus=1
 
@@ -669,7 +725,7 @@ omap <leader><ENTER> <Plug>(easymotion-sn)
 let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 
 """" W3m:
-if executable('w3m')
+if s:has_exec('w3m')
   " Bind w3m to an easy key and add http so it doesn't search.                 }{
   nnoremap <leader>w3 :W3m http://
   autocmd FileType w3m setlocal colorcolumn=
@@ -684,21 +740,25 @@ endif
 
 """" FZF:
 let g:fzf_command_prefix="Fzf"
-nmap <leader>p :FZF<CR>
-nmap <leader>b :FzfBuffers<CR>
-nmap <leader>t :FzfBTags<CR>
-autocmd FileType javascript command! -buffer -bang -nargs=* FzfBTags
-  \ call fzf#vim#buffer_tags(<q-args>,
-  \ [printf('jsctags %s -f', expand('%:S'))],
-  \ <bang>0 ? {} : copy(get(g:, 'fzf_layout', g:fzf#vim#default_layout)))
-    " \ printf('ctags -f - --sort=no --excmd=number --language-force=%s %s', &filetype, expand('%:S')),
-    " \ printf('ctags -f - --sort=no --excmd=number %s', expand('%:S'))], {})
+if s:has_exec('fzf')
+  nmap <leader>p :FZF<CR>
+  nmap <leader>b :FzfBuffers<CR>
+  nmap <leader>t :FzfBTags<CR>
+  autocmd FileType javascript command! -buffer -bang -nargs=* FzfBTags
+    \ call fzf#vim#buffer_tags(<q-args>,
+    \ [printf('jsctags %s -f', expand('%:S'))],
+    \ <bang>0 ? {} : copy(get(g:, 'fzf_layout', g:fzf#vim#default_layout)))
+      " \ printf('ctags -f - --sort=no --excmd=number --language-force=%s %s', &filetype, expand('%:S')),
+      " \ printf('ctags -f - --sort=no --excmd=number %s', expand('%:S'))], {})
+endif
 
 """" Vimux:                                                                  }{
-map <leader>vp :VimuxPromptCommand<CR>
-map <leader>vr :VimuxRunLastCommand<CR>
-map <leader>vo :VimuxInspectRunner<CR>
-map <leader>vc :VimuxCloseRunner<CR>
+if s:has_exec('tmux')
+  map <leader>vp :VimuxPromptCommand<CR>
+  map <leader>vr :VimuxRunLastCommand<CR>
+  map <leader>vo :VimuxInspectRunner<CR>
+  map <leader>vc :VimuxCloseRunner<CR>
+endif
 
 """" PreserveNoEOL:
 let g:PreserveNoEOL=1
@@ -743,10 +803,21 @@ nmap <leader>a :call SyntaxAttr()<CR>
 
 """" VimPandoc:
 let g:pandoc#keyboard#use_default_mappings = 0
-augroup PandocBinds
-  autocmd FileType pandoc nmap <buffer>go <Plug>(pandoc-keyboard-links-open)
-  autocmd FileType pandoc nmap <buffer>gb <Plug>(pandoc-keyboard-links-back)
+if s:has_exec('pandoc') && empty($SIMPLE_VIM_PLUGINS)
+  augroup PandocBinds
+    autocmd!
+    autocmd FileType pandoc nmap <buffer>go <Plug>(pandoc-keyboard-links-open)
+    autocmd FileType pandoc nmap <buffer>gb <Plug>(pandoc-keyboard-links-back)
+  augroup END
+endif
+
+"""" VimPandocSyntax:
+if !s:has_exec('pandoc') || !empty($SIMPLE_VIM_PLUGINS)
+  augroup pandoc_syntax
+    autocmd!
+    autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
 augroup END
+endif
 
 """" VimOperatorSurround:
 " operator mappings                                                         }{
@@ -798,24 +869,31 @@ omap iX <Plug>(textobj-comment-big-i)
 """""""" Insert:
 """" Enter:
 " Deoplete:
-if has('nvim')
-  imap <silent><CR> <C-r>=<SID>my_cr_function()<CR>
+if empty($SIMPLE_VIM_PLUGINS)
+  if has('nvim')
+    imap <silent><CR> <C-r>=<SID>my_cr_function()<CR>
 
-  " Close the completion popup if it is visible. If it is not, press Enter.
-  function! s:my_cr_function()
-    let cr_str = pumvisible() ? "" : "\<CR>"
-    return deoplete#close_popup() . cr_str
-    " return (pumvisible() ? "\<C-y>" : "" ) . "\<Plug>AutoPairsReturn"
-  endfunction
+    " Close the completion popup if it is visible. If it is not, press Enter.
+    function! s:my_cr_function()
+      let cr_str = pumvisible() ? "" : "\<CR>"
+      return deoplete#close_popup() . cr_str
+      " return (pumvisible() ? "\<C-y>" : "" ) . "\<Plug>AutoPairsReturn"
+    endfunction
 
-" Neocomplete:
-else
-  imap <silent><CR> <C-r>=<SID>my_cr_function()<CR>
+  " Neocomplete:
+  else
+    imap <silent><CR> <C-r>=<SID>my_cr_function()<CR>
 
-  function! s:my_cr_function()
-    let cr_str = pumvisible() ? "" : "\<CR>"
-    return neocomplete#close_popup() . cr_str
-  endfunction
+    function! s:my_cr_function()
+      let cr_str = pumvisible() ? "" : "\<CR>"
+      return neocomplete#close_popup() . cr_str
+    endfunction
+  endif
+endif
+
+" Make sure that <CR> at least has itself in the mapping
+if !mapcheck('<CR>', 'i')
+  imap <silent><CR> <CR>
 endif
 
 " Endwise:
@@ -824,28 +902,38 @@ exe "imap <silent><CR> ".maparg('<CR>','i')."<Plug>DiscretionaryEnd"
 """" CtrlH:
 
 " Deoplete:
-if has('nvim')
-  imap <silent><C-h> <C-r>=deoplete#smart_close_popup()<CR>
+if empty($SIMPLE_VIM_PLUGINS)
+  if has('nvim')
+    imap <silent><C-h> <C-r>=deoplete#smart_close_popup()<CR>
 
-" Neocomplete:
-else
-  imap <silent><C-h> <C-r>=neocomplete#smart_close_popup()<CR>
+  " Neocomplete:
+  else
+    imap <silent><C-h> <C-r>=neocomplete#smart_close_popup()<CR>
+  endif
 endif
 
+" Make sure that <c-h> at least has itself in the mapping
+if !mapcheck('<c-h>', 'i')
+  imap <silent><c-h> <c-h>
+endif
 " AutoPairs:
 exe "imap <silent><C-h> ".maparg('<C-h>', 'i')."<C-r>=AutoPairsDelete()<CR>"
 
 """" Backspace:
 " Deoplete:
-if has('nvim')
-  imap <silent><BS> <C-r>=deoplete#smart_close_popup()<CR>
+if empty($SIMPLE_VIM_PLUGINS)
+  if has('nvim')
+    imap <silent><BS> <C-r>=deoplete#smart_close_popup()<CR>
 
-" Neocomplete:
-else
-  imap <silent><BS> <C-r>=neocomplete#smart_close_popup()<CR>
+  " Neocomplete:
+  else
+    imap <silent><BS> <C-r>=neocomplete#smart_close_popup()<CR>
+  endif
 endif
 
+" Make sure that <BS> at least has itself in the mapping
+if !mapcheck('<BS>', 'i')
+  imap <silent><BS> <BS>
+endif
 " AutoPairs:
 exe "imap <silent><BS> ".maparg('<BS>', 'i')."<C-r>=AutoPairsDelete()<CR>"
-
-

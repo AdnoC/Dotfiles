@@ -593,13 +593,17 @@ nnoremap <Down> <Nop>
 " Allows one to switch buffers without having to save or undo changes first.
 set hidden
 
-" Make tab navigation quicker                                                }{
+" Make buffer tab navigation quicker                                         }{
 nnoremap ]b :bnext<CR>
 nnoremap [b :bprev<CR>
 nnoremap ]t :tabnext<CR>
 nnoremap [t :tabprev<CR>
 " switch to last used tab                                                    }{
 nnoremap bb :b#<CR>
+
+" Go to next file in location list
+nnoremap <leader>s] :lnext<CR>
+nnoremap <leader>s[ :lprevious<CR>
 " make window navigation easier.                                             }{
 nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
