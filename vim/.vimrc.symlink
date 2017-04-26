@@ -1097,12 +1097,15 @@ endif
 " Refresh busted syntax highlighting (this happens too often)                }{
 map <F12> :syntax sync fromstart<cr>
 
+if has("termguicolors")
+  set termguicolors
+endif
+
 " Don't turn syntax or highlight searching on unless there are enough colors
 " to make them look good
 if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
   if !empty($TMUX)
     set t_ut=
-    let g:asdf="YES"
   endif
     " Use 256 colors
     set t_Co=256
@@ -1123,6 +1126,7 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
     if has("gui_running")
       set guioptions-=T
     endif
+
     " If we are using a gui set the font in the proper format for that gui
     if has("gui_gtk2")
       set guifont= DejaVu\ Sans\ Mono\ for\ Powerline\ 12
@@ -1131,13 +1135,8 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
     elseif has("gui_win32")
       set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h12:cANSI
     endif
-    " Highlight search matches
-    set hlsearch
 endif
 
-if has("termguicolors")
-  set termguicolors
-endif
 
 " Always use absolute line numbers
 set number
@@ -1257,6 +1256,8 @@ vnoremap / /\v
 nnoremap ? ?\v
 vnoremap ? ?\v
 set incsearch   " Search incrementally
+set hlsearch    " Highlight search matches
+
 " If we have 'live substitution', enable it
 if exists('&inccommand')
   set inccommand=split
