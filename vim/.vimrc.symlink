@@ -109,6 +109,7 @@ endif
 
 " Required:
 call plug#begin(s:vimDirectoryPart . 'bundle')
+
 "Add your plugins here
 "" Games:
 Plug 'vim-scripts/TeTrIs.vim', { 'on': 'LoadTetris'}
@@ -131,6 +132,7 @@ function! InstallGoBins(info)
   endif
 endfunction
 Plug 'fatih/vim-go', { 'do': function('InstallGoBins')}
+Plug 'rust-lang/rust.vim'
 Plug 'vim-pandoc/vim-pandoc' | Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'elzr/vim-json'
 Plug 'groenewege/vim-less'
@@ -224,6 +226,8 @@ else
 endif
 " Show function signature for auto-completed functions
 Plug 'Shougo/echodoc.vim'
+
+Plug 'racer-rust/vim-racer'
 
 Plug 'Shougo/neosnippet.vim'| Plug 'Shougo/neosnippet-snippets'
 Plug 'vim-scripts/csv.vim', {'for': 'csv'}
@@ -367,7 +371,15 @@ endif
 """" Neomake:
 if g:syntax_plugin == s:syntax_neomake
   " Check syntax every time I save
-  autocmd! BufWritePost * Neomake
+  function! s:my_neomake_function()
+    if &filetype == "rust"
+      Neomake! cargo
+    else
+      Neomake
+    endif
+  endfunction
+  autocmd! BufWritePost * call <SID>my_neomake_function()
+  " autocmd! BufWritePost * Neomake
   " Use gcc by default
   let g:neomake_cpp_enabled_makers = ['gcc']
   " Use different gcc args
@@ -468,6 +480,16 @@ if ((!has('nvim') || !empty($CLANG_INCLUDE_PATH)) && !isdirectory(s:clang_librar
   let s:clang_library_path = fnamemodify(s:clang_library_path, ':h')
 endif
 let g:clang_library_path = s:clang_library_path
+
+"""" VimRacer:
+let g:racer_experimental_completer = 1
+augroup RacerBinds
+  autocmd!
+  autocmd FileType rust nmap gd <Plug>(rust-def)
+  autocmd FileType rust nmap gs <Plug>(rust-def-split)
+  autocmd FileType rust nmap gx <Plug>(rust-def-vertical)
+  autocmd FileType rust nmap <leader>gd <Plug>(rust-doc)
+augroup END
 
 """ TernForVim:
 let g:tern_show_signature_in_pum = 1
