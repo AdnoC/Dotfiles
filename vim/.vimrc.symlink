@@ -1420,10 +1420,12 @@ nnoremap <Down> <Nop>
 set hidden
 
 " Make tab navigation quicker                                                }{
-nnoremap <Leader>] :bnext<CR>
-nnoremap <leader>[ :bprev<CR>
+nnoremap ]b :bnext<CR>
+nnoremap [b :bprev<CR>
+nnoremap ]t :tabnext<CR>
+nnoremap [t :tabprev<CR>
 " switch to last used tab                                                    }{
-nnoremap tt :b#<CR>
+nnoremap bb :b#<CR>
 " make window navigation easier.                                             }{
 nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
