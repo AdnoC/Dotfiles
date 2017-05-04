@@ -1,0 +1,179 @@
+ α   \alpha         θ   \theta        o   o             τ   \tau
+ β   \beta          ϑ   \vartheta     π   \pi           υ   \upsilon
+ γ   \gamma         γ   \gamma        ϖ   \varpi        ϕ   \phi
+ δ   \delta         κ   \kappa        ρ   \rho          φ   \varphi
+ ϵ   \epsilon       λ   \lambda       ϱ   \varrho       χ   \chi
+ ε   \varepsilon    μ   \mu           σ   \sigma        ψ   \psi
+ ζ   \zeta          ν   \nu           ς   \varsigma     ω   \omega
+ η   \eta           ξ   \xi
+ Γ   \Gamma         Λ   \Lambda       Σ   \Sigma        Ψ   \Psi
+ Δ   \Delta         Ξ   \Xi           Υ   \Upsilon      Ω   \Omega
+ Θ   \Theta         Π   \Pi           Φ   \Phi
+
+                                              Table  1: Greek  Letters
+
+ ±   \pm       ∩    \cap         ⋄   \diamond              ⊕     \oplus
+ ∓   \mp       ∪    \cup         △   \bigtriangleup        ⊖     \ominus
+ ×   \times    ⊎    \uplus       ▽   \bigtriangledown      ⊗     \otimes
+ ÷   \div      ⊓    \sqcap       ⊲   \triangleleft         ⊘     \oslash
+ ∗   \ast      ⊔    \sqcup       ⊳   \triangleright        ⊙     \odot
+                                          b
+ ⋆   \star     ∨    \vee         ⊲   \lhd                  ◯     \bigcirc
+                                          b
+ ◦   \circ     ∧    \wedge       ⊳   \rhd                  †     \dagger
+                                            b
+ •   \bullet   \    \setminus    ⊴   \unlhd                ‡     \ddagger
+                                            b
+ ·   \cdot     ≀    \wr          ⊵   \unrhd                ∐     \amalg
+ +   +         −    -
+b
+ Not predeﬁned in a format based  on basefont.tex.  Use  one of the style options
+oldlfont, newlfont, amsfonts  or amssymb.
+
+                                        Table 2: Binary  Operation  Symbols
+
+ ≤   \leq            ≥   \geq           ≡    \equiv      |=  \models
+ ≮   \nless          ⩽   \leqslant      ≰    \nleq       ⩽̸   \nleqslant
+ ≺   \prec           ≻   \succ          ∼    \sim        ⊥   \perp
+ ≼   \preceq         ≽   \succeq        ≃    \simeq      |   \mid
+ ≪   \ll             ≫   \gg            ≍    \asymp      ∥   \parallel
+ ⊂   \subset         ⊃   \supset        ≈    \approx     ⊳⊲  \bowtie
+                                                                    b
+ ⊆   \subseteq       ⊇   \supseteq      ∼    \cong       ⋊⋉  \Join
+                                        =
+               b                    b
+ ⊏   \sqsubset       ⊐   \sqsupset      ≠    \neq        ⌣   \smile
+                                         .
+ ⊑   \sqsubseteq     ⊒   \sqsupseteq    =    \doteq      ⌢   \frown
+ ∈   \in             ∋   \ni            ∝    \propto     =   =
+ ⊢   \vdash          ⊣   \dashv         <    <           >   >
+ :   :               ∈/  \notin
+b
+ Not predeﬁned in a format based  on basefont.tex.  Use  one of the style options
+oldlfont, newlfont, amsfonts  or amssymb.
+                                            Table  3: Relation Symbols
+
+
+ ,  ,        ;  ;         :   \colon    .  \ldotp     ·  \cdotp
+                                           Table 4: Punctuation  Symbols
+
+
+                                                          1
+
+
+ ←      \leftarrow             ←−      \longleftarrow            ↑    \uparrow
+ ⇐      \Leftarrow             ⇐=      \Longleftarrow            ⇑    \Uparrow
+ →      \rightarrow            −→      \longrightarrow           ↓    \downarrow
+ ⇒      \Rightarrow            =⇒      \Longrightarrow           ⇓    \Downarrow
+ ↔      \leftrightarrow        ←→      \longleftrightarrow       ↕    \updownarrow
+ ⇔      \Leftrightarrow        ⇐⇒      \Longleftrightarrow       ⇕    \Updownarrow
+ ?→     \mapsto                ?−→     \longmapsto               ↗    \nearrow
+ ←?     \hookleftarrow         ?→      \hookrightarrow           ↘    \searrow
+ ↼      \leftharpoonup         ⇀       \rightharpoonup           ↙    \swarrow
+ ↽      \leftharpoondown       ⇁       \rightharpoondown         ↖    \nwarrow
+ =⇒     \implies                ⇐⇒     \iff
+                                                b
+ ⇌      \rightleftharpoons     ⇝       \leadsto
+b
+ Not predeﬁned in a format based  on basefont.tex.  Use one  of the style options
+oldlfont, newlfont, amsfonts  or amssymb.
+                                             Table  5: Arrow  Symbols
+
+                                  .                 .
+                                  .                  .
+ ...  \ldots   ···   \cdots       .   \vdots          .   \ddots
+ ℵ    \aleph   ′     \prime       ∀   \forall       ∞     \infty
+                                                               b
+ ℏ    \hbar    ∅     \emptyset    ∃   \exists       □     \Box
+                                                                    b
+ ı    \imath   ∇     \nabla       ¬   \neg          ◊     \Diamond
+ j    \jmath   √     \surd        ♭   \flat         △     \triangle
+ ℓ    \ell     ⊤     \top         ♮   \natural      ♣     \clubsuit
+ ℘    \wp      ⊥     \bot         ♯   \sharp        ♢     \diamondsuit
+ ℜ    \Re      ∥     \|           \   \backslash    ♡     \heartsuit
+ ℑ    \Im      ∠     \angle       ∂   \partial      ♠     \spadesuit
+          b
+ ℧    \mho     .     .            |   |
+b
+ Not predeﬁned in a format based  on basefont.tex.  Use one  of the style options
+oldlfont, newlfont, amsfonts  or amssymb.
+                                          Table 6: Miscellaneous  Symbols
+
+ ∑   \sum       ∩    \bigcap      ⊙    \bigodot
+ ∏   \prod      ∪    \bigcup      ⊗    \bigotimes
+ ∐   \coprod    ⊔    \bigsqcup    ⊕    \bigoplus
+ ∫   \int       ∨    \bigvee      ⊎    \biguplus
+ ∮   \oint      ∧    \bigwedge
+                                          Table 7: Variable-sized Symbols
+
+ \arccos   \cos     \csc   \exp   \ker      \limsup     \min    \sinh
+ \arcsin   \cosh    \deg   \gcd   \lg       \ln         \Pr     \sup
+ \arctan   \cot     \det   \hom   \lim      \log        \sec    \tan
+ \arg      \coth    \dim   \inf   \liminf   \max        \sin    \tanh
+                                             Table 8: Log-like Symbols
+
+ (  (         )    )         ↑   \uparrow        ⇑    \Uparrow
+ [  [         ]    ]         ↓   \downarrow      ⇓    \Downarrow
+ {  \{        }    \}        ↕   \updownarrow    ⇕    \Updownarrow
+ ⌊  \lfloor   ⌋    \rfloor   ⌈   \lceil          ⌉    \rceil
+ ⟨  \langle   ⟩    \rangle   /   /               \    \backslash
+ |  |         ∥    \|
+                                                Table  9: Delimiters
+
+
+                                                          2
+
+
+⎫              ⎧                ⎫                  ⎧
+⎩  \rmoustache ⎭   \lmoustache  ⎭   \rgroup        ⎩    \lgroup
+              􏽷                ⎪
+                                ⎪
+  \arrowvert  􏽷   \Arrowvert   ⎪   \bracevert
+                                ⎪
+                                    Table 10: Large  Delimiters
+
+
+
+
+
+
+â \hat{a}    á  \acute{a}  ā  \bar{a}   ȧ   \dot{a}     ă   \breve{a}
+ǎ \check{a}  à  \grave{a}  a⃗  \vec{a}   ä   \ddot{a}    ã   \tilde{a}
+
+                                   Table 11: Math  mode  accents
+
+
+
+
+
+
+~                         ^
+abc  \widetilde{abc}     abc    \widehat{abc}
+←−                       −→
+abc  \overleftarrow{abc} abc    \overrightarrow{abc}
+abc  \overline{abc}      abc    \underline{abc}
+􏽺􏽽􏽼􏽻
+abc  \overbrace{abc}      abc   \underbrace{abc}
+                         􏽼􏽻􏽺􏽽
+                          n
+√abc \sqrt{abc}           √abc  \sqrt[n]{abc}
+ ′                        abc
+f    f’                         \frac{abc}{xyz}
+                          xyz
+                                Table 12: Some  other constructions
+
+
+
+
+
+
+ℕ  \mathbb{N} ℤ   \mathbb{Z} ℚ   \mathbb{Q}    ⅁    \mathbb{a}
+ℝ  \mathbb{R} ℂ   \mathbb{C} ℍ   \mathbb{H}    𝕆    \mathbb{O}
+                                       Table 13: Math  Sets
+
+
+
+
+                                                 3
+
+
