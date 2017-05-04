@@ -151,7 +151,7 @@ if s:has_exec('ctags')
 endif
 " YouCompleteMe only works on Linux/Mac and if vim is version > 7.3.584
 " Use supertab if YCM won't work
-if !empty($SIMPLE_VIM_PLUGINS)
+if !empty($STANDALONE_VIM_PLUGINS)
   let g:autocomplete_plugin = s:autocomplete_supertab
   Plug 'ervandew/supertab'
 elseif (has('lua') || has('nvim'))
