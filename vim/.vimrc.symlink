@@ -70,13 +70,13 @@ augroup FileTypeSpecificCmds
   autocmd FileType java setlocal keywordprg=
   "nnoremap <Leader>ls :w <BAR> !lessc % > ../css/%:t:r.css<CR><space>
   autocmd FileType less setlocal makeprg=lessc\ %\ >\ ../css/%:t:r.css
-  autocmd FileType plaintex set ft=tex
+  autocmd FileType plaintex set ft=tex | syntax enable
 
   autocmd FileType tex  if ! isdirectory('.LatexOutput') |  exec "!mkdir .LatexOutput" |  endif
 
   autocmd FileType tex exec "setlocal makeprg=latexmk\\ -outdir=\\\"" . expand('%:p:h') . expand('/') . ".LatexOutput\\\"\\ -pdf\\ %"
 
-  " autocmd FileType tex set conceallevel=0
+  autocmd FileType tex set conceallevel=2
 
   " Workaround for lack of timer_create in WSL
   if !empty($IN_WSL)
