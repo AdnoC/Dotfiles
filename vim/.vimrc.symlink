@@ -464,7 +464,7 @@ function! ListLeaders()
   silent! redir END
   silent! new
   silent! set buftype=nofile
-  silent! set bufhidden=hide
+  silent! set bufhidden=delete
   silent! setlocal noswapfile
   silent! put! b
   silent! g/^s*$/d
@@ -510,6 +510,20 @@ function! DateSaveFunc(bang, doMove, ...)
 endfunction
 command! -nargs=* -bang -complete=file DateSave :call DateSaveFunc(<q-bang>, 0, <f-args>)
 command! -nargs=* -bang -complete=file DateMove :call DateSaveFunc(<q-bang>, 1, <f-args>)
+
+function! ViewTexCharList()
+  vnew
+  edit $VIMRUNTIME/syntax/tex.vim
+  silent! set bufhidden=delete
+  silent! setlocal noswapfile
+  nnoremap <buffer>q :q<CR>
+  " Go to the first line of the file
+  :0
+  " Search for (and therefore go to) the variable in which the list is stored
+  /texMathList
+  nohl
+endfunction
+command! -nargs=0 -buffer ViewTexCharList call ViewTexCharList()
 
 """""""""""""""""""""""""""""""""" Movement """""""""""""""""""""""""""""""""""
 " Number of lines to use for the command line
