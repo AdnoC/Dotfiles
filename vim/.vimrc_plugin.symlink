@@ -812,7 +812,7 @@ nmap <leader>a :call SyntaxAttr()<CR>
 
 """" VimPandoc:
 let g:pandoc#keyboard#use_default_mappings = 0
-if s:has_exec('pandoc') && empty($SIMPLE_VIM_PLUGINS)
+if s:has_exec('pandoc')
   augroup PandocBinds
     autocmd!
     autocmd FileType pandoc nmap <buffer>go <Plug>(pandoc-keyboard-links-open)
@@ -821,9 +821,10 @@ if s:has_exec('pandoc') && empty($SIMPLE_VIM_PLUGINS)
 endif
 
 """" VimPandocSyntax:
-if !s:has_exec('pandoc') || !empty($SIMPLE_VIM_PLUGINS)
+if !s:has_exec('pandoc')
   augroup pandoc_syntax
     autocmd!
+    autocmd BufNewFile,BufFilePre,BufRead *.pdc set filetype=pandoc
     autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
 augroup END
 endif
