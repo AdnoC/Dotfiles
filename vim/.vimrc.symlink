@@ -254,7 +254,7 @@ endif
 " Refresh busted syntax highlighting (this happens too often)
 map <F12> :syntax sync fromstart<cr>
 
-if has("termguicolors")
+if empty($NO_VIM_GUICOLORS) && has("termguicolors")
   set termguicolors
 endif
 
@@ -268,7 +268,7 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
     set t_Co=256
     " Start vim with solarized theme of the correct flavor
     syntax enable
-    if expand("$TERM_COLOR") == 'light'
+    if $TERM_COLOR == 'light'
       set background="light"
     else
       set background="dark"
@@ -276,8 +276,12 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
 
     if !g:USE_PLUGINS
       silent! colorscheme desert
-    elseif has("termguicolors")
-      silent! colorscheme solarized8_dark
+    elseif empty($NO_VIM_GUICOLORS) && has("termguicolors")
+      if $TERM_COLOR == 'light'
+        silent! colorscheme solarized8_light
+      else
+        silent! colorscheme solarized8_dark
+      endif
     else
       " Silent so that it doesn't throw an error if the colorscheme doesn't exist
       silent! colorscheme solarized

@@ -671,12 +671,21 @@ let g:rainbow_conf = {
 " Fixes most gui problems (broken syntax coloring, status bar no color)
 function! FixGUI()
   syntax enable
-  if expand("$TERM_COLOR") == 'light'
+  if $TERM_COLOR == 'light'
     set background="light"
   else
     set background="dark"
   endif
-  colorscheme solarized
+  if empty($NO_VIM_GUICOLORS) && has("termguicolors")
+    if $TERM_COLOR == 'light'
+      silent! colorscheme solarized8_light
+    else
+      silent! colorscheme solarized8_dark
+    endif
+  else
+    " Silent so that it doesn't throw an error if the colorscheme doesn't exist
+    silent! colorscheme solarized
+  endif
 endfunction
 map <F9> :call FixGUI()<CR>
 
