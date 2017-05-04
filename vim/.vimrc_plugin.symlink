@@ -121,6 +121,8 @@ if s:has_exec('go') && empty($SIMPLE_VIM_PLUGINS)
   Plug 'fatih/vim-go', { 'do': function('InstallGoBins')}
 endif
 Plug 'rust-lang/rust.vim'
+" Some more concealchars for tex
+Plug 'KeitaNakamura/tex-conceal.vim'
 if s:has_exec('pandoc') && empty($SIMPLE_VIM_PLUGINS)
   Plug 'vim-pandoc/vim-pandoc'
 endif
