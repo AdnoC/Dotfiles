@@ -596,7 +596,7 @@ nnoremap [b :bprev<CR>
 nnoremap ]t :tabnext<CR>
 nnoremap [t :tabprev<CR>
 " switch to last used buffer
-nnoremap bb :b#<CR>
+nnoremap tt :b#<CR>
 
 " Go to next file in location list
 nnoremap <leader>s] :lnext<CR>
