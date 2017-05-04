@@ -12,9 +12,6 @@
 "   -> Msc
 "   -> Movement
 "   -> Other things
-"
-" Note: Mappings have a }{ symbol at the end of the line
-"
 
 
 """"""""""""""""""""""""""""""""""" Initial """""""""""""""""""""""""""""""""""
@@ -22,7 +19,7 @@
 if has('vim_starting')
   set nocompatible
 endif
-" Remap leader. Needs to be done before any mappings involving the leader.   }{
+" Remap leader. Needs to be done before any mappings involving the leader.
 nnoremap <SPACE> <Nop>
 onoremap <SPACE> <Nop>
 let mapleader=" "
@@ -127,15 +124,15 @@ augroup BufEnterFileTypeCmds
 augroup END
 
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
-" Use Control-a to move to normal mode                                       }{
+" Use Control-a to move to normal mode
 inoremap jk <Esc>
-" Allow the use of a familiar key combination to exit visual mode            }{
+" Allow the use of a familiar key combination to exit visual mode
 vnoremap jk <Esc>
 " Toggle paste mode.
 set pastetoggle=<F11>
-" Makes the switch to paste mode immediately shown                           }{
+" Makes the switch to paste mode immediately shown
 map <F11> :set invpaste paste?<CR>
-" Change vim pwd to dir of file to easily open other files in dir            }{
+" Change vim pwd to dir of file to easily open other files in dir
 nnoremap <leader>cd :cd %:p:h<CR>
 " Fix broken default mappings
 nmap dd d_
@@ -167,11 +164,11 @@ autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
      \   exe "normal! g`\"" |
      \ endif
-" Open .vimrc                                                                }{
+" Open .vimrc
 nmap <leader>ev <c-w><c-s><c-l>:e $MYVIMRC<CR>|:exec "nnoremap <buffer>q :bd\<CR\>"<CR>
 " Open a scratch buffer
 nmap <leader>cs :new|:set buftype=nofile<CR>|:setlocal noswapfile<CR>|:exec "nnoremap <buffer>q :bd\<CR\>"<CR>|:exe "resize " . (winheight(0) * 2 * 1/6)<CR>
-" Resize the current buffer                                                  }{
+" Resize the current buffer
 nnoremap <leader>rs :exe "resize " . (winheight(0) * 2 * 5/6)<CR>
   "silent! set buftype=nofile
   "silent! set bufhidden=hide
@@ -254,7 +251,7 @@ if has('win32unix') || !empty($IN_WSL)
   let &t_EI.="\e[1 q"
   let &t_te.="\e[0 q"
 endif
-" Refresh busted syntax highlighting (this happens too often)                }{
+" Refresh busted syntax highlighting (this happens too often)
 map <F12> :syntax sync fromstart<cr>
 
 if has("termguicolors")
@@ -360,9 +357,9 @@ endif
 
 
 """"""""""""""""""""""""""""""""" Formatting """"""""""""""""""""""""""""""""""
-" Strips excess whitespace from file                                         }{
+" Strips excess whitespace from file
 nnoremap <leader>w :%s/\s\+$//<CR>:let @/=''<CR>
-" Converts existing tabs to spaces                                           }{
+" Converts existing tabs to spaces
 nnoremap <leader>rt :retab<CR>
 " Use smart indenting when starting a new line
 set smartindent
@@ -401,19 +398,19 @@ autocmd FileType javascript setlocal foldcolumn=6
 set foldmethod=indent
 " Open files with all folds open by default
 set foldlevel=99
-" Reselect visual block after indent/outdent                                }{
+" Reselect visual block after indent/outdent
 vnoremap < <gv
 vnoremap > >gv
-" Re-hardwrap paragraph                                                      }{
+" Re-hardwrap paragraph
 nnoremap <leader>q gqip
 
 
 """""""""""""""""""""""""""""""""" Searching """"""""""""""""""""""""""""""""""
-" Clears  the search by pressing <leader> COMMA                              }{
+" Clears  the search by pressing <leader> COMMA
 nnoremap <silent><leader>, :noh<CR>
 set ignorecase             " ignore case when searching
 set smartcase
-" Use sane regexes                                                           }{
+" Use sane regexes
 nnoremap / /\v
 vnoremap / /\v
 nnoremap ? ?\v
@@ -428,7 +425,7 @@ endif
 
 
 """""""""""""""""""""""""""""""""""" Msc. """""""""""""""""""""""""""""""""""""
-" Remove the Windows ^M - when the encodings gets messed up                  }{
+" Remove the Windows ^M - when the encodings gets messed up
 noremap <Leader>^m mmHmt:%s/<C-V><CR>//ge<CR>'tzt'm
 " Look for tag files in paths relative to cwd, not the file being edited
 set cpoptions+=d
@@ -444,9 +441,9 @@ set completeopt=longest,menu
 " Open new split windows to right and bottom, which feels more natural
 set splitbelow
 set splitright
-" Make Y behave like other capitals                                          }{
+" Make Y behave like other capitals
 nnoremap Y y$
-" Replace a word with yanked text                                            }{
+" Replace a word with yanked text
 nnoremap <leader>rp viw"0p
 """" Help
 " Press Enter to follow a help tag
@@ -526,11 +523,11 @@ else
   set mouse=
 endif
 
-" Move to the beginning and end of lines easier                              }{
+" Move to the beginning and end of lines easier
 "nnoremap H ^
 "nnoremap L $
 
-" Use sane movement along wrapped lines                                      }{
+" Use sane movement along wrapped lines
 nnoremap j gj
 nnoremap k gk
 vnoremap j gj
@@ -541,7 +538,7 @@ vnoremap k gk
 nnoremap ' `
 nnoremap ` '
 
-" Only jumps around the current buffer.                                      }{
+" Only jumps around the current buffer.
 function! JumpInFile(back, forw)
   let [n, i] = [bufnr('%'), 1]
   let p = [n] + getpos('.')[1:]
@@ -563,12 +560,12 @@ nnoremap <silent><leader><C-i> :call JumpInFile("\<C-o>", "\<C-i>")<CR>
 " Binds numpad home/end to move 1/2 page up/down.
 " When I sit back to think I like moving around the page with only one hand,
 " usually the right one. This lets me do that. Would use PgUp/PgDown, but Mintty
-" or tmux captures those with my settings.                                   }{
+" or tmux captures those with my settings.
 nnoremap <kEnd> <C-d>
 nnoremap <kHome> <C-u>
 
 
-" Get off my lawn (Turn off arrow keys, and give some friendly advice)       }{
+" Get off my lawn (Turn off arrow keys, and give some friendly advice)
 " Note: May wish to remove nmap for up/down because the commands slightly bleed
 " over to insert mode for a time after the switch.
 inoremap <Left> <C-o>:echom "Use h"<CR>
@@ -584,7 +581,7 @@ nnoremap <Down> :echom "Use j"<CR>
 
 " Turn off up and down arrows completely in insert mode, as the mouse scroll
 " is interpreted as scroll and gets past any other mapping and goes back to
-" default behavior. Also preceding command with <Esc> isn't ideal.           }{
+" default behavior. Also preceding command with <Esc> isn't ideal.
 inoremap <Up> <Nop>
 inoremap <Down> <Nop>
 nnoremap <Up> <Nop>
@@ -593,18 +590,18 @@ nnoremap <Down> <Nop>
 " Allows one to switch buffers without having to save or undo changes first.
 set hidden
 
-" Make buffer tab navigation quicker                                         }{
+" Make buffer tab navigation quicker
 nnoremap ]b :bnext<CR>
 nnoremap [b :bprev<CR>
 nnoremap ]t :tabnext<CR>
 nnoremap [t :tabprev<CR>
-" switch to last used tab                                                    }{
+" switch to last used buffer
 nnoremap bb :b#<CR>
 
 " Go to next file in location list
 nnoremap <leader>s] :lnext<CR>
 nnoremap <leader>s[ :lprevious<CR>
-" make window navigation easier.                                             }{
+" make window navigation easier.
 nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k

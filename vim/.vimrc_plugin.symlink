@@ -412,7 +412,7 @@ endif
 " let g:syntastic_mode_map = { 'mode': 'active',
 "   \ 'active_filetypes': [],
 "   \ 'passive_filetypes': ['java'] }
-" Bind a button to check syntax when in passive mode                         }{
+" Bind a button to check syntax when in passive mode
 if g:syntax_plugin == s:syntax_syntastic
   autocmd FileType java nnoremap <leader>cc :SyntasticCheck<CR>
 endif
@@ -437,7 +437,7 @@ let g:syntastic_cpp_check_header = 1
 let g:syntastic_cpp_include_dirs = ['/usr/local/include/SDL2']
 " Use modern C++ compile options
 let g:syntastic_cpp_compiler_options = ' -std=c++14'
-" Shortcuts to prev/next errors                                              }{
+" Shortcuts to prev/next errors
 let g:syntastic_java_javac_config_file_enabled = 1
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_javascript_jsxhint_exec = 'jsx-jshint-wrapper'
@@ -604,13 +604,13 @@ endif
 " Tell gitgutter not to set any keybinds by itself. They will all be rebound.
 let g:gitgutter_map_keys = 0
 if s:has_exec('git')
-  " Move from to the next/prev change                                          }{
+  " Move from to the next/prev change
   nmap ]g <Plug>GitGutterNextHunk
   nmap [g <Plug>GitGutterPrevHunk
-  " Stage or revert the lines the cursor is on                                 }{
+  " Stage or revert the lines the cursor is on
   nmap <Leader>gs <Plug>GitGutterStageHunk
   nmap <Leader>gr <Plug>GitGutterRevertHunk
-  " Preview the changes                                                        }{
+  " Preview the changes
   nmap <Leader>gp <Plug>GitGutterPreviewHunk
   let g:gitgutter_eager = 0
 
@@ -668,7 +668,7 @@ let g:rainbow_conf = {
 \   }
 \}
 "
-" Fixes most gui problems (broken syntax coloring, status bar no color)      }{
+" Fixes most gui problems (broken syntax coloring, status bar no color)
 function! FixGUI()
   syntax enable
   if expand("$TERM_COLOR") == 'light'
@@ -681,7 +681,7 @@ endfunction
 map <F9> :call FixGUI()<CR>
 
 """" Tagbar:
-" Bind a button to open the tagbar                                         }{
+" Bind a button to open the tagbar
 if s:has_exec('ctags')
   nnoremap <leader>cb :TagbarToggle<CR>
 endif
@@ -689,7 +689,7 @@ let g:tagbar_autoclose=1
 let g:tagbar_autofocus=1
 
 """" UndoTree:
-" Bind a button to open UntoDree                                             }{
+" Bind a button to open UntoDree
 nnoremap <leader>gu :UndotreeToggle<CR>
 
 """" Indent Lines:
@@ -703,7 +703,7 @@ nnoremap <leader>ig :IndentLinesToggle<CR>
 "nmap <leader> <Plug>(easymotion-prefix)
 omap <leader> <Plug>(easymotion-prefix)
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
-" Make some easymotion binds                                                 }{
+" Make some easymotion binds
 nmap <leader>l <Plug>(easymotion-lineforward)
 omap <leader>l <Plug>(easymotion-lineforward)
 nmap <leader>h <Plug>(easymotion-linebackward)
@@ -726,7 +726,7 @@ let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 
 """" W3m:
 if s:has_exec('w3m')
-  " Bind w3m to an easy key and add http so it doesn't search.                 }{
+  " Bind w3m to an easy key and add http so it doesn't search.
   nnoremap <leader>w3 :W3m http://
   autocmd FileType w3m setlocal colorcolumn=
   autocmd FileType w3m setlocal scrolloff=3
@@ -752,7 +752,7 @@ if s:has_exec('fzf')
       " \ printf('ctags -f - --sort=no --excmd=number %s', expand('%:S'))], {})
 endif
 
-"""" Vimux:                                                                  }{
+"""" Vimux:
 if s:has_exec('tmux')
   map <leader>vp :VimuxPromptCommand<CR>
   map <leader>vr :VimuxRunLastCommand<CR>
@@ -782,7 +782,7 @@ augroup JCommenterSettings
   autocmd FileType java let g:jcommenter_class_author='Adam Cutler'
   autocmd FileType java let g:jcommenter_file_author='Adam Cutler'
   autocmd FileType java let g:jcommenter_method_description_space = 1
-  " Create a bind to generate comments                                         }{
+  " Create a bind to generate comments
   autocmd FileType java nmap <leader>cj :call JCommentWriter()<CR>
   autocmd FileType java nmap <leader>c] :call SearchInvalidComment(0)<cr>
   autocmd FileType java nmap <leader>c[ :call SearchInvalidComment(1)<cr>
@@ -792,7 +792,7 @@ augroup END
 let g:jsdoc_allow_input_prompt=1
 let g:jsdoc_additional_descriptions=1
 let g:jsdoc_default_mapping=0
-"                                                                            }{
+"
 augroup VIMJSDOC
   autocmd!
   autocmd FileType javascript nmap <leader>cj :JsDoc<CR>
@@ -820,7 +820,7 @@ augroup END
 endif
 
 """" VimOperatorSurround:
-" operator mappings                                                         }{
+" operator mappings
 map <silent>sa <Plug>(operator-surround-append)
 map <silent>sd <Plug>(operator-surround-delete)
 map <silent>sc <Plug>(operator-surround-replace)
