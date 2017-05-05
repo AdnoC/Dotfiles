@@ -531,6 +531,7 @@ endfunction
 command! -nargs=0 -buffer ViewTexCharList call ViewTexCharList()
 
 """""""""""""""""""""""""""""""""" Movement """""""""""""""""""""""""""""""""""
+" Check out http://stackoverflow.com/questions/16082991/vim-switching-between-files-rapidly-using-vanilla-vim-no-plugins
 " Number of lines to use for the command line
 set cmdheight=2
 " The minimum number of line to keep above and below the cursor.
@@ -630,12 +631,32 @@ nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
 
+nnoremap <F5> :ls<CR>:buffer<SPACE>
+if !empty($NO_VIM_PLUGINS)
+  nnoremap <leader>b :ls<CR>:buffer<SPACE>
+endif
+
 if has('nvim')
   augroup FZFNvim
     autocmd!
     autocmd TermOpen */*fzf* tnoremap <buffer><c-k> <UP>
     autocmd TermOpen */*fzf* tnoremap <buffer><c-j> <DOWN>
   augroup END
+endif
+
+if has('nvim')
+  if empty($TMUX)
+    tnoremap <C-s> <C-\><C-n>
+  endif
+
+  tnoremap <A-j><A-k> <C-\><C-n>
+  tnoremap <C-q> <C-\><C-n>
+  tnoremap <ESC> <C-\><C-n>
+
+  tnoremap <C-h> <C-\><C-n><C-w>h
+  tnoremap <C-j> <C-\><C-n><C-w>j
+  tnoremap <C-k> <C-\><C-n><C-w>k
+  tnoremap <C-l> <C-\><C-n><C-w>l
 endif
 
 """" Notes
