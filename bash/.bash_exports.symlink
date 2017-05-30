@@ -165,3 +165,6 @@ if [ -f /usr/share/source-highlight/src-hilite-lesspipe.sh ]; then
   export LESS=' -R'
 fi
 
+if [ -n "$IN_WSL" ]; then
+  export FZF_DEFAULT_COMMAND="command find -L . -mindepth 1 -type f -print -o -type l -print 2> /dev/null | cut -b3-"
+fi
