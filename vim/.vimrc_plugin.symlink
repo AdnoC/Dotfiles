@@ -137,6 +137,8 @@ if !&diff
     let g:syntax_plugin = s:syntax_syntastic
     Plug 'scrooloose/syntastic'
   endif
+else
+  let g:syntax_plugin = ''
 endif
 " Set indent options based on what is used in the file
 " Plug 'tpope/vim-sleuth'
