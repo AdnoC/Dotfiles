@@ -55,6 +55,11 @@ augroup UserFileTypeDefs
   au BufRead,BufFilePre,BufNewFile *.module set filetype=php
 augroup END
 
+augroup RustDoc
+  autocmd!
+  autocmd FileType rustdoc nnoremap <buffer>q :bd<CR>
+augroup END
+
 if executable('ant')
   augroup JavaMakeSettings
     autocmd!

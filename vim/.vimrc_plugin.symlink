@@ -380,16 +380,9 @@ endif
 
 """" Neomake:
 if g:syntax_plugin == s:syntax_neomake
-  " Check syntax every time I save
-  function! s:my_neomake_function()
-    if &filetype == "rust"
-      Neomake! cargo
-    else
-      Neomake
-    endif
-  endfunction
-  autocmd! BufWritePost * call <SID>my_neomake_function()
-  " autocmd! BufWritePost * Neomake
+
+  autocmd! BufWritePost * Neomake
+
   " Use gcc by default
   let g:neomake_cpp_enabled_makers = ['gcc']
   " Use different gcc args
@@ -400,7 +393,10 @@ if g:syntax_plugin == s:syntax_neomake
   let g:neomake_cpp_clang_maker.args = g:neomake_cpp_clang_maker.args
         \ + ['-std=c++14', '-Wall', '-Werror', '-Wextra', '-pedantic']
   " Open location list when errors occur
-  let g:neomake_open_list = 1
+  " Preserve cursor position
+  let g:neomake_open_list = 2
+  " Highlight lines with errors
+  let g:neomake_highlight_lines=1
 
   augroup NeomakeErrorSigns
     au!
@@ -502,6 +498,7 @@ if s:has_exec('racer') && empty($SIMPLE_VIM_PLUGINS)
     autocmd FileType rust nmap gs <Plug>(rust-def-split)
     autocmd FileType rust nmap gx <Plug>(rust-def-vertical)
     autocmd FileType rust nmap <leader>gd <Plug>(rust-doc)
+    autocmd FileType rust nmap K <Plug>(rust-doc)
   augroup END
 endif
 
