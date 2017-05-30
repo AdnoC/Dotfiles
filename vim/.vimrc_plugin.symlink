@@ -149,7 +149,7 @@ Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'tpope/vim-endwise'
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle'}
 if s:has_exec('ctags')
-  Plug 'xolox/vim-misc' | Plug 'xolox/vim-easytags'
+  Plug 'ludovicchabant/vim-gutentags'
 endif
 " YouCompleteMe only works on Linux/Mac and if vim is version > 7.3.584
 " Use supertab if YCM won't work
@@ -634,22 +634,9 @@ if s:has_exec('git')
   augroup END
 endif
 
-"""" EasyTags
-let g:easytags_async=1
-let g:easytags_always_enabled = 1
-" Use relative paths for tag files and create one if it doesn't exist
-let g:easytags_dynamic_files = 2
-let g:easytags_auto_highlight = 0
-let g:easytags_on_cursorhold = 0
-let g:easytags_languages = {
-\ 'javascript': {
-  \ 'cmd': 'jsctags',
-  \ 'args': [],
-  \ 'fileoutput_opt': '-f',
-  \ 'stdout_opt': '-f-',
-  \ 'recurse_flag': '-R'
-  \  }
-\}
+"""" Gutentags
+nnoremap <leader>gt :GutentagsUpdate<CR>
+
 
 """" Solarized:
 let g:solarized_termcolors=256
