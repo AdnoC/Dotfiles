@@ -116,6 +116,10 @@ augroup FileTypeSpecificCmds
   autocmd FileType pandoc setlocal nospell
   " Use 4 spaces per tab since thats the magic number for pandoc
   autocmd FileType pandoc setlocal shiftwidth=4
+  " Don't add '*' or '#' after newline
+  autocmd FileType pandoc setlocal formatoptions-=r
+  autocmd FileType pandoc setlocal formatoptions-=o
+
 
   " When editing plain text I don't need to see the ends of lines.
   autocmd FileType txt setlocal wrap linebreak nolist textwidth=0 wrapmargin=0
