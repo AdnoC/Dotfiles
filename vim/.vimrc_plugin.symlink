@@ -146,7 +146,7 @@ endif
 Plug 'sheerun/vim-polyglot'
 Plug '2072/php-indenting-for-vim'
 " Adds syntax highlighting for some keywords in React. vim-polyglot already provides JSX syntax.
-Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
 " Auto-close some structures (i.e. adds 'endfunction' after you type 'function!' in VimL)
 Plug 'tpope/vim-endwise'
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle'}
