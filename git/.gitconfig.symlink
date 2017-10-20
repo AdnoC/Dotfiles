@@ -34,7 +34,7 @@
 # URL shorthands
 [url "git@github.com:"]
   insteadOf = "gh:"
-  insteadOf = "https://github.com/"
+  # insteadOf = "https://github.com/"
   pushInsteadOf = "github:"
   pushInsteadOf = "git://github.com/"
 # Use pull --rebase instead of normal pull
