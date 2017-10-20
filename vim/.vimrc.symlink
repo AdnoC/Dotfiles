@@ -556,13 +556,25 @@ set scrolloff=10
 " Allow keys to move left or right to the prev/next line
 set whichwrap=b,s,h,l,<,>,[,]
 
-" Use the mouse if we have a gui
-if has('gui')
-  set mouse=a
-" If we are on command line, ignore the mouse
-else
-  set mouse=
-endif
+" Use a mouse mode that by default uses less mouse stuff
+set mouse=nicr
+" Turn off clicking so that we can use the mouse to scroll and nothing else
+map <LeftMouse> <NOP>
+map <2-LeftMouse> <NOP>
+map <3-LeftMouse> <NOP>
+map <4-LeftMouse> <NOP>
+map <RightMouse> <NOP>
+map <2-RightMouse> <NOP>
+map <3-RightMouse> <NOP>
+map <4-RightMouse> <NOP>
+imap <LeftMouse> <NOP>
+imap <2-LeftMouse> <NOP>
+imap <3-LeftMouse> <NOP>
+imap <4-LeftMouse> <NOP>
+imap <RightMouse> <NOP>
+imap <2-RightMouse> <NOP>
+imap <3-RightMouse> <NOP>
+imap <4-RightMouse> <NOP>
 
 " Move to the beginning and end of lines easier
 "nnoremap H ^
