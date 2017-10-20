@@ -651,9 +651,14 @@ nnoremap [t :tabprev<CR>
 " switch to last used buffer
 nnoremap tt :b#<CR>
 
-" Go to next file in location list
-nnoremap <leader>s] :lnext<CR>
-nnoremap <leader>s[ :lprevious<CR>
+" Go to next spot in location list
+nnoremap ]l :lnext<CR>
+nnoremap [l :lprevious<CR>
+
+" Go to next spot in quickfix
+nnoremap ]q :cnext<CR>
+nnoremap [q :cprevious<CR>
+
 " make window navigation easier.
 nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
