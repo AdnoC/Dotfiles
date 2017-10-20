@@ -390,7 +390,8 @@ endif
 """" Neomake:
 if g:syntax_plugin == s:syntax_neomake
 
-  autocmd! BufWritePost * Neomake
+  nnoremap <leader><ENTER> :Neomake<CR>
+  " autocmd! BufWritePost * Neomake
 
   " Use gcc by default
   let g:neomake_cpp_enabled_makers = ['gcc']
