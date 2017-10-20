@@ -268,6 +268,10 @@ endif
 " Refresh busted syntax highlighting (this happens too often)
 map <F12> :syntax sync fromstart<cr>
 
+if has('nvim')
+  set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
+endif
+
 if empty($NO_VIM_GUICOLORS) && has("termguicolors")
   set termguicolors
 endif
