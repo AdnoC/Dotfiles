@@ -281,6 +281,9 @@ Plug 'tommcdo/vim-lion'
 
 Plug 'kana/vim-operator-user'
 Plug 'kana/vim-textobj-user'
+if s:has_exec('cscope')
+  Plug 'chazy/cscope_maps'
+endif
 " Text Objects:
 " Allows for things like 'cs2a([' to change ((*)) to [(*)]
 Plug 'osyo-manga/vim-textobj-multiblock'
