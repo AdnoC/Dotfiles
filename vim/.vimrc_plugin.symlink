@@ -246,6 +246,8 @@ Plug 'davetron5000/javax-xml-javadoc-vim', { 'for': 'java'}
 Plug 'davetron5000/javax-javadoc-vim', { 'for': 'java'}
 Plug 'davetron5000/java-javadoc-vim', { 'for': 'java'}
 """ Tools:
+" Sources a .lvimrc file to allow for per-project configuration
+Plug 'embear/vim-localvimrc'
 " Shows all 256 x-term colors in a nice table
 Plug 'guns/xterm-color-table.vim'
 " Fixes <C-A> and <C-X> to correctly increment/decrement dates
@@ -530,6 +532,9 @@ let s:autoPairsMapBS=0
 """" Endwise:
 let g:endwise_no_mappings = 1
 
+
+"""" Vim_LocalVimrc:
+let g:localvimrc_persistent = 2
 
 """" BufKill:
 let g:BufKillCreateMappings=0
