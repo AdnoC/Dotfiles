@@ -135,9 +135,9 @@ augroup END
 
 """""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
 " Use Control-a to move to normal mode
-inoremap jk <Esc>
+inoremap kj <Esc>
 " Allow the use of a familiar key combination to exit visual mode
-vnoremap jk <Esc>
+vnoremap kj <Esc>
 " Toggle paste mode.
 set pastetoggle=<F11>
 " Makes the switch to paste mode immediately shown
