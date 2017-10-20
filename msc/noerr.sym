@@ -1,0 +1,4 @@
+#!/bin/bash
+prog="$1"
+shift
+"$prog" "$@" 2>/dev/null
