@@ -50,7 +50,7 @@ $if mode=vi
     "\ep": yank-last-arg
 
     # use jk to exit insert mode
-    "jk": vi-movement-mode
+    "kj": vi-movement-mode
 
     # glob patterns without executing with <ALT-e>, eg: 'rm *x'
     "\ee": glob-expand-word
