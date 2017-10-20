@@ -678,7 +678,7 @@ if has('nvim')
     tnoremap <C-s> <C-\><C-n>
   endif
 
-  tnoremap <A-j><A-k> <C-\><C-n>
+  tnoremap <A-k><A-j> <C-\><C-n>
   tnoremap <C-q> <C-\><C-n>
   tnoremap <ESC> <C-\><C-n>
 
