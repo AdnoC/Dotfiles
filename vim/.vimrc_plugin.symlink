@@ -528,6 +528,11 @@ let g:echodoc_enable_at_startup = 1
 """" AutoPairs:
 let s:autoPairsMapCh=0
 let s:autoPairsMapBS=0
+augroup VimrcRustAutopairs
+  autocmd!
+  autocmd FileType rust let g:AutoPairs = {'(':')', '[':']', '{':'}',
+        \ '"':'"', '`':'`'}
+augroup END
 
 """" Endwise:
 let g:endwise_no_mappings = 1
