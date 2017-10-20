@@ -29,7 +29,11 @@ let mapleader=" "
 if has('gui_win32')
   let g:vimDirectory=expand("$HOME/vimfiles")
 elseif has('nvim')
-  let g:vimDirectory=expand("$HOME/.config/nvim")
+  if has('win32')
+    let g:vimDirectory=expand(expand("<sfile>:p:h") . "/")
+  else
+    let g:vimDirectory=expand("$HOME/.config/nvim")
+  endif
 else
   let g:vimDirectory=expand("$HOME/.vim")
 endif
