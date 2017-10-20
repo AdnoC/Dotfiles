@@ -601,6 +601,12 @@ if has('nvim') && s:has_exec('tmux')
   nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
 endif
 
+"""" Vim Fugitive:
+" Search the word under the cursor with `git grep`.
+" Result locations are put into quickfix.
+" https://statico.github.io/vim3.html
+nmap <leader>gk :Ggrep! "\b<cword>\b" <CR>
+
 """" Vim GitGutter:
 " Tell gitgutter not to set any keybinds by itself. They will all be rebound.
 let g:gitgutter_map_keys = 0
