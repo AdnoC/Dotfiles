@@ -519,10 +519,31 @@ if s:has_exec('racer') && empty($SIMPLE_VIM_PLUGINS)
     autocmd FileType rust nmap <leader>gd <Plug>(rust-doc)
     autocmd FileType rust nmap K <Plug>(rust-doc)
   augroup END
+
+  if g:autocomplete_plugin == s:autocomplete_deoplete
+     augroup RacerMore
+       autocmd!
+       autocmd FileType rust call deoplete#custom#set('racer', 'rank', 9999)
+     augroup END
+  endif
 endif
+
+"""" DeopleteTernjs:
+let g:deoplete#sources#ternjs#tern_bin = 'ternjs'
+let g:deoplete#sources#ternjs#filetypes = [
+                \ 'jsx',
+                \ 'javascript.jsx',
+                \ 'vue',
+                \ ]
+let g:deoplete#sources#ternjs#types = 1
+let g:deoplete#sources#ternjs#docs = 1
 
 """ TernForVim:
 let g:tern_show_signature_in_pum = 1
+let g:tern#filetypes = [
+                \ 'jsx',
+                \ 'javascript.jsx',
+                \ ]
 " Make neocomplete understand that we are getting syntax info from tern
 if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
