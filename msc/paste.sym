@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 
+cd ~/WinUser
+
 # Get the contents of the clipboard
-wcmd : '%USERPROFILE%\bin\paste.exe' | \
+# wcmd : '%USERPROFILE%\bin\paste.exe' | \
+  ~/WinUser/bin/paste.exe | \
+# cmd.exe /c '%USERPROFILE%\bin\paste.exe' | \
 # Get rid of Windows line endings 
-  sed 's///'
+  # sed 's/\$//' | \
+  sed 's/$//'
+# Remove final  that the sed won't remove
+   # head --bytes -2
 

@@ -6,10 +6,10 @@ if isWSL; then
 
   link_file "$DOTFILES_ROOT"/msc/clip.sym ~/bin/clip
   # Need to install paste.exe
+  # Install it to %USERPROFILE%\bin\paste.exe
   # Found here: http://www.c3scripts.com/tutorials/msdos/paste.html#exe
   link_file "$DOTFILES_ROOT"/msc/paste.sym ~/bin/paste
 
-  # Used to spoof MacOSX clipboard utils to allow clipboard access in nvim
-  link_file "$DOTFILES_ROOT"/msc/clip.sym ~/bin/pbcopy
-  link_file "$DOTFILES_ROOT"/msc/paste.sym ~/bin/pbpaste
+
+  link_file "$DOTFILES_ROOT"/msc/lemonade.sym ~/bin/lemonade
 fi
