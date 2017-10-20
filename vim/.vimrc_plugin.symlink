@@ -743,8 +743,6 @@ nmap <leader>s <Plug>(easymotion-s2)
 omap <leader>s <Plug>(easymotion-s2)
 vmap <leader>s <Plug>(easymotion-s2)
 omap <leader>s <Plug>(easymotion-s2)
-nmap <leader><ENTER> <Plug>(easymotion-sn)
-omap <leader><ENTER> <Plug>(easymotion-sn)
 let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 
 """" W3m:
