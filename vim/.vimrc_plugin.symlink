@@ -97,9 +97,8 @@ call plug#begin(g:vimDirectoryPart . 'bundle')
 
 "Add your plugins here
 "" Games:
-Plug 'vim-scripts/TeTrIs.vim', { 'on': 'LoadTetris'}
-function! LoadTetris()
-endfunction
+Plug 'vim-scripts/TeTrIs.vim'
+Plug 'johngrib/vim-game-code-break'
 """ Git:
 " NOTE: fugitive makes vim very laggy sometimes
 " Commands for using git nicely in Vim
@@ -304,13 +303,13 @@ else
   Plug 'bling/vim-bufferline'
 endif
 " Dims paragraphs besides the one you are working on
-Plug 'junegunn/limelight.vim', { 'on': 'Limelight'}
+Plug 'junegunn/limelight.vim'
 " Removes distractions
-Plug 'junegunn/goyo.vim', { 'on': ['GoyoEnter', 'Limelight']}
+Plug 'junegunn/goyo.vim'
 " Plug 'luochen1990/rainbow'
 """ Movement:
 Plug 'Lokaltog/vim-easymotion'
-Plug 'wikitopian/hardmode', { 'on': ['ToggleHardMode', 'HardMode']}
+" Plug 'wikitopian/hardmode'
 Plug 'rhysd/vim-operator-surround'
 " Lets you replace text with something from a register (like pasting from register)
 Plug 'kana/vim-operator-replace'
