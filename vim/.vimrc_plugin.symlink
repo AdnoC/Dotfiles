@@ -127,6 +127,9 @@ if s:has_exec('pandoc') && empty($SIMPLE_VIM_PLUGINS)
   Plug 'vim-pandoc/vim-pandoc'
 endif
 Plug 'vim-pandoc/vim-pandoc-syntax'
+if s:has_exec('python') && empty($SIMPLE_VIM_PLUGINS)
+  Plug 'davidhalter/jedi-vim'
+endif
 Plug 'elzr/vim-json'
 Plug 'groenewege/vim-less'
 if !&diff
