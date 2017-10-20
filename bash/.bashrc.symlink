@@ -1,9 +1,9 @@
 # vim: ft=sh :
 # If not running interactively, don't do anything
-if [[ -v _BRC_SOURCED ]]; then
+if [[ -v _BRC_SOURCED ]] && [ "$_BRC_SOURCED" -ge "$SHLVL" ]; then
   return
 fi
-export _BRC_SOURCED=1
+export _BRC_SOURCED=$SHLVL
 [ -z "$PS1" ] && return
 if [ ${#BASH_SOURCE[@]} -gt 2 ]; then
   return

@@ -1,5 +1,8 @@
 # vim: ft=sh :
-export _BP_SOURCED=1
+if [[ -v _BP_SOURCED ]] && [ "$_BP_SOURCED" -ge "$SHLVL" ]; then
+  return
+fi
+export _BP_SOURCED=$SHLVL
 set -o vi
 
 # '.' = run     '$_' = the last arg of the previous command
@@ -58,3 +61,7 @@ if [ -s ~/.lastdirectory ] && [ "$(pwd)" == "$HOME" ]; then
 fi
 
 test -f ~/.bash_profile.local && . $_
+
+# Let me source the profile again manually if I want to
+unset _BRC_SOURCED
+unset _BP_SOURCED
