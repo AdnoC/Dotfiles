@@ -23,6 +23,7 @@ if isWSL; then
       else
         YANK_PATH="$(which win32yank.exe)"
         sudo ln -s "$YANK_PATH" /usr/bin/win32yank
+        link_file "$DOTFILES_ROOT"/msc/win32yank.sym ~/bin/win32yank
       fi
     else
       echo "Please install windows neovim to enable clipboard integration"

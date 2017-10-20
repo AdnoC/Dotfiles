@@ -1,0 +1,3 @@
+#!/bin/bash
+
+noerr /usr/bin/win32yank "$@"
