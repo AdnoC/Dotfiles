@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+cd ~/WinUser
+
+if [[ "$1" = "copy" ]]; then
+  clip
+else #if [[ "$1" = "paste" ]]; then
+  paste
+fi 
+
+
