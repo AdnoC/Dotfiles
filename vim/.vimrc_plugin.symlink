@@ -167,20 +167,23 @@ elseif (has('lua') || has('nvim'))
     Plug 'Shougo/neocomplete.vim'
   endif
 
-  if s:has_exec('clang') && !empty($LIBCLANG_PATH)
+  if s:has_exec('clang')
     " NOTE: deoplete-clang needs to point to clang's dynamic library, not just
     " where it can find the library
-    if (g:autocomplete_plugin == s:autocomplete_deoplete &&
-          \ !empty($CLANG_INCLUDE_PATH) && !isdirectory($LIBCLANG_PATH))
-      Plug 'zchee/deoplete-clang'
-    else
+    " if (g:autocomplete_plugin == s:autocomplete_deoplete &&
+    "       \ !empty($CLANG_INCLUDE_PATH) && !isdirectory($LIBCLANG_PATH))
+      " Plug 'zchee/deoplete-clang'
+    if g:autocomplete_plugin == s:autocomplete_deoplete
+      Plug'tweekmonster/deoplete-clang2'
+
+    elseif !empty($LIBCLANG_PATH)
       Plug 'Rip-Rip/clang_complete'
     endif
   elseif iCanHazVimPlug == 0
     echo 'Cannot find clang, not installing clang completion'
   endif
 
-  if s:has_exec('tern')
+  if s:has_exec('ternjs')
     if g:autocomplete_plugin == s:autocomplete_deoplete
       Plug 'carlitux/deoplete-ternjs', { 'for': 'javascript'}
     else
@@ -190,6 +193,12 @@ elseif (has('lua') || has('nvim'))
     echo 'Cannot find tern, not installing javascript completion'
   endif
 
+  if s:has_exec('flow')
+    if g:autocomplete_plugin == s:autocomplete_deoplete
+      Plug 'steelsojka/deoplete-flow', { 'for': 'javascript'}
+    endif
+  endif
+
   if s:has_exec('gocode')
     Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go'}
   elseif iCanHazVimPlug == 0
@@ -197,11 +206,7 @@ elseif (has('lua') || has('nvim'))
   endif
 
   if s:has_exec('python')
-    if s:has_exec('jedi')
-      Plug 'zchee/deoplete-jedi', { 'for': 'python'}
-    elseif (iCanHazVimPlug == 0 && s:has_exec('pip'))
-      silent exec '!pip install jedi'
-    endif
+    Plug 'zchee/deoplete-jedi', { 'for': 'python'}
   endif
 
   " Vim autocomplete. Uncomment when you have something for it.
