@@ -692,6 +692,7 @@ endif
 ":bro ol (AKA :browse oldfiles) lists previously opened files and allows you to open one
 "<c-o> Returns you to locations before jumps. <c-i> (also tab) moves you forward
 
+let $MYVIMRCLOCAL=expand(g:vimDirectoryPart . ".vimrc.local")
 """" If there is a local vim configuration file, run it
 if filereadable(g:vimDirectoryPart . ".vimrc.local")
   exec "so " . g:vimDirectoryPart . ".vimrc.local"
