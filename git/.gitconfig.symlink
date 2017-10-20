@@ -46,3 +46,5 @@
 	default = current
 [init]
 	templatedir = ~/dotfiles/gitTemplateDir
+[diff]
+	indentHeuristic = true
