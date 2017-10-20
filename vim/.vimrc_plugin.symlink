@@ -396,12 +396,16 @@ if g:syntax_plugin == s:syntax_neomake
   " Use gcc by default
   let g:neomake_cpp_enabled_makers = ['gcc']
   " Use different gcc args
-  let g:neomake_cpp_gcc_maker = neomake#makers#ft#cpp#gcc()
-  let g:neomake_cpp_gcc_maker.args = g:neomake_cpp_gcc_maker.args
-        \ + ['-std=c++14', '-Wall', '-Werror', '-Wextra', '-pedantic']
-  let g:neomake_cpp_clang_maker = neomake#makers#ft#cpp#clang()
-  let g:neomake_cpp_clang_maker.args = g:neomake_cpp_clang_maker.args
-        \ + ['-std=c++14', '-Wall', '-Werror', '-Wextra', '-pedantic']
+  try
+    let g:neomake_cpp_gcc_maker = neomake#makers#ft#cpp#gcc()
+    let g:neomake_cpp_gcc_maker.args = g:neomake_cpp_gcc_maker.args
+          \ + ['-std=c++14', '-Wall', '-Werror', '-Wextra', '-pedantic']
+    let g:neomake_cpp_clang_maker = neomake#makers#ft#cpp#clang()
+    let g:neomake_cpp_clang_maker.args = g:neomake_cpp_clang_maker.args
+          \ + ['-std=c++14', '-Wall', '-Werror', '-Wextra', '-pedantic']
+  catch
+    echom "Couldn't set cpp maker options"
+  endtry
   " Open location list when errors occur
   " Preserve cursor position
   let g:neomake_open_list = 2
