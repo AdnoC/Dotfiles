@@ -11,6 +11,7 @@
 
 " Set that we decided to use plugins
 let g:USE_PLUGINS=1
+let $MYVIMRCPLUGIN=expand('<sfile>')
 
 
 " Get SID prefix of vimrc (see :h <SID>)
