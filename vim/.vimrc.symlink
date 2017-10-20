@@ -673,8 +673,10 @@ endif
 if has('nvim')
   augroup FZFNvim
     autocmd!
-    autocmd TermOpen */*fzf* tnoremap <buffer><c-k> <UP>
-    autocmd TermOpen */*fzf* tnoremap <buffer><c-j> <DOWN>
+    " autocmd TermOpen */*fzf* tnoremap <buffer><c-k> <UP>
+    " autocmd TermOpen */*fzf* tnoremap <buffer><c-j> <DOWN>
+    autocmd FileType fzf tnoremap <buffer><C-k> <C-k>
+    autocmd FileType fzf tnoremap <buffer><C-j> <C-j>
   augroup END
 endif
 
