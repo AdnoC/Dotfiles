@@ -494,6 +494,7 @@ let g:deoplete#ignore_sources = {}
 " let g:deoplete#ignore_sources.javascript = ["buffer", "member", "tag", "file", "omni", "dictionary", "around", "flow", "syntax"]
 " let g:deoplete#ignore_sources.javascript = ["flow", "omni", "ternjs"]
 let g:deoplete#ignore_sources.javascript = ["omni", "flow"]
+let g:deoplete#ignore_sources.go = ["buffer", "syntax"]
 
 """" Neocomplete:
 let g:neocomplete#enable_at_startup = 1
@@ -501,7 +502,16 @@ let g:neocomplete#auto_complete_start_length=1
 let g:neocomplete#enable_smart_case = 1
 
 """" DeopleteGo:
+if g:autocomplete_plugin == s:autocomplete_deoplete
+   augroup DeoGoMore
+     autocmd!
+     autocmd FileType go call deoplete#custom#set('go', 'rank', 9999)
+   augroup END
+ endif
 let g:deoplete#sources#go#align_class = 1
+if has('win32')
+  let g:deoplete#sources#go#gocode_binary = expand($GOPATH.'/bin/gocode.exe')
+endif
 
 """" DeopleteClang:
 " let g:deoplete#sources#clang#libclang_path = $LIBCLANG_PATH
@@ -513,6 +523,8 @@ if ((!has('nvim') || !empty($CLANG_INCLUDE_PATH)) && !isdirectory(s:clang_librar
   let s:clang_library_path = fnamemodify(s:clang_library_path, ':h')
 endif
 let g:clang_library_path = s:clang_library_path
+let g:clang2_placeholder_next = '<c-k>'
+let g:clang2_placeholder_prev = '<c-j>'
 
 """" VimRacer:
 let g:racer_experimental_completer = 1
@@ -563,6 +575,12 @@ if !exists('g:neocomplete#sources#omni#input_patterns')
 endif
 let g:neocomplete#sources#omni#input_patterns.go =
   \ '\h\w*\|[^. \t]\.\w*'
+if s:has_exec("goimports")
+  let g:go_fmt_command = "goimports"
+  if has("win32")
+    let g:go_fmt_command = "goimports.exe"
+  endif
+endif
 
 """" Echodoc:
 let g:echodoc_enable_at_startup = 1
