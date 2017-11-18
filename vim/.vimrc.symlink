@@ -124,7 +124,6 @@ augroup FileTypeSpecificCmds
   autocmd FileType pandoc setlocal formatoptions-=r
   autocmd FileType pandoc setlocal formatoptions-=o
 
-
   " When editing plain text I don't need to see the ends of lines.
   autocmd FileType txt setlocal wrap linebreak nolist textwidth=0 wrapmargin=0
 
@@ -294,6 +293,8 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
 
     if !g:USE_PLUGINS
       silent! colorscheme desert
+    elseif has('win32') && !has('gui_running')
+      silent! colorscheme elflord
     elseif empty($NO_VIM_GUICOLORS) && has("termguicolors")
         silent! colorscheme solarized8
     else
