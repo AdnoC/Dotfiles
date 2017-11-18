@@ -1,0 +1,7 @@
+# Check if bash variable exists
+if [[ -v VARIABLE_NAME ]]; then
+  # DO THING
+fi
+
+# Quit down pylint about no config file
+touch ~/.pylintrc
