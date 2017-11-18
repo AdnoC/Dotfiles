@@ -1,7 +1,10 @@
+# Allow ssh login without needing a password
+cat .ssh/id_rsa.pub | ssh b@B 'cat >> .ssh/authorized_keys'
+
 # Check if bash variable exists
 if [[ -v VARIABLE_NAME ]]; then
   # DO THING
 fi
 
-# Quit down pylint about no config file
+# Quiet down pylint about no config file
 touch ~/.pylintrc
