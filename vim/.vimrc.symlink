@@ -14,6 +14,7 @@ onoremap <SPACE> <Nop>
 let mapleader="\<Space>"
 
 
+" Platform specific directories {{{
 " Vim looks for plugins in vimfiles instead of .vim in Windows
 if has('gui_win32')
   let g:vimDirectory=expand("$HOME/vimfiles")
@@ -30,6 +31,7 @@ let g:vimDirectoryPart=expand(g:vimDirectory . "/")
 let g:vimDirectory=g:vimDirectory
 
 let g:vimrcDirectory=expand(expand("<sfile>:p:h") . "/")
+" }}}
 
 let g:USE_PLUGINS=0
 if empty($NO_VIM_PLUGINS) && filereadable(g:vimrcDirectory . ".vimrc_plugin")
@@ -37,23 +39,28 @@ if empty($NO_VIM_PLUGINS) && filereadable(g:vimrcDirectory . ".vimrc_plugin")
 endif
 " }}}
 
-" File Types {{{
+" Filetypes Specific Preferences {{{
+
+" Set filetype for extension {{{
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
-"
 augroup UserFileTypeDefs
-   autocmd!
+  autocmd!
 
-  au BufRead,BufFilePre,BufNewFile *.sls set filetype=yaml
-  au BufRead,BufFilePre,BufNewFile *.inc set filetype=php
-  au BufRead,BufFilePre,BufNewFile *.module set filetype=php
+  autocmd BufRead,BufFilePre,BufNewFile *.sls set filetype=yaml
+  autocmd BufRead,BufFilePre,BufNewFile *.inc set filetype=php
+  autocmd BufRead,BufFilePre,BufNewFile *.module set filetype=php
 augroup END
+" }}}
 
+" Rust {{{
 augroup RustDoc
   autocmd!
   autocmd FileType rustdoc nnoremap <buffer>q :bd<CR>
 augroup END
+" }}}
 
+" Java {{{
 if executable('ant')
   augroup JavaMakeSettings
     autocmd!
@@ -62,48 +69,57 @@ if executable('ant')
     autocmd FileType java setlocal shellpipe=2>&1\ \|\ tee
   augroup END
 endif
-let java_highlight_all=1
+" }}}
 
-augroup FileTypeSpecificCmds
+" Latex {{{
+augroup LatexSettings
   autocmd!
-  " Use the java docs for keyword help
-  autocmd FileType java setlocal keywordprg=
-  "nnoremap <Leader>ls :w <BAR> !lessc % > ../css/%:t:r.css<CR><space>
-  autocmd FileType less setlocal makeprg=lessc\ %\ >\ ../css/%:t:r.css
   autocmd FileType plaintex set ft=tex | syntax enable
+  autocmd FileType tex  if ! isdirectory('.LatexOutput') |
+        \ exec "!mkdir .LatexOutput" |
+        \ endif
 
-  autocmd FileType tex  if ! isdirectory('.LatexOutput') |  exec "!mkdir .LatexOutput" |  endif
-
-  autocmd FileType tex exec "setlocal makeprg=latexmk\\ -outdir=\\\"" . expand('%:p:h') . expand('/') . ".LatexOutput\\\"\\ -pdf\\ %"
+  autocmd FileType tex exec "setlocal makeprg=latexmk\\ -outdir=\\\"" .
+        \ expand('%:p:h') . expand('/') . ".LatexOutput\\\"\\ -pdf\\ %"
 
   autocmd FileType tex set conceallevel=2
+augroup END
+" }}}
 
-  " Workaround for lack of timer_create in WSL
-  if !empty($IN_WSL)
-    let s:pandoc="pandoc\\ +RTS\\ -V0\\ -RTS"
-    let s:pandocPDF="pandoc +RTS -V0 -RTS"
-  else
-    let s:pandoc="pandoc"
-    let s:pandocPDF="pandoc"
-  endif
+" Pandoc {{{
+" Workaround for lack of timer_create in WSL
+if !empty($IN_WSL)
+  let s:pandocCmd="pandoc\\ +RTS\\ -V0\\ -RTS"
+  let s:pandocPDFCmd="pandoc +RTS -V0 -RTS"
+else
+  let s:pandocCmd="pandoc"
+  let s:pandocPDFCmd="pandoc"
+endif
 
-  autocmd FileType pandoc  if ! isdirectory('.PandocOutput') |  exec "!mkdir .PandocOutput" |  endif
-  " autocmd FileType markdown exec "setlocal makeprg=pandoc\\ -s\\ --to=html\\ --output=\\\""
-    \ . expand('%:h') . expand('/') . ".PandocOutput" . expand('/') . expand('%:r') . ".html\\\"\\ %"
+function! ViewPandoc()
+  " Pass the html output to w3m
+  exec "!cat " . expand('%:h') . expand('/') . ".PandocOutput" .
+        \ expand('/') . expand('%:r') . ".html \| w3m -T text/html"
+endfunction
 
-  " autocmd FileType pandoc exec "setlocal makeprg=pandoc\\ -s\\ --output=\\\"" . expand('%:h') . expand('/')
-    \ . ".PandocOutput" . expand('/') . expand('%:r') . ".pdf\\\"\\ %"
+function! PandocMakePDF()
+  exec "!" . s:pandocPDFCmd . " --highlight-style=pygments -s --output=\"" .
+        \ expand('%:h') . expand('/') . ".PandocOutput" . expand('/') .
+        \ expand('%:r') . ".pdf\" %"
+endfunction
 
-  autocmd FileType pandoc exec "setlocal makeprg=" . s:pandoc . "\\ --highlight-style=pygments\\ -s\\ --output=\\\""
-    \ . expand('%:h') . expand('/') . ".PandocOutput" . expand('/') . expand('%:r') . ".html\\\"\\ %"
+augroup PandocSettings
+  autocmd!
+  autocmd FileType pandoc  if ! isdirectory('.PandocOutput') |
+        \ exec "!mkdir .PandocOutput" |
+        \ endif
 
-  function! ViewPandoc()
-    exec "!cat " . expand('%:h') . expand('/') . ".PandocOutput" . expand('/') . expand('%:r') . ".html \| w3m -T text/html"
-  endfunction
+  autocmd FileType pandoc exec "setlocal makeprg=" . s:pandocCmd .
+        \ "\\ --highlight-style=pygments\\ -s\\ --output=\\\"" .
+        \ expand('%:h') . expand('/') . ".PandocOutput" . expand('/') .
+        \ expand('%:r') . ".html\\\"\\ %"
+
   autocmd FileType pandoc command! -nargs=0 -buffer ViewPandoc call ViewPandoc()
-  function! PandocMakePDF()
-    exec "!" . s:pandocPDF . " --highlight-style=pygments -s --output=\"" . expand('%:h') . expand('/') . ".PandocOutput" . expand('/') . expand('%:r') . ".pdf\" %"
-  endfunction
   autocmd FileType pandoc command! -nargs=0 -buffer PandocMakePDF call PandocMakePDF()
 
   " Turn spellcheck off because we are going to be using words that aren't in the dictionary
@@ -113,18 +129,25 @@ augroup FileTypeSpecificCmds
   " Don't add '*' or '#' after newline
   autocmd FileType pandoc setlocal formatoptions-=r
   autocmd FileType pandoc setlocal formatoptions-=o
+augroup END
+" }}}
+
+" Msc {{{
+
+augroup MscFileTypeSettings
+  autocmd!
+  " Use the java docs for keyword help
+  "nnoremap <Leader>ls :w <BAR> !lessc % > ../css/%:t:r.css<CR><space>
+  autocmd FileType less setlocal makeprg=lessc\ %\ >\ ../css/%:t:r.css
 
   " When editing plain text I don't need to see the ends of lines.
   autocmd FileType txt setlocal wrap linebreak nolist textwidth=0 wrapmargin=0
 
   autocmd FileType gitcommit set spell
-augroup END
-" let g:tex_conceal = ""
 
-augroup BufEnterFileTypeCmds
-  autocmd!
   autocmd BufEnter *.js setlocal foldmethod=indent
 augroup END
+" }}}
 " }}}
 
 " Meta {{{
