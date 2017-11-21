@@ -1,20 +1,9 @@
-" TODO: Add settings for if the term is not utf-8
+" vim:foldmethod=marker
+
 " Vim preferneces file
-" Sections:
-"   -> Initial
-"   -> Plugins
-"   -> File Types
-"   -> Chained Keybinds
-"   -> Meta
-"   -> Looks
-"   -> Formatting
-"   -> Searching
-"   -> Msc
-"   -> Movement
-"   -> Other things
 
 
-""""""""""""""""""""""""""""""""""" Initial """""""""""""""""""""""""""""""""""
+" Initial {{{
 " This isn't Vi, it is Vi IMproved. So lets not cling to old Vi settings
 if has('vim_starting')
   set nocompatible
@@ -22,7 +11,7 @@ endif
 " Remap leader. Needs to be done before any mappings involving the leader.
 nnoremap <SPACE> <Nop>
 onoremap <SPACE> <Nop>
-let mapleader=" "
+let mapleader="\<Space>"
 
 
 " Vim looks for plugins in vimfiles instead of .vim in Windows
@@ -46,8 +35,9 @@ let g:USE_PLUGINS=0
 if empty($NO_VIM_PLUGINS) && filereadable(g:vimrcDirectory . ".vimrc_plugin")
   exec "so " . g:vimrcDirectory . ".vimrc_plugin"
 endif
+" }}}
 
-""""""""""""""""""""""""""""""""" File Types """""""""""""""""""""""""""""""""
+" File Types {{{
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
 "
@@ -135,8 +125,9 @@ augroup BufEnterFileTypeCmds
   autocmd!
   autocmd BufEnter *.js setlocal foldmethod=indent
 augroup END
+" }}}
 
-"""""""""""""""""""""""""""""""""""" Meta """""""""""""""""""""""""""""""""""""
+" Meta {{{
 " Use Control-a to move to normal mode
 inoremap kj <Esc>
 " Allow the use of a familiar key combination to exit visual mode
@@ -247,8 +238,9 @@ if has('gui') && has('vim_starting')
     cd ~
   endif
 endif
+" }}}
 
-"""""""""""""""""""""""""""""""""""" Looks """"""""""""""""""""""""""""""""""""
+" Looks {{{
 """" Color Scheme
 " If using vimdiff, use a colorscheme that is actually readable.
 if &diff
@@ -372,9 +364,10 @@ if v:version >= 700
   au BufLeave * if !&diff | let b:winview = winsaveview() | endif
   au BufEnter * if exists('b:winview') && !&diff | call winrestview(b:winview) | unlet! b:winview | endif
 endif
+" }}}
 
 
-""""""""""""""""""""""""""""""""" Formatting """"""""""""""""""""""""""""""""""
+" Formatting {{{
 " Strips excess whitespace from file
 nnoremap <leader>w :%s/\s\+$//<CR>:let @/=''<CR>
 " Converts existing tabs to spaces
@@ -421,9 +414,10 @@ vnoremap < <gv
 vnoremap > >gv
 " Re-hardwrap paragraph
 nnoremap <leader>q gqip
+" }}}
 
 
-"""""""""""""""""""""""""""""""""" Searching """"""""""""""""""""""""""""""""""
+" Searching {{{
 " Clears  the search by pressing <leader> COMMA
 nnoremap <silent><leader>, :noh<CR>
 set ignorecase             " ignore case when searching
@@ -440,9 +434,10 @@ set hlsearch    " Highlight search matches
 if exists('&inccommand')
   set inccommand=split
 endif
+" }}}
 
 
-"""""""""""""""""""""""""""""""""""" Msc. """""""""""""""""""""""""""""""""""""
+" Msc. {{{
 " Remove the Windows ^M - when the encodings gets messed up
 noremap <Leader>^m mmHmt:%s/<C-V><CR>//ge<CR>'tzt'm
 " Look for tag files in paths relative to cwd, not the file being edited
@@ -542,8 +537,9 @@ function! ViewTexCharList()
   silent! normal! zt
 endfunction
 command! -nargs=0 -buffer ViewTexCharList call ViewTexCharList()
+" }}}
 
-"""""""""""""""""""""""""""""""""" Movement """""""""""""""""""""""""""""""""""
+" Movement {{{
 " Check out http://stackoverflow.com/questions/16082991/vim-switching-between-files-rapidly-using-vanilla-vim-no-plugins
 " Number of lines to use for the command line
 set cmdheight=2
@@ -688,13 +684,12 @@ if has('nvim')
   tnoremap <C-k> <C-\><C-n><C-w>k
   tnoremap <C-l> <C-\><C-n><C-w>l
 endif
+" }}}
 
-"""" Notes
-":bro ol (AKA :browse oldfiles) lists previously opened files and allows you to open one
-"<c-o> Returns you to locations before jumps. <c-i> (also tab) moves you forward
-
+" Load Local Prefs {{{
 let $MYVIMRCLOCAL=expand(g:vimDirectoryPart . ".vimrc.local")
 """" If there is a local vim configuration file, run it
 if filereadable(g:vimDirectoryPart . ".vimrc.local")
   exec "so " . g:vimDirectoryPart . ".vimrc.local"
 endif
+" }}}
