@@ -3,10 +3,6 @@
 
 
 " Initial {{{
-" This isn't Vi, it is Vi IMproved. So lets not cling to old Vi settings
-if has('vim_starting')
-  set nocompatible
-endif
 " Remap leader. Needs to be done before any mappings involving the leader.
 nnoremap <SPACE> <Nop>
 onoremap <SPACE> <Nop>
@@ -118,13 +114,13 @@ else
   let s:pandocPDFCmd="pandoc"
 endif
 
-function! ViewPandoc()
+function! ViewPandoc() abort
   " Pass the html output to w3m
   exec "!cat " . expand('%:h') . expand('/') . ".PandocOutput" .
         \ expand('/') . expand('%:r') . ".html \| w3m -T text/html"
 endfunction
 
-function! PandocMakePDF()
+function! PandocMakePDF() abort
   exec "!" . s:pandocPDFCmd . " --highlight-style=pygments -s --output=\"" .
         \ expand('%:h') . expand('/') . ".PandocOutput" . expand('/') .
         \ expand('%:r') . ".pdf\" %"
@@ -206,7 +202,7 @@ autocmd BufReadPost *
      \   exe "normal! g`\"" |
      \ endif
 
-function! OpenScratchBuffer()
+function! OpenScratchBuffer() abort
   new
   setlocal buftype=nofile
   setlocal noswapfile
@@ -359,7 +355,8 @@ set list
 " Set hidden chars to show (Show tabs and trailing spaces)
 if &encoding == "utf-8"
   exe "set listchars=eol:\u00ac,nbsp:\u001f,conceal:\u2315,tab:\u2595\u2014,precedes:\u2026,extends:\u2026"
-  exe "set sbr=\u21b3"
+  " What to display when a line is wrapped
+  exe "set showbreak=\u21b3"
 else
   set listchars=eol:$,trail:-,tab:>-,extends:>,precedes:<,conceal:+
 endif
@@ -482,7 +479,7 @@ set completeopt=longest,menu
 
 " Functions {{{
 " Displays a list of maps that include the leader
-function! ListLeaders()
+function! ListLeaders() abort
   silent! redir @b
   silent! nmap <LEADER>
   silent! redir END
@@ -505,7 +502,7 @@ command! ListLeaders :call ListLeaders()
 " If given one arg it saves with the given arg as the file name
 " If given two args it saves in the directory of the first arg with the second arg as the file name
 " If doMove it moves the current file instead of saving a new file
-function! DateSaveFunc(bang, doMove, ...)
+function! DateSaveFunc(bang, doMove, ...) abort
   echo a:doMove
   if a:0 == 0
     let l:thisPath = expand('%:h')
@@ -535,7 +532,7 @@ endfunction
 command! -nargs=* -bang -complete=file DateSave :call DateSaveFunc(<q-bang>, 0, <f-args>)
 command! -nargs=* -bang -complete=file DateMove :call DateSaveFunc(<q-bang>, 1, <f-args>)
 
-function! ViewTexCharList()
+function! ViewTexCharList() abort
   vnew
   edit $VIMRUNTIME/syntax/tex.vim
   silent! vertical resize 40
@@ -620,7 +617,7 @@ nnoremap ` '
 " C-o, C-i for current buffer {{{
 " https://stackoverflow.com/questions/7066456/vim-how-to-prevent-jumps-out-of-current-buffer
 " Only jumps around the current buffer.
-function! JumpInFile(back, forw)
+function! JumpInFile(back, forw) abort
   let [n, i] = [bufnr('%'), 1]
   let p = [n] + getpos('.')[1:]
   sil! exe 'norm!1' . a:forw

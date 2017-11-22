@@ -19,7 +19,7 @@ let $MYVIMRCPLUGIN=expand('<sfile>')
 
 " Check whether there is an executable with a given name
 " If we are using standalone plugins we automatically return false
-function! s:has_exec(prog_name)
+function! s:has_exec(prog_name) abort
   return empty($STANDALONE_VIM_PLUGINS) && executable(a:prog_name)
 endfunction
 
@@ -84,7 +84,7 @@ if empty(glob(expand(g:vimDirectory . '/autoload/plug.vim')))
       silent exec '!pip3 install neovim'
     endif
   endif
-  function! InstallMyPlugs()
+  function! InstallMyPlugs() abort
     PlugInstall
     if has('nvim')
       UpdateRemotePlugins
@@ -119,7 +119,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'sheerun/vim-polyglot'
 Plug 'Konfekt/FastFold'
 " Go: {{{
-function! InstallGoBins(info)
+function! InstallGoBins(info) abort
   if a:info.status == 'installed'
     GoInstallBinaries
   elseif a:info.status == 'updated'
@@ -399,7 +399,7 @@ call plug#end()
 
 " Vimballs: {{{
 " Installs all vimballs in the vimball directory
-function! InstallVimballs()
+function! InstallVimballs() abort
   " For each file in the vimball diretcory...
   for f in split(glob(expand(g:vimDirectory . '/vimball/') . "*"))
     " Open the file in a new buffer
@@ -736,25 +736,25 @@ if s:has_exec('git')
   nmap <Leader>gp <Plug>GitGutterPreviewHunk
   let g:gitgutter_eager = 0
 
-  " Disable some things if the file is very large.
-  let g:LargeFile = 1024 * 1024 * 1
-  autocmd BufNew * let b:gitGutEnAu = 0
-  function! LargeFileGitgutter()
-    let f=expand("<afile>")
-    if getfsize(f) > g:LargeFile
-      let g:gitgutter_enabled = 0
-      let g:gitgutter_realtime = 0
-      if b:gitGutEnAu == 0
-        autocmd BufWritePost <buffer> :GitGutterEnable
-      endif
-      let b:gitGutEnAu = 1
-    endif
-  endfunction
-  augroup LargeFile
-    autocmd!
-    " Gitgutter slows vim to a halt if the file is to big, so turn it off in those cases.
-    autocmd BufReadPre * call LargeFileGitgutter()
-  augroup END
+  " " Disable some things if the file is very large.
+  " let g:LargeFile = 1024 * 1024 * 1
+  " autocmd BufNew * let b:gitGutEnAu = 0
+  " function! LargeFileGitgutter() abort
+  "   let f=expand("<afile>")
+  "   if getfsize(f) > g:LargeFile
+  "     let g:gitgutter_enabled = 0
+  "     let g:gitgutter_realtime = 0
+  "     if b:gitGutEnAu == 0
+  "       autocmd BufWritePost <buffer> :GitGutterEnable
+  "     endif
+  "     let b:gitGutEnAu = 1
+  "   endif
+  " endfunction
+  " augroup LargeFile
+  "   autocmd!
+  "   " Gitgutter slows vim to a halt if the file is to big, so turn it off in those cases.
+  "   autocmd BufReadPre * call LargeFileGitgutter()
+  " augroup END
 endif
 " }}}
 
@@ -952,10 +952,10 @@ omap iX <Plug>(textobj-comment-big-i)
 " Using vim-operator-user (With NERDCommenter)
 " http://relaxedcolumn.blog8.fc2.com/blog-entry-154.html
 " Get SID prefix of vimrc (see :h <SID>)
-" function! s:SID_PREFIX()
+" function! s:SID_PREFIX() abort
 "     return matchstr(expand('<sfile>'), '<SNR>\d\+_')
 " endfunction
-"function! s:setCommentOperator(key, name)
+"function! s:setCommentOperator(key, name) abort
     "call operator#user#define(
     "\   'comment-' . a:name,
     "\   s:SID_PREFIX() . 'doCommentCommand',
@@ -963,11 +963,11 @@ omap iX <Plug>(textobj-comment-big-i)
     "execute 'map' a:key '<Plug>(operator-comment-' . a:name . ')'
 "endfunction
 
-"function! s:setCommentCommand(command)
+"function! s:setCommentCommand(command) abort
     "let s:comment_command = a:command
 "endfunction
 
-"function! s:doCommentCommand(motion_wiseness)
+"function! s:doCommentCommand(motion_wiseness) abort
     "let v = operator#user#visual_command_from_wise_name(a:motion_wiseness)
     "execute 'normal! `[' . v . "`]\<Esc>"
     "echo s:comment_command
@@ -993,7 +993,7 @@ if empty($SIMPLE_VIM_PLUGINS)
     imap <silent><CR> <C-r>=<SID>my_cr_function()<CR>
 
     " Close the completion popup if it is visible. If it is not, press Enter.
-    function! s:my_cr_function()
+    function! s:my_cr_function() abort
       let cr_str = pumvisible() ? "" : "\<CR>"
       return deoplete#close_popup() . cr_str
       " return (pumvisible() ? "\<C-y>" : "" ) . "\<Plug>AutoPairsReturn"
@@ -1003,7 +1003,7 @@ if empty($SIMPLE_VIM_PLUGINS)
   else
     imap <silent><CR> <C-r>=<SID>my_cr_function()<CR>
 
-    function! s:my_cr_function()
+    function! s:my_cr_function() abort
       let cr_str = pumvisible() ? "" : "\<CR>"
       return neocomplete#close_popup() . cr_str
     endfunction
