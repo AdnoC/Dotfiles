@@ -1,15 +1,14 @@
 " Vim preferneces file
-" vim:foldmethod=marker
 
 
-" Initial {{{
+" Initial {
 " Remap leader. Needs to be done before any mappings involving the leader.
 nnoremap <SPACE> <Nop>
 onoremap <SPACE> <Nop>
 let mapleader="\<Space>"
 
 
-" Platform specific directories {{{
+" Platform specific directories {
 " Vim looks for plugins in vimfiles instead of .vim in Windows
 if has('gui_win32')
   let g:vimDirectory=expand("$HOME/vimfiles")
@@ -24,7 +23,7 @@ else
 endif
 let g:vimDirectoryPart=expand(g:vimDirectory . "/")
 let g:vimDirectory=g:vimDirectory
-" }}}
+" }
 
 let g:vimrcDirectory=expand(expand("<sfile>:p:h") . "/")
 
@@ -32,11 +31,11 @@ let g:USE_PLUGINS=0
 if empty($NO_VIM_PLUGINS) && filereadable(g:vimrcDirectory . ".vimrc_plugin")
   exec "so " . g:vimrcDirectory . ".vimrc_plugin"
 endif
-" }}}
+" }
 
-" Filetypes Specific Preferences {{{
+" Filetypes Specific Preferences {
 
-" Set filetype for extension {{{
+" Set filetype for extension {
 " How to set filetypes: (an example of setting one as ruby)
 " au BufRead,BufNewFile *.rpdf       set ft=ruby
 augroup UserFileTypeDefs
@@ -46,9 +45,9 @@ augroup UserFileTypeDefs
   autocmd BufRead,BufFilePre,BufNewFile *.inc set filetype=php
   autocmd BufRead,BufFilePre,BufNewFile *.module set filetype=php
 augroup END
-" }}}
+" }
 
-" Help (Vim) {{{
+" Help (Vim) {
 augroup HelpSettings
   autocmd!
   " Press Enter to follow a help tag
@@ -59,9 +58,9 @@ augroup HelpSettings
   autocmd FileType help nnoremap <buffer>q :q<CR>
   autocmd FileType help setlocal nonumber
 augroup END
-" }}}
+" }
 
-" Fzf (nvim integration) {{{
+" Fzf (nvim integration) {
 if has('nvim')
   augroup FZFNvim
     autocmd!
@@ -69,16 +68,16 @@ if has('nvim')
     autocmd TermOpen */*fzf* tnoremap <buffer><c-j> <DOWN>
   augroup END
 endif
-" }}}
+" }
 
-" Rust {{{
+" Rust {
 augroup RustDoc
   autocmd!
   autocmd FileType rustdoc nnoremap <buffer>q :bd<CR>
 augroup END
-" }}}
+" }
 
-" Java {{{
+" Java {
 if executable('ant')
   augroup JavaMakeSettings
     autocmd!
@@ -87,9 +86,9 @@ if executable('ant')
     autocmd FileType java setlocal shellpipe=2>&1\ \|\ tee
   augroup END
 endif
-" }}}
+" }
 
-" Latex {{{
+" Latex {
 augroup LatexSettings
   autocmd!
   autocmd FileType plaintex set ft=tex | syntax enable
@@ -102,9 +101,9 @@ augroup LatexSettings
 
   autocmd FileType tex set conceallevel=2
 augroup END
-" }}}
+" }
 
-" Pandoc {{{
+" Pandoc {
 " Workaround for lack of timer_create in WSL
 if !empty($IN_WSL)
   let s:pandocCmd="pandoc\\ +RTS\\ -V0\\ -RTS"
@@ -148,9 +147,9 @@ augroup PandocSettings
   autocmd FileType pandoc setlocal formatoptions-=r
   autocmd FileType pandoc setlocal formatoptions-=o
 augroup END
-" }}}
+" }
 
-" Msc {{{
+" Msc {
 
 augroup MscFileTypeSettings
   autocmd!
@@ -165,14 +164,14 @@ augroup MscFileTypeSettings
 
   autocmd BufEnter *.js setlocal foldmethod=indent
 augroup END
-" }}}
-" }}}
+" }
+" }
 
-" Meta {{{
-" Escape Aliases {{{
+" Meta {
+" Escape Aliases {
 inoremap kj <Esc>
 vnoremap kj <Esc>
-" }}}
+" }
 
 noremap <leader>tn :tabnew<CR>
 noremap <leader>tc :tabclose<CR>
@@ -183,7 +182,7 @@ set pastetoggle=<F11>
 " Change vim pwd to dir of file to easily open other files in dir
 nnoremap <leader>cd :cd %:p:h<CR>
 
-" Wildmenu {{{
+" Wildmenu {
 " Turn on wild menu (Allow tab use with the command line)
 set wildmenu
 " Settings for wildmenu (:h wildmenu)
@@ -194,10 +193,18 @@ set wildignore+=*.o,*.out,*.class,.git,tags
 set wildignore+=*.zip,*.tar.gz
 " Disable for temp files
 set wildignore+=*.swp,*~
-" }}}
+" }
+
+" Allow the use of `vim: settings` to set for individual files.
+" For some reason defaults to `off` on standard vim
+set modeline
 
 " Don't redraw while executing macros (good performance config)
 set lazyredraw
+
+" Set where new splits are put
+set splitright
+set splitbelow
 
 " Return to last edit position when opening files
 autocmd BufReadPost *
@@ -221,7 +228,7 @@ if &diff
   nmap <leader>m :diffget LO<CR>
 endif
 
-"""" Meta files (backup, swap) {{{
+"""" Meta files (backup, swap) {
 " Create backup, swap, and undo  folders if they do not exist
 " Centralize backups, swapfiles and undo history
  if ! isdirectory(g:vimDirectoryPart . 'backups')
@@ -240,18 +247,18 @@ if has('persistent_undo')
 endif
 exec "set backupdir=" . g:vimDirectoryPart . "backups"
 exec "set directory=" . g:vimDirectoryPart . "swaps"
-" }}}
+" }
 
 " Use utf-8 encoding. Needs to be set before listchars on some systems.
 set encoding=utf-8
-" }}}
+" }
 
-" Looks {{{
+" Looks {
 
 " Refresh busted syntax highlighting (this happens too often)
 map <F12> :syntax sync fromstart<CR>
 
-" Cursor {{{
+" Cursor {
 if has('win32unix') || !empty($IN_WSL) " Cygwin only
   let &t_ti.="\e[1 q"
   let &t_SI.="\e[5 q"
@@ -262,9 +269,9 @@ endif
 if has('nvim')
   set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 endif
-" }}}
+" }
 
-" Colors {{{
+" Colors {
 if empty($NO_VIM_GUICOLORS) && has("termguicolors") && !has('win32')
   set termguicolors
 endif
@@ -310,7 +317,7 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
       set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h12:cANSI
     endif
 endif
-" }}}
+" }
 
 " Always use absolute line numbers
 set number
@@ -320,7 +327,7 @@ if exists("&relativenumber")
   set relativenumber
 endif
 
-" Status line area stuff {{{
+" Status line area stuff {
 if ! empty($SIMPLE_VIM_PLUGINS) " If not using Airline
   " Show on status bar line & column number, relative % in file
   set ruler
@@ -334,7 +341,7 @@ set laststatus=2
 set report=0
 " Don't show "ins-completion-menu" messages (shown when auto-completing)
 set shortmess+=c
-" }}}
+" }
 
 " Don't beep on errors (like entering `:set xyz<CR>`)
 set visualbell
@@ -352,7 +359,7 @@ endif
 " Show matching brackets when text indicator is over them"
 set showmatch
 
-" Displaying Meta Things (line end, etc) {{{
+" Displaying Meta Things (line end, etc) {
 " Show hidden chars
 set list
 " Set hidden chars to show (Show tabs and trailing spaces)
@@ -363,7 +370,7 @@ if &encoding == "utf-8"
 else
   set listchars=eol:$,trail:-,tab:>-,extends:>,precedes:<,conceal:+
 endif
-" }}}
+" }
 
 " We are using a fairly fast terminal connection most times
 set ttyfast
@@ -378,12 +385,12 @@ if v:version >= 700
         \ unlet! b:winview |
         \ endif
 endif
-" }}}
+" }
 
-" Formatting {{{
+" Formatting {
 " Strips excess whitespace from file
 nnoremap <leader>w :%s/\s\+$//<CR>:let @/=''<CR>
-" Indentation {{{
+" Indentation {
 " Use smart indenting when starting a new line
 set autoindent
 " Number of spaces to use for auto-indent ('>>' or '<<)
@@ -403,7 +410,7 @@ set cinoptions+=:0
 set cinoptions+=Ls
 " Align new lines in open parenthesis with the first item in the parenthesis
 set cinoptions+=(0
-" }}}
+" }
 
 " The maximum width of a line of text. Lines that go longer will be broken
 " after a whitespace
@@ -414,22 +421,22 @@ set formatoptions=qrno
 " Set line ending preferences (CR LR stuff)
 set fileformats=unix,dos,mac
 
-" Folding {{{
+" Folding {
 " For highly nested languages, consider setting `foldcolumn`
 " Auto include folds based on indent. Syntax-based folds can slow down opening large files.
 set foldmethod=indent
 " Open files with all folds open by default
 set foldlevel=99
-" }}}
+" }
 
 " Reselect visual block after indent/outdent
 vnoremap < <gv
 vnoremap > >gv
 " Re-hardwrap paragraph
 nnoremap <leader>q gqip
-" }}}
+" }
 
-" Searching {{{
+" Searching {
 " Clears  the search by pressing <leader> COMMA
 nnoremap <silent><leader>, :noh<CR>
 
@@ -445,9 +452,9 @@ set hlsearch    " Highlight search matches
 if exists('&inccommand')
   set inccommand=split
 endif
-" }}}
+" }
 
-" Msc. {{{
+" Msc. {
 " Make Y behave like other capitals
 nnoremap Y y$
 
@@ -469,15 +476,15 @@ augroup END
 
 " Number of lines to use for the command line
 set cmdheight=2
-" Completion Options {{{
+" Completion Options {
 " Be smart about case when using autocomplete
 set infercase
 " Specify how keyword completion works
 set complete=.,t
 set completeopt=longest,menu
-" }}}
+" }
 
-" Functions {{{
+" Functions {
 " Displays a list of maps that include the leader
 function! ListLeaders() abort
   silent! redir @b
@@ -549,17 +556,17 @@ function! ViewTexCharList() abort
   silent! normal! zt
 endfunction
 command! -nargs=0 -buffer ViewTexCharList call ViewTexCharList()
-" }}}
-" }}}
+" }
+" }
 
-" Movement {{{
+" Movement {
 " Check out http://stackoverflow.com/questions/16082991/vim-switching-between-files-rapidly-using-vanilla-vim-no-plugins
 " Allows one to switch buffers without having to save or undo changes first.
 set hidden
 " The minimum number of line to keep above and below the cursor.
 set scrolloff=10
 
-" Paired Movements {{{
+" Paired Movements {
 " Make buffer tab navigation quicker
 nnoremap ]b :bnext<CR>
 nnoremap [b :bprev<CR>
@@ -575,9 +582,9 @@ nnoremap [l :lprevious<CR>
 " Go to next spot in quickfix
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprevious<CR>
-" }}}
+" }
 
-" Mouse {{{
+" Mouse {
 " Use a mouse mode that by default uses less mouse stuff
 set mouse=nicr
 " Turn off clicking so that we can use the mouse to scroll and nothing else
@@ -597,7 +604,7 @@ imap <RightMouse> <NOP>
 imap <2-RightMouse> <NOP>
 imap <3-RightMouse> <NOP>
 imap <4-RightMouse> <NOP>
-" }}}
+" }
 
 " Move to the beginning and end of lines easier
 "nnoremap H ^
@@ -614,7 +621,7 @@ vnoremap k gk
 nnoremap ' `
 nnoremap ` '
 
-" C-o, C-i for current buffer {{{
+" C-o, C-i for current buffer {
 " https://stackoverflow.com/questions/7066456/vim-how-to-prevent-jumps-out-of-current-buffer
 " Only jumps around the current buffer.
 function! JumpInFile(back, forw) abort
@@ -634,7 +641,7 @@ function! JumpInFile(back, forw) abort
 endfunction
 nnoremap <silent><leader><C-o> :call JumpInFile("\<C-i>", "\<C-o>")<CR>
 nnoremap <silent><leader><C-i> :call JumpInFile("\<C-o>", "\<C-i>")<CR>
-" }}}
+" }
 
 " Binds numpad home/end to move 1/2 page up/down.
 " When I sit back to think I like moving around the page with only one hand,
@@ -644,7 +651,7 @@ nnoremap <kEnd> <C-d>
 nnoremap <kHome> <C-u>
 
 
-" Hard Mode {{{
+" Hard Mode {
 " Turn off arrow keys, and give some friendly advice
 inoremap <Up> <C-o>:echom "Use k"<CR>
 inoremap <Down> <C-o>:echom "Use j"<CR>
@@ -654,7 +661,7 @@ map <Up> <Esc>:echom "Use k"<CR>
 map <Down> <Esc>:echom "Use j"<CR>
 map <Left> <Esc>:echom "Use h"<CR>
 map <Right> <Esc>:echom "Use l"<CR>
-" }}}
+" }
 
 " make window navigation easier.
 nnoremap <c-h> <c-w>h
@@ -669,7 +676,7 @@ if !empty($NO_VIM_PLUGINS)
 endif
 
 
-" Terminal mappings {{{
+" Terminal mappings {
 if has('nvim')
   if empty($TMUX)
     tnoremap <C-s> <C-\><C-n>
@@ -684,18 +691,18 @@ if has('nvim')
   tnoremap <C-k> <C-\><C-n><C-w>k
   tnoremap <C-l> <C-\><C-n><C-w>l
 endif
-" }}}
-" }}}
+" }
+" }
 
-" Load Local Prefs {{{
+" Load Local Prefs {
 let $MYVIMRCLOCAL=expand(g:vimDirectoryPart . ".vimrc.local")
 """" If there is a local vim configuration file, run it
 if filereadable(g:vimDirectoryPart . ".vimrc.local")
   exec "so " . g:vimDirectoryPart . ".vimrc.local"
 endif
-" }}}
+" }
 
-" Up For Removal {{{
+" Up For Removal {
 
 " What was broken with the default?
 " " Fix broken default mappings
@@ -708,4 +715,6 @@ endif
 "         "\ if &omnifunc == "" | setl omnifunc=syntaxcomplete#Complete | endif
 " "endif
 
-" }}}
+" }
+
+" vim: foldmethod=marker foldmarker={,}
