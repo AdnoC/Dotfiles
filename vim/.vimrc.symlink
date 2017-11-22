@@ -24,9 +24,9 @@ else
 endif
 let g:vimDirectoryPart=expand(g:vimDirectory . "/")
 let g:vimDirectory=g:vimDirectory
+" }}}
 
 let g:vimrcDirectory=expand(expand("<sfile>:p:h") . "/")
-" }}}
 
 let g:USE_PLUGINS=0
 if empty($NO_VIM_PLUGINS) && filereadable(g:vimrcDirectory . ".vimrc_plugin")
