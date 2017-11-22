@@ -94,6 +94,8 @@ pathaddFront /usr/local/sbin
 pathaddFront /usr/local/bin
 pathaddFront ~/bin
 
+pathadd ~/.cargo/bin
+
 export GOPATH="$HOME/go"
 pathadd "$GOPATH/bin"
 
