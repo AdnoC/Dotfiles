@@ -1,6 +1,5 @@
-" vim:foldmethod=marker
-
 " Vim preferneces file
+" vim:foldmethod=marker
 
 
 " Initial {{{
@@ -151,56 +150,56 @@ augroup END
 " }}}
 
 " Meta {{{
-" Use Control-a to move to normal mode
+" Escape Aliases {{{
 inoremap kj <Esc>
-" Allow the use of a familiar key combination to exit visual mode
 vnoremap kj <Esc>
+" }}}
+
 " Toggle paste mode.
 set pastetoggle=<F11>
-" Makes the switch to paste mode immediately shown
-map <F11> :set invpaste paste?<CR>
+
 " Change vim pwd to dir of file to easily open other files in dir
 nnoremap <leader>cd :cd %:p:h<CR>
-" Fix broken default mappings
-nmap dd d_
-" We aren't going to have any vim variables at the beginning or end of files
-set modelines=1
-set modeline
+
+" Wildmenu {{{
 " Turn on wild menu (Allow tab use with the command line)
 set wildmenu
 " Settings for wildmenu (:h wildmenu)
 set wildmode=list:longest,list:full
-" Get rid of the help key
-inoremap <F1> <Nop>
-nnoremap <F1> <Nop>
-vnoremap <F1> <Nop>
+" Disable for VCS and output files
+set wildignore+=*.o,*.out,*.class,.git,tags
+" Disable for archives
+set wildignore+=*.zip,*.tar.gz
+" Disable for temp files
+set wildignore+=*.swp,*~
+" }}}
 
 " Don't redraw while executing macros (good performance config)
 set lazyredraw
 
-" Use generic omnicompletion if something more specific isn't already set
-"if has("autocmd") && exists("+omnifunc")
-    "au Filetype *
-        "\ if &omnifunc == "" | setl omnifunc=syntaxcomplete#Complete | endif
-"endif
-
-" auto-save on focus loss
-" au FocusLost * :wa
-" return to last edit position when opening files (you want this!)
+" Return to last edit position when opening files
 autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
      \   exe "normal! g`\"" |
      \ endif
-" Open .vimrc
-nmap <leader>ev <c-w><c-s><c-l>:e $MYVIMRC<CR>|:exec "nnoremap <buffer>q :bd\<CR\>"<CR>
-" Open a scratch buffer
-nmap <leader>cs :new|:set buftype=nofile<CR>|:setlocal noswapfile<CR>|:exec "nnoremap <buffer>q :bd\<CR\>"<CR>|:exe "resize " . (winheight(0) * 2 * 1/6)<CR>
+
+function! OpenScratchBuffer()
+  new
+  setlocal buftype=nofile
+  setlocal noswapfile
+  exec "nnoremap <buffer>q :bd\<CR\>"
+  exec "resize " . (winheight(0) * 2 * 1/6)
+endfunction
+
 " Resize the current buffer
 nnoremap <leader>rs :exe "resize " . (winheight(0) * 2 * 5/6)<CR>
-  "silent! set buftype=nofile
-  "silent! set bufhidden=hide
-  "silent! setlocal noswapfile
-"""" Meta files
+
+if &diff
+  nmap <leader>. :diffget RE<CR>
+  nmap <leader>m :diffget LO<CR>
+endif
+
+"""" Meta files (backup, swap) {{{
 " Create backup, swap, and undo  folders if they do not exist
 " Centralize backups, swapfiles and undo history
  if ! isdirectory(g:vimDirectoryPart . 'backups')
@@ -219,73 +218,31 @@ if has('persistent_undo')
 endif
 exec "set backupdir=" . g:vimDirectoryPart . "backups"
 exec "set directory=" . g:vimDirectoryPart . "swaps"
+" }}}
 
-"if has('gui_win32')
-"  source $VIMRUNTIME/mswin.vim
-"endif
-"
-" Was in default gVim vimrc
-if has('gui') && has('vim_starting')
-  set diffexpr=MyDiff()
-  function! MyDiff()
-    let opt = '-a --binary '
-    if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-    if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-    let arg1 = v:fname_in
-    if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-    let arg2 = v:fname_new
-    if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-    let arg3 = v:fname_out
-    if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-    let eq = ''
-    if $VIMRUNTIME =~ ' '
-      if &sh =~ '\<cmd'
-        let cmd = '""' . $VIMRUNTIME . '\diff"'
-        let eq = '"'
-      else
-        let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-      endif
-    else
-      let cmd = $VIMRUNTIME . '\diff'
-    endif
-    silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
-  endfunction
-
-" Get the args that Vim was opened with
-  redir @a
-  silent args
-  redir END
-  " If we are running the GUI and we didn't open a specific file, move to ~ so that
-  " we aren't in the folder where Vim was installed to
-  if has('gui') && @a == ''
-    cd ~
-  endif
-endif
+" Use utf-8 encoding. Needs to be set before listchars on some systems.
+set encoding=utf-8
 " }}}
 
 " Looks {{{
-"""" Color Scheme
-" If using vimdiff, use a colorscheme that is actually readable.
-if &diff
-  colorscheme blue
-  nmap <leader>. :diffget RE<CR>
-  nmap <leader>m :diffget LO<CR>
-endif
 
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-if has('win32unix') || !empty($IN_WSL)
+" Refresh busted syntax highlighting (this happens too often)
+map <F12> :syntax sync fromstart<CR>
+
+" Cursor {{{
+if has('win32unix') || !empty($IN_WSL) " Cygwin only
   let &t_ti.="\e[1 q"
   let &t_SI.="\e[5 q"
   let &t_EI.="\e[1 q"
   let &t_te.="\e[0 q"
 endif
-" Refresh busted syntax highlighting (this happens too often)
-map <F12> :syntax sync fromstart<cr>
 
 if has('nvim')
   set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 endif
+" }}}
 
+" Colors {{{
 if empty($NO_VIM_GUICOLORS) && has("termguicolors") && !has('win32')
   set termguicolors
 endif
@@ -306,7 +263,11 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
       set background=dark
     endif
 
-    if !g:USE_PLUGINS
+    " If using vimdiff, use a colorscheme that is actually readable.
+    if &diff
+      colorscheme blue
+    " Otherwise pick the best for the situation
+    elseif !g:USE_PLUGINS
       silent! colorscheme desert
     elseif has('win32') && !has('gui_running')
       silent! colorscheme elflord
@@ -317,11 +278,8 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
       silent! colorscheme solarized
     endif
 
-    if has("gui_running")
-      set guioptions-=T
-    endif
-
     " If we are using a gui set the font in the proper format for that gui
+    " nvim-qt uses its own configuration file
     if has("gui_gtk2")
       set guifont= DejaVu\ Sans\ Mono\ for\ Powerline\ 12
     elseif has("gui_macvim")
@@ -330,46 +288,49 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
       set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h12:cANSI
     endif
 endif
-
+" }}}
 
 " Always use absolute line numbers
 set number
-
 " Use relative line numbers if we can
 if exists("&relativenumber")
 "   " This can cause lag (like when there is no v-sync) when scrolling.
   set relativenumber
 endif
 
-" Show on status bar line & column number, relative % in file
-set ruler
-" Don't display incomplete commands
-set noshowcmd
-" Shut the fuck up (Screen flashes instead of making a beep)
-set visualbell
-" Highlight current line (Horizontal underline)
-" This caused lag (like when there is no v-sync) when scrolling.
-" set cursorline
-" No need to show the mode, as airline will show it for us
-set noshowmode
-" Don't show "ins-completion-menu" messages (shown when auto-completing)
-set shortmess+=c
+" Status line area stuff {{{
+if ! empty($SIMPLE_VIM_PLUGINS) " If not using Airline
+  " Show on status bar line & column number, relative % in file
+  set ruler
+  " No need to show the mode, as airline will show it for us
+  set noshowmode
+endif
 " Always show the status line (I use airline, so I want to see it)
 set laststatus=2
-" Wrap lines of text that are too long around to the next line
-set wrap
+"
+" Show the number of changes made when doing substitutions
+set report=0
+" Don't show "ins-completion-menu" messages (shown when auto-completing)
+set shortmess+=c
+" }}}
+
+" Don't beep on errors (like entering `:set xyz<CR>`)
+set visualbell
+
+" highlight current line and column
+" These can cause lag (like when there is no v-sync) when scrolling.
+set cursorline
+set cursorcolumn
+
 " Show column at x chars so that there is no lines to long
 if exists('+colorcolumn')
   set colorcolumn=80
 endif
-" Show the number of changes made when doing substitutions
-set report=0
+
 " Show matching brackets when text indicator is over them"
 set showmatch
-" How long in 1/10s of a second to show the match
-set matchtime=5
-" Use utf-8 encoding. Needs to be set before listchars on some systems.
-set encoding=utf-8
+
+" Displaying Meta Things (line end, etc) {{{
 " Show hidden chars
 set list
 " Set hidden chars to show (Show tabs and trailing spaces)
@@ -379,13 +340,20 @@ if &encoding == "utf-8"
 else
   set listchars=eol:$,trail:-,tab:>-,extends:>,precedes:<,conceal:+
 endif
+" }}}
 
 " We are using a fairly fast terminal connection most times
 set ttyfast
+
 " When switching buffers, preserve window view.(Vim tip 1375)
 if v:version >= 700
-  au BufLeave * if !&diff | let b:winview = winsaveview() | endif
-  au BufEnter * if exists('b:winview') && !&diff | call winrestview(b:winview) | unlet! b:winview | endif
+  au BufLeave * if !&diff |
+        \ let b:winview = winsaveview() |
+        \ endif
+  au BufEnter * if exists('b:winview') && !&diff |
+        \ call winrestview(b:winview) |
+        \ unlet! b:winview |
+        \ endif
 endif
 " }}}
 
@@ -715,4 +683,19 @@ let $MYVIMRCLOCAL=expand(g:vimDirectoryPart . ".vimrc.local")
 if filereadable(g:vimDirectoryPart . ".vimrc.local")
   exec "so " . g:vimDirectoryPart . ".vimrc.local"
 endif
+" }}}
+
+" Up For Removal {{{
+
+" What was broken with the default?
+" " Fix broken default mappings
+" nmap dd d_
+
+" Was already commented out
+" " Use generic omnicompletion if something more specific isn't already set
+" "if has("autocmd") && exists("+omnifunc")
+"     "au Filetype *
+"         "\ if &omnifunc == "" | setl omnifunc=syntaxcomplete#Complete | endif
+" "endif
+
 " }}}
