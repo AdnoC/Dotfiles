@@ -70,6 +70,11 @@ pathaddFront() {
   unset tmpvar
 }
 
+if [ -n "$IN_WSL" ]; then
+  # Strip Windows path from PATH
+  PATH=$(/usr/bin/printenv PATH | \
+    /usr/bin/perl -ne 'print join(":", grep { !/\/mnt\/[a-z]/ } split(/:/));')
+fi
 if [[ "$OSTYPE" == 'cygwin' ]]; then
 # Add to the path: Java, RabbitMQ, MongoDB, Ant, java3d libraries
   pathadd "$JAVA_HOME"/bin
