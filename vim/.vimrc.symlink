@@ -436,10 +436,7 @@ nnoremap <silent><leader>, :noh<CR>
 set ignorecase             " ignore case when searching
 set smartcase
 " Use sane regexes
-nnoremap / /\v
-vnoremap / /\v
-nnoremap ? ?\v
-vnoremap ? ?\v
+set magic
 
 set incsearch   " Search incrementally
 set hlsearch    " Highlight search matches
