@@ -52,6 +52,29 @@ augroup UserFileTypeDefs
 augroup END
 " }}}
 
+" Help (Vim) {{{
+augroup HelpSettings
+  autocmd!
+  " Press Enter to follow a help tag
+  autocmd FileType help nnoremap <buffer><CR> <c-]>
+  " Press Backspace to go back to the location of the previous tag
+  autocmd FileType help nnoremap <buffer><BS> <c-T>
+  " Press q to exit the help
+  autocmd FileType help nnoremap <buffer>q :q<CR>
+  autocmd FileType help setlocal nonumber
+augroup END
+" }}}
+
+" Fzf (nvim integration) {{{
+if has('nvim')
+  augroup FZFNvim
+    autocmd!
+    autocmd TermOpen */*fzf* tnoremap <buffer><c-k> <UP>
+    autocmd TermOpen */*fzf* tnoremap <buffer><c-j> <DOWN>
+  augroup END
+endif
+" }}}
+
 " Rust {{{
 augroup RustDoc
   autocmd!
@@ -357,22 +380,19 @@ if v:version >= 700
 endif
 " }}}
 
-
 " Formatting {{{
 " Strips excess whitespace from file
 nnoremap <leader>w :%s/\s\+$//<CR>:let @/=''<CR>
-" Converts existing tabs to spaces
-nnoremap <leader>rt :retab<CR>
+" Indentation {{{
 " Use smart indenting when starting a new line
 set smartindent
 " Number of spaces to use for auto-indent ('>>' or '<<)
 set shiftwidth=2
-" Number of spaces a tab in a file counts for
-" shiftwidth spaces.
+" Number of spaces (chars, not <SPACE>) a tab in a file counts for
 set tabstop=2
 " Use an appropriate number of spaces instead of tabs when typing <Tab>
 set expandtab
-" At start of line, <Tab> inserts shiftwidth spaces, <Bs> deletes
+" At start of line, <Tab> inserts shiftwidth spaces, <Bs> deletes indentation
 set smarttab
 " Align indentation in case block with the label istelf instead of after
 " the label.
@@ -383,23 +403,25 @@ set cinoptions+=:0
 set cinoptions+=Ls
 " Align new lines in open parenthesis with the first item in the parenthesis
 set cinoptions+=(0
+" }}}
 
 " The maximum width of a line of text. Lines that go longer will be broken
 " after a whitespace
 set textwidth=100
+
 " Sets how vim formats text (see :h fo-table)
 set formatoptions=qrno
 " Set line ending preferences (CR LR stuff)
 set fileformats=unix,dos,mac
-" Creates a gutter on the left side ofthe screen showing fold info
-" By default do not show the gutter
-autocmd FileType * set foldcolumn=0
-" Show the gutter for only specified filetypes
-autocmd FileType javascript setlocal foldcolumn=6
+
+" Folding {{{
+" For highly nested languages, consider setting `foldcolumn`
 " Auto include folds based on indent. Syntax-based folds can slow down opening large files.
 set foldmethod=indent
 " Open files with all folds open by default
 set foldlevel=99
+" }}}
+
 " Reselect visual block after indent/outdent
 vnoremap < <gv
 vnoremap > >gv
@@ -407,10 +429,10 @@ vnoremap > >gv
 nnoremap <leader>q gqip
 " }}}
 
-
 " Searching {{{
 " Clears  the search by pressing <leader> COMMA
 nnoremap <silent><leader>, :noh<CR>
+
 set ignorecase             " ignore case when searching
 set smartcase
 " Use sane regexes
@@ -418,6 +440,7 @@ nnoremap / /\v
 vnoremap / /\v
 nnoremap ? ?\v
 vnoremap ? ?\v
+
 set incsearch   " Search incrementally
 set hlsearch    " Highlight search matches
 
@@ -427,36 +450,37 @@ if exists('&inccommand')
 endif
 " }}}
 
-
 " Msc. {{{
-" Remove the Windows ^M - when the encodings gets messed up
-noremap <Leader>^m mmHmt:%s/<C-V><CR>//ge<CR>'tzt'm
+" Make Y behave like other capitals
+nnoremap Y y$
+
+" Replace a word with yanked text
+nnoremap <leader>rp viw"0p
+
 " Look for tag files in paths relative to cwd, not the file being edited
 set cpoptions+=d
 " Allow backspacing over everything in insert mode (:h bs)
 set backspace=indent,eol,start
+
+" Remove the Windows ^M - when the encodings gets messed up
+noremap <Leader>^m mmHmt:%s/<C-V><CR>//ge<CR>'tzt'm
+
+augroup FileChangedAlert
+  " Helps if you have to use another editor on the same file
+  autocmd! FileChangedShell * echoerr "File has been changed outside of Vim."
+augroup END
+
+" Number of lines to use for the command line
+set cmdheight=2
+" Completion Options {{{
 " Be smart about case when using autocomplete
 set infercase
-" Helps if you have to use another editor on the same file
-au FileChangedShell * echoerr "File has been changed outside of Vim."
 " Specify how keyword completion works
 set complete=.,t
 set completeopt=longest,menu
-" Open new split windows to right and bottom, which feels more natural
-set splitbelow
-set splitright
-" Make Y behave like other capitals
-nnoremap Y y$
-" Replace a word with yanked text
-nnoremap <leader>rp viw"0p
-"""" Help
-" Press Enter to follow a help tag
-au filetype help nnoremap <buffer><CR> <c-]>
-" Press Backspace to go back to the location of the previous tag
-au filetype help nnoremap <buffer><BS> <c-T>
-" Press q to exit the help
-au filetype help nnoremap <buffer>q :q<CR>
-au filetype help set nonumber
+" }}}
+
+" Functions {{{
 " Displays a list of maps that include the leader
 function! ListLeaders()
   silent! redir @b
@@ -529,16 +553,34 @@ function! ViewTexCharList()
 endfunction
 command! -nargs=0 -buffer ViewTexCharList call ViewTexCharList()
 " }}}
+" }}}
 
 " Movement {{{
 " Check out http://stackoverflow.com/questions/16082991/vim-switching-between-files-rapidly-using-vanilla-vim-no-plugins
-" Number of lines to use for the command line
-set cmdheight=2
+" Allows one to switch buffers without having to save or undo changes first.
+set hidden
 " The minimum number of line to keep above and below the cursor.
 set scrolloff=10
-" Allow keys to move left or right to the prev/next line
-set whichwrap=b,s,h,l,<,>,[,]
 
+" Paired Movements {{{
+" Make buffer tab navigation quicker
+nnoremap ]b :bnext<CR>
+nnoremap [b :bprev<CR>
+nnoremap ]t :tabnext<CR>
+nnoremap [t :tabprev<CR>
+" switch to last used buffer
+nnoremap tt :b#<CR>
+
+" Go to next spot in location list
+nnoremap ]l :lnext<CR>
+nnoremap [l :lprevious<CR>
+
+" Go to next spot in quickfix
+nnoremap ]q :cnext<CR>
+nnoremap [q :cprevious<CR>
+" }}}
+
+" Mouse {{{
 " Use a mouse mode that by default uses less mouse stuff
 set mouse=nicr
 " Turn off clicking so that we can use the mouse to scroll and nothing else
@@ -558,6 +600,7 @@ imap <RightMouse> <NOP>
 imap <2-RightMouse> <NOP>
 imap <3-RightMouse> <NOP>
 imap <4-RightMouse> <NOP>
+" }}}
 
 " Move to the beginning and end of lines easier
 "nnoremap H ^
@@ -574,6 +617,8 @@ vnoremap k gk
 nnoremap ' `
 nnoremap ` '
 
+" C-o, C-i for current buffer {{{
+" https://stackoverflow.com/questions/7066456/vim-how-to-prevent-jumps-out-of-current-buffer
 " Only jumps around the current buffer.
 function! JumpInFile(back, forw)
   let [n, i] = [bufnr('%'), 1]
@@ -592,6 +637,7 @@ function! JumpInFile(back, forw)
 endfunction
 nnoremap <silent><leader><C-o> :call JumpInFile("\<C-i>", "\<C-o>")<CR>
 nnoremap <silent><leader><C-i> :call JumpInFile("\<C-o>", "\<C-i>")<CR>
+" }}}
 
 " Binds numpad home/end to move 1/2 page up/down.
 " When I sit back to think I like moving around the page with only one hand,
@@ -601,46 +647,17 @@ nnoremap <kEnd> <C-d>
 nnoremap <kHome> <C-u>
 
 
-" Get off my lawn (Turn off arrow keys, and give some friendly advice)
-" Note: May wish to remove nmap for up/down because the commands slightly bleed
-" over to insert mode for a time after the switch.
+" Hard Mode {{{
+" Turn off arrow keys, and give some friendly advice
+inoremap <Up> <C-o>:echom "Use k"<CR>
+inoremap <Down> <C-o>:echom "Use j"<CR>
 inoremap <Left> <C-o>:echom "Use h"<CR>
 inoremap <Right> <C-o>:echom "Use l"<CR>
-vnoremap <Left> <Esc>:echom "Use h"<CR>
-vnoremap <Right> <Esc>:echom "Use l"<CR>
-vnoremap <Up> <Esc>:echom "Use k"<CR>
-vnoremap <Down> <Esc>:echom "Use j"<CR>
-nnoremap <Left> :echom "Use h"<CR>
-nnoremap <Right> :echom "Use l"<CR>
-nnoremap <Up> :echom "Use k"<CR>
-nnoremap <Down> :echom "Use j"<CR>
-
-" Turn off up and down arrows completely in insert mode, as the mouse scroll
-" is interpreted as scroll and gets past any other mapping and goes back to
-" default behavior. Also preceding command with <Esc> isn't ideal.
-inoremap <Up> <Nop>
-inoremap <Down> <Nop>
-nnoremap <Up> <Nop>
-nnoremap <Down> <Nop>
-
-" Allows one to switch buffers without having to save or undo changes first.
-set hidden
-
-" Make buffer tab navigation quicker
-nnoremap ]b :bnext<CR>
-nnoremap [b :bprev<CR>
-nnoremap ]t :tabnext<CR>
-nnoremap [t :tabprev<CR>
-" switch to last used buffer
-nnoremap tt :b#<CR>
-
-" Go to next spot in location list
-nnoremap ]l :lnext<CR>
-nnoremap [l :lprevious<CR>
-
-" Go to next spot in quickfix
-nnoremap ]q :cnext<CR>
-nnoremap [q :cprevious<CR>
+map <Up> <Esc>:echom "Use k"<CR>
+map <Down> <Esc>:echom "Use j"<CR>
+map <Left> <Esc>:echom "Use h"<CR>
+map <Right> <Esc>:echom "Use l"<CR>
+" }}}
 
 " make window navigation easier.
 nnoremap <c-h> <c-w>h
@@ -648,19 +665,14 @@ nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
 
+" Basic jump-to-buffer for when we don't have Fzf
 nnoremap <F5> :ls<CR>:buffer<SPACE>
 if !empty($NO_VIM_PLUGINS)
   nnoremap <leader>b :ls<CR>:buffer<SPACE>
 endif
 
-if has('nvim')
-  augroup FZFNvim
-    autocmd!
-    autocmd TermOpen */*fzf* tnoremap <buffer><c-k> <UP>
-    autocmd TermOpen */*fzf* tnoremap <buffer><c-j> <DOWN>
-  augroup END
-endif
 
+" Terminal mappings {{{
 if has('nvim')
   if empty($TMUX)
     tnoremap <C-s> <C-\><C-n>
@@ -675,6 +687,7 @@ if has('nvim')
   tnoremap <C-k> <C-\><C-n><C-w>k
   tnoremap <C-l> <C-\><C-n><C-w>l
 endif
+" }}}
 " }}}
 
 " Load Local Prefs {{{
