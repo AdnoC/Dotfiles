@@ -98,24 +98,26 @@ call plug#begin(g:vimDirectoryPart . 'bundle')
 "Add your plugins here
 " Games: {
 Plug 'vim-scripts/TeTrIs.vim'
-Plug 'johngrib/vim-game-code-break'
+Plug 'johngrib/vim-game-code-break', { 'on': 'VimGameCodeBreak' }
 " }
 " Git: {
 if s:has_exec('git')
   " Commands for using git nicely in Vim
   " NOTE: fugitive makes vim very laggy sometimes
   Plug 'tpope/vim-fugitive'
+  " Commit browser. Switch to original (junegunn/gv.vim) after it merges help PR
+  Plug 'sudavid4/gv.vim', { 'on': 'GV' }
   " Show git changes in gutter
   Plug 'airblade/vim-gitgutter'
 endif
 " }
 """ Auto Formatting:
 Plug 'jiangmiao/auto-pairs'
+Plug 'Konfekt/FastFold'
 " Syntax: {
 " FileType Specific: (syntax files) {
 " General language pack
 Plug 'sheerun/vim-polyglot'
-Plug 'Konfekt/FastFold'
 " Go: {
 function! InstallGoBins(info) abort
   if a:info.status == 'installed'
@@ -265,6 +267,8 @@ endif
 
 " }
 " Tools: {
+" Nice startup screen
+Plug 'mhinz/vim-startify'
 " Sources a .lvimrc file to allow for per-project configuration
 Plug 'embear/vim-localvimrc'
 " Shows all 256 x-term colors in a nice table
@@ -282,7 +286,7 @@ Plug 'qpkorr/vim-bufkill'
 Plug 'tomtom/tcomment_vim'
 " File Explorer Plugin
 Plug 'jeetsukumaran/vim-filebeagle'
-Plug 'mbbill/undotree'
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 " Fuzzy search for files, buffers, and recent files
 if empty($STANDALONE_VIM_PLUGINS) && empty($SIMPLE_VIM_PLUGINS)
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -333,10 +337,11 @@ else
   Plug 'bling/vim-bufferline'
 endif
 " Dims paragraphs besides the one you are working on
-Plug 'junegunn/limelight.vim'
+Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
 " Removes distractions
-Plug 'junegunn/goyo.vim'
-" Plug 'luochen1990/rainbow'
+Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
+" Adds distractions
+Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle' }
 " }
 " Movement: {
 Plug 'Lokaltog/vim-easymotion'
