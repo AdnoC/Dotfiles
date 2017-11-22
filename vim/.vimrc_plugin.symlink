@@ -24,12 +24,15 @@ function! s:has_exec(prog_name)
 endfunction
 
 
+" Plugin Alternatives {{{
+" Used in checking which of several alternatives is used
 let s:syntax_syntastic = 'syntastic'
 let s:syntax_neomake = 'neomake'
 let s:autocomplete_ycm = 'ycm'
 let s:autocomplete_neocomplete = 'neocomplete'
 let s:autocomplete_deoplete = 'deoplete'
 let s:autocomplete_supertab = 'supertab'
+" }}}
 
 """" Plugin Manager: (Vim-Plug)
 let VimPlugInitialized=1
@@ -115,6 +118,7 @@ Plug 'jiangmiao/auto-pairs'
 " General language pack
 Plug 'sheerun/vim-polyglot'
 Plug 'Konfekt/FastFold'
+" Go: {{{
 function! InstallGoBins(info)
   if a:info.status == 'installed'
     GoInstallBinaries
@@ -125,6 +129,8 @@ endfunction
 if s:has_exec('go') && empty($SIMPLE_VIM_PLUGINS)
   Plug 'fatih/vim-go', { 'do': function('InstallGoBins')}
 endif
+" }}}
+
 Plug 'rust-lang/rust.vim'
 " Some more concealchars for tex
 Plug 'KeitaNakamura/tex-conceal.vim'
@@ -141,7 +147,6 @@ Plug 'vim-scripts/csv.vim', {'for': 'csv'}
 Plug '2072/php-indenting-for-vim'
 " Adds syntax highlighting for some keywords in React. vim-polyglot already provides JSX syntax.
 Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
-" Auto-close some structures (i.e. adds 'endfunction' after you type 'function!' in VimL)
 
 " Helpers for creating comments
 Plug 'AdnoC/jcommenter.vim', { 'for': 'java'}
@@ -166,11 +171,10 @@ else
 endif
 " Set indent options based on what is used in the file
 " Plug 'tpope/vim-sleuth'
+" Auto-close some structures (i.e. adds 'endfunction' after
+" you type 'function!' in VimL)
 Plug 'tpope/vim-endwise'
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle'}
-if s:has_exec('ctags')
-  Plug 'ludovicchabant/vim-gutentags'
-endif
 
 if empty($SIMPLE_VIM_PLUGINS)
   Plug 'Shougo/neosnippet.vim'| Plug 'Shougo/neosnippet-snippets'
@@ -293,6 +297,10 @@ Plug 'tommcdo/vim-lion'
 
 Plug 'kana/vim-operator-user'
 Plug 'kana/vim-textobj-user'
+if s:has_exec('ctags')
+  " Auto-generate tag files
+  Plug 'ludovicchabant/vim-gutentags'
+endif
 if s:has_exec('cscope')
   Plug 'chazy/cscope_maps'
 endif
@@ -631,7 +639,6 @@ augroup END
 " Endwise:
 let g:endwise_no_mappings = 1
 
-
 " Vim_LocalVimrc:
 let g:localvimrc_persistent = 2
 
@@ -756,7 +763,6 @@ nnoremap <leader>gt :GutentagsUpdate<CR>
 let g:gutentags_ctags_exclude = ['node_modules']
 " }}}
 
-
 " Solarized: {{{
 let g:solarized_termcolors=256
 let g:solarized_termtrans=1
@@ -794,7 +800,6 @@ let g:indentLine_enabled=0
 " The default bind, just here so I remember
 nnoremap <leader>ig :IndentLinesToggle<CR>
 " }}}
-
 
 " Easy Motion: {{{
 " NOTE: omaps are used when using 'c' and 'd' operators
@@ -977,6 +982,10 @@ omap iX <Plug>(textobj-comment-big-i)
 
 
 " Chained Keybinds: {{{
+" Sometimes multiple plugins want to use the same key, or mapping them in
+" a certain order causes things act funny.
+" This section is for mapping those cases.
+
 " Enter: {{{
 " Deoplete:
 if empty($SIMPLE_VIM_PLUGINS)
