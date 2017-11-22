@@ -1,5 +1,10 @@
 " Vim preferneces file
 
+if !empty($NO_VIM_PLUGINS)
+  let $STANDALONE_VIM_PLUGINS=1
+  let $SIMPLE_VIM_PLUGINS=1
+endif
+
 
 " Initial {
 " Remap leader. Needs to be done before any mappings involving the leader.
@@ -671,7 +676,7 @@ nnoremap <c-l> <c-w>l
 
 " Basic jump-to-buffer for when we don't have Fzf
 nnoremap <F5> :ls<CR>:buffer<SPACE>
-if !empty($NO_VIM_PLUGINS)
+if !empty($STANDALONE_VIM_PLUGiNS)
   nnoremap <leader>b :ls<CR>:buffer<SPACE>
 endif
 
