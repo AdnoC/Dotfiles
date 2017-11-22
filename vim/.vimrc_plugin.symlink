@@ -1,3 +1,6 @@
+" Vim plugin configuration
+
+" vim:foldmethod=marker
 
 " A simpler plugin setup is available for environments where some things are not
 " available.
@@ -14,11 +17,6 @@ let g:USE_PLUGINS=1
 let $MYVIMRCPLUGIN=expand('<sfile>')
 
 
-" Get SID prefix of vimrc (see :h <SID>)
-function! s:SID_PREFIX()
-    return matchstr(expand('<sfile>'), '<SNR>\d\+_')
-endfunction
-
 " Check whether there is an executable with a given name
 " If we are using standalone plugins we automatically return false
 function! s:has_exec(prog_name)
@@ -32,12 +30,12 @@ let s:autocomplete_ycm = 'ycm'
 let s:autocomplete_neocomplete = 'neocomplete'
 let s:autocomplete_deoplete = 'deoplete'
 let s:autocomplete_supertab = 'supertab'
-""""""""""""""""""""""""""""""""""" Plugins """""""""""""""""""""""""""""""""""
+
 """" Plugin Manager: (Vim-Plug)
-let iCanHazVimPlug=1
-" Download the manager if it isn't yet.
+let VimPlugInitialized=1
+" Download plugin manager {{{
 if empty(glob(expand(g:vimDirectory . '/autoload/plug.vim')))
-  let iCanHazVimPlug=0
+  let VimPlugInitialized=0
   " I know that all these could be replaced with just the git one. But I don't want to delete them
   if executable("curl")
     silent exec '!curl -fLo ' . shellescape(expand(g:vimDirectory."/autoload/plug.vim")) .
@@ -91,24 +89,27 @@ if empty(glob(expand(g:vimDirectory . '/autoload/plug.vim')))
   endfunction
   autocmd VimEnter * call InstallMyPlugs()
 endif
+" }}}
 
-" Required:
+" Plugin Declarations: {{{
 call plug#begin(g:vimDirectoryPart . 'bundle')
 
 "Add your plugins here
-"" Games:
+" Games: {{{
 Plug 'vim-scripts/TeTrIs.vim'
 Plug 'johngrib/vim-game-code-break'
-""" Git:
+" }}}
+" Git: {{{
 " NOTE: fugitive makes vim very laggy sometimes
 " Commands for using git nicely in Vim
 if s:has_exec('git')
   Plug 'tpope/vim-fugitive'
   Plug 'airblade/vim-gitgutter'
 endif
+" }}}
 """ Auto Formatting:
 Plug 'jiangmiao/auto-pairs'
-""" Syntax:
+" Syntax: {{{
 Plug 'Konfekt/FastFold'
 function! InstallGoBins(info)
   if a:info.status == 'installed'
@@ -182,7 +183,7 @@ elseif (has('lua') || has('nvim'))
     elseif !empty($LIBCLANG_PATH)
       Plug 'Rip-Rip/clang_complete'
     endif
-  elseif iCanHazVimPlug == 0
+  elseif VimPlugInitialized == 0
     echo 'Cannot find clang, not installing clang completion'
   endif
 
@@ -192,7 +193,7 @@ elseif (has('lua') || has('nvim'))
     else
       Plug 'ternjs/tern_for_vim'
     endif
-  elseif iCanHazVimPlug == 0
+  elseif VimPlugInitialized == 0
     echo 'Cannot find tern, not installing javascript completion'
   endif
 
@@ -204,7 +205,7 @@ elseif (has('lua') || has('nvim'))
 
   if s:has_exec('gocode')
     Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go'}
-  elseif iCanHazVimPlug == 0
+  elseif VimPlugInitialized == 0
     echo 'Cannot find gocode, not installing go completion'
   endif
 
@@ -234,7 +235,7 @@ Plug 'Shougo/echodoc.vim'
 if empty($SIMPLE_VIM_PLUGINS)
   if s:has_exec('racer')
     Plug 'racer-rust/vim-racer'
-  elseif (iCanHazVimPlug == 0 && s:has_exec('cargo'))
+  elseif (VimPlugInitialized == 0 && s:has_exec('cargo'))
     silent exec '!cargo install racer'
   endif
 endif
@@ -253,7 +254,8 @@ Plug 'heavenshell/vim-jsdoc', { 'for': 'javascript'}
 Plug 'davetron5000/javax-xml-javadoc-vim', { 'for': 'java'}
 Plug 'davetron5000/javax-javadoc-vim', { 'for': 'java'}
 Plug 'davetron5000/java-javadoc-vim', { 'for': 'java'}
-""" Tools:
+" }}}
+" Tools: {{{
 " Sources a .lvimrc file to allow for per-project configuration
 Plug 'embear/vim-localvimrc'
 " Shows all 256 x-term colors in a nice table
@@ -287,7 +289,8 @@ Plug 'kana/vim-textobj-user'
 if s:has_exec('cscope')
   Plug 'chazy/cscope_maps'
 endif
-" Text Objects:
+" }}}
+" Text Objects: {{{
 " Allows for things like 'cs2a([' to change ((*)) to [(*)]
 Plug 'osyo-manga/vim-textobj-multiblock'
 " Allows for text objects to be between any specified char
@@ -300,7 +303,8 @@ Plug 'coderifous/textobj-word-column.vim'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-fold'
 Plug 'glts/vim-textobj-comment'
-""" Looks:
+" }}}
+" Looks: {{{
 " Colorschemes
 " A good solarized replacement. Has a grey background unless bash colors are overritten.
 Plug 'romainl/flattened'
@@ -320,7 +324,8 @@ Plug 'junegunn/limelight.vim'
 " Removes distractions
 Plug 'junegunn/goyo.vim'
 " Plug 'luochen1990/rainbow'
-""" Movement:
+" }}}
+" Movement: {{{
 Plug 'Lokaltog/vim-easymotion'
 " Plug 'wikitopian/hardmode'
 Plug 'rhysd/vim-operator-surround'
@@ -330,9 +335,10 @@ Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'
 " matchit breaks [] jumping. Only use it when 100% useful
 Plug 'k-takata/matchit.vim'
+" }}}
 
 
-""" Tagbar:
+" Tagbar: {{{
 " Ctags are a dependancy of tagbar
 if s:has_exec('ctags')
   Plug 'majutsushi/tagbar'
@@ -341,38 +347,42 @@ if s:has_exec('ctags')
     Plug 'vim-php/tagbar-phpctags.vim', { 'do': 'make'}
   endif
 else
-  if iCanHazVimPlug == 0
+  if VimPlugInitialized == 0
     echo 'Cannot find ctags. Not installing tagbar.'
   endif
 endif
+" }}}
 
-""" Tmux:
+" Tmux: {{{
 if s:has_exec('tmux')
   " Lets you use <C-hjkl> to move between both tmux and vim panes.
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'benmills/vimux'
   Plug 'edkolev/tmuxline.vim', { 'on': ['Tmuxline', 'TmuxlineSnapshot'] }
 else
-  if iCanHazVimPlug == 0
+  if VimPlugInitialized == 0
     echo 'Cannot find tmux. Not installing vimux or tmuxline'
   endif
 endif
-""" W3M:
+" }}}
+" W3M: {{{
 if s:has_exec('w3m')
   Plug 'yuratomo/w3m.vim'
-elseif iCanHazVimPlug == 0
+elseif VimPlugInitialized == 0
   echo 'Cannot find W3m. Not installing w3m.vim'
 endif
+" }}}
 
 call plug#end()
+" }}}
 
     "...All your other bundles...
-"if iCanHazVimPlug == 0
+"if VimPlugInitialized == 0
   "echo "Installing Plugins, please ignore key map error messages"
   "echo ""
 "endif
 
-"""" Vimballs:
+" Vimballs: {{{
 " Installs all vimballs in the vimball directory
 function! InstallVimballs()
   " For each file in the vimball diretcory...
@@ -385,15 +395,18 @@ function! InstallVimballs()
     bd
   endfor
 endfunction
+" }}}
 
 " If we are in a new installation and therefore are installing plugins...
-if iCanHazVimPlug == 0
+if VimPlugInitialized == 0
   echo "Intalling Vimballs"
   " Intall vimballs (UseVimball needs to be called after startup, therefore au)
   autocmd VimEnter * call InstallVimballs()
 endif
 
-"""" Neomake:
+" Plugin Settings: {{{
+
+" Neomake: {{{
 if g:syntax_plugin == s:syntax_neomake
 
   nnoremap <leader><ENTER> :Neomake<CR>
@@ -424,8 +437,9 @@ if g:syntax_plugin == s:syntax_neomake
           \ hi NeomakeErrorSign ctermfg=124
   augroup END
 endif
+" }}}
 
-"""" Syntastic:
+" Syntastic: {{{
 " Turn it on by default, so far no filetypes where it needs to be off.
 " let g:syntastic_mode_map = { 'mode': 'active',
 "   \ 'active_filetypes': [],
@@ -459,8 +473,9 @@ let g:syntastic_cpp_compiler_options = ' -std=c++14'
 let g:syntastic_java_javac_config_file_enabled = 1
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_javascript_jsxhint_exec = 'jsx-jshint-wrapper'
+" }}}
 
-"""" NeoSnippet:
+" NeoSnippet: {{{
 if empty($SIMPLE_VIM_PLUGINS)
   imap <expr><TAB>
    \ pumvisible() ? "\<C-n>" :
@@ -473,14 +488,16 @@ if empty($SIMPLE_VIM_PLUGINS)
   smap <C-k>     <Plug>(neosnippet_expand_or_jump)
   xmap <C-k>     <Plug>(neosnippet_expand_target)
 endif
+" }}}
 
-"""" General Completion:
+" General Completion: {{{
 function! s:completion_prev() abort
   return pumvisible() ? "\<C-p>" : "\<S-TAB>"
 endfunction
 imap <silent><S-TAB> <C-r>=<SID>completion_prev()<CR>
+" }}}
 
-"""" Deoplete:
+" Deoplete: {{{
 "" Run deoplete.nvim automatically
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
@@ -495,13 +512,15 @@ let g:deoplete#ignore_sources = {}
 " let g:deoplete#ignore_sources.javascript = ["flow", "omni", "ternjs"]
 let g:deoplete#ignore_sources.javascript = ["omni", "flow"]
 let g:deoplete#ignore_sources.go = ["buffer", "syntax"]
+" }}}
 
-"""" Neocomplete:
+" Neocomplete: {{{
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#auto_complete_start_length=1
 let g:neocomplete#enable_smart_case = 1
+" }}}
 
-"""" DeopleteGo:
+" DeopleteGo: {{{
 if g:autocomplete_plugin == s:autocomplete_deoplete
    augroup DeoGoMore
      autocmd!
@@ -512,12 +531,14 @@ let g:deoplete#sources#go#align_class = 1
 if has('win32')
   let g:deoplete#sources#go#gocode_binary = expand($GOPATH.'/bin/gocode.exe')
 endif
+" }}}
 
-"""" DeopleteClang:
+" DeopleteClang: {{{
 " let g:deoplete#sources#clang#libclang_path = $LIBCLANG_PATH
 " let g:deoplete#sources#clang#clang_header = $CLANG_INCLUDE_PATH
+" }}}
 
-"""" ClangComplete:
+" ClangComplete: {{{
 let s:clang_library_path = $LIBCLANG_PATH
 if ((!has('nvim') || !empty($CLANG_INCLUDE_PATH)) && !isdirectory(s:clang_library_path))
   let s:clang_library_path = fnamemodify(s:clang_library_path, ':h')
@@ -525,8 +546,9 @@ endif
 let g:clang_library_path = s:clang_library_path
 let g:clang2_placeholder_next = '<c-k>'
 let g:clang2_placeholder_prev = '<c-j>'
+" }}}
 
-"""" VimRacer:
+" VimRacer: {{{
 let g:racer_experimental_completer = 1
 if s:has_exec('racer') && empty($SIMPLE_VIM_PLUGINS)
   augroup RacerBinds
@@ -545,8 +567,9 @@ if s:has_exec('racer') && empty($SIMPLE_VIM_PLUGINS)
      augroup END
   endif
 endif
+" }}}
 
-"""" DeopleteTernjs:
+" DeopleteTernjs: {{{
 let g:deoplete#sources#ternjs#tern_bin = 'ternjs'
 let g:deoplete#sources#ternjs#filetypes = [
                 \ 'jsx',
@@ -555,8 +578,9 @@ let g:deoplete#sources#ternjs#filetypes = [
                 \ ]
 let g:deoplete#sources#ternjs#types = 1
 let g:deoplete#sources#ternjs#docs = 1
+" }}}
 
-""" TernForVim:
+" TernForVim: {{{
 let g:tern_show_signature_in_pum = 1
 let g:tern#filetypes = [
                 \ 'jsx',
@@ -568,8 +592,9 @@ if !exists('g:neocomplete#sources#omni#input_patterns')
 endif
 let g:neocomplete#sources#omni#input_patterns.javascript =
   \ '\h\w*\|[^. \t]\.\w*'
+" }}}
 
-"""" VimGo:
+" VimGo: {{{
 if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
 endif
@@ -581,11 +606,12 @@ if s:has_exec("goimports")
     let g:go_fmt_command = "goimports.exe"
   endif
 endif
+" }}}
 
-"""" Echodoc:
+" Echodoc:
 let g:echodoc_enable_at_startup = 1
 
-"""" AutoPairs:
+" AutoPairs: {{{
 let s:autoPairsMapCh=0
 let s:autoPairsMapBS=0
 augroup VimrcRustAutopairs
@@ -593,28 +619,30 @@ augroup VimrcRustAutopairs
   autocmd FileType rust let g:AutoPairs = {'(':')', '[':']', '{':'}',
         \ '"':'"', '`':'`'}
 augroup END
+" }}}
 
-"""" Endwise:
+" Endwise:
 let g:endwise_no_mappings = 1
 
 
-"""" Vim_LocalVimrc:
+" Vim_LocalVimrc:
 let g:localvimrc_persistent = 2
 
-"""" BufKill:
+" BufKill:
 let g:BufKillCreateMappings=0
 
-"""" Characterize:
+" Characterize:
 nmap gch <Plug>(characterize)
 
-"""" Goyo:
+" Goyo: {{{
 autocmd User GoyoEnter Limelight
 autocmd User GoyoLeave Limelight!
+" }}}
 
-"""" Limelight:
+" Limelight:
 let g:limelight_conceal_ctermfg = 'DarkGray'
 
-"""" Vim Airline:
+" Vim Airline: {{{
 if empty($SIMPLE_VIM_PLUGINS)
   if g:syntax_plugin == s:syntax_syntastic
     let g:airline#extensions#syntastic#enabled = 1
@@ -654,7 +682,7 @@ if empty($SIMPLE_VIM_PLUGINS)
   " Just show the list of files/buffers in section c
   let g:airline_section_c = "%f%m %<%{bufname('#') != bufname('%') ? '('. bufname('#') .')' : ''}"
   " No need for tagbar if we don't have ctags. Also don't call functions if the plugin isn't " installed.
-  if s:has_exec('ctags') && iCanHazVimPlug == 1
+  if s:has_exec('ctags') && VimPlugInitialized == 1
     " No need to show filetype in the status bar, the ctags section is enough
     " autocmd User AirlineAfterInit let g:airline_section_y = airline#section#create(['tagbar'])
     let g:airline_section_y = airline#section#create(['tagbar'])
@@ -664,20 +692,23 @@ if empty($SIMPLE_VIM_PLUGINS)
   " Automatically refresh airline when changing colorschemes. This fixes the arrows.
   autocmd VimEnter * autocmd ColorScheme * AirlineRefresh
 endif
+" }}}
 
-"""" VimTmuxNavigator:
+" VimTmuxNavigator: {{{
 if has('nvim') && s:has_exec('tmux')
   " A hackey solution to C-h not working
   nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
 endif
+" }}}
 
-"""" Vim Fugitive:
+" Vim Fugitive: {{{
 " Search the word under the cursor with `git grep`.
 " Result locations are put into quickfix.
 " https://statico.github.io/vim3.html
 nmap <leader>gk :Ggrep! "\b<cword>\b" <CR>
+" }}}
 
-"""" Vim GitGutter:
+" Vim GitGutter: {{{
 " Tell gitgutter not to set any keybinds by itself. They will all be rebound.
 let g:gitgutter_map_keys = 0
 if s:has_exec('git')
@@ -711,18 +742,21 @@ if s:has_exec('git')
     autocmd BufReadPre * call LargeFileGitgutter()
   augroup END
 endif
+" }}}
 
-"""" Gutentags
+" Gutentags {{{
 nnoremap <leader>gt :GutentagsUpdate<CR>
 let g:gutentags_ctags_exclude = ['node_modules']
+" }}}
 
 
-"""" Solarized:
+" Solarized: {{{
 let g:solarized_termcolors=256
 let g:solarized_termtrans=1
 let g:solarized_visibility='high'
+" }}}
 
-"""" Rainbow:
+" Rainbow: {{{
 let g:rainbow_active = 1
 let g:rainbow_conf = {
 \   'guifgs': ['#6c71c4', '#d33682', '#dc322f', '#cb4b16', '#b58900', '#859900', '#2aa198', '#268bd2'],
@@ -732,47 +766,30 @@ let g:rainbow_conf = {
 \   'separately': {
 \   }
 \}
-"
-" Fixes most gui problems (broken syntax coloring, status bar no color)
-function! FixGUI()
-  syntax enable
-  if $TERM_COLOR == 'light'
-    set background="light"
-  else
-    set background="dark"
-  endif
-  if empty($NO_VIM_GUICOLORS) && has("termguicolors")
-    if $TERM_COLOR == 'light'
-      silent! colorscheme solarized8_light
-    else
-      silent! colorscheme solarized8_dark
-    endif
-  else
-    " Silent so that it doesn't throw an error if the colorscheme doesn't exist
-    silent! colorscheme solarized
-  endif
-endfunction
-map <F9> :call FixGUI()<CR>
+" }}}
 
-"""" Tagbar:
+" Tagbar: {{{
 " Bind a button to open the tagbar
 if s:has_exec('ctags')
   nnoremap <leader>cb :TagbarToggle<CR>
 endif
 let g:tagbar_autoclose=1
 let g:tagbar_autofocus=1
+" }}}
 
-"""" UndoTree:
+" UndoTree: {{{
 " Bind a button to open UntoDree
 nnoremap <leader>gu :UndotreeToggle<CR>
+" }}}
 
-"""" Indent Lines:
+" Indent Lines: {{{
 let g:indentLine_enabled=0
 " The default bind, just here so I remember
 nnoremap <leader>ig :IndentLinesToggle<CR>
+" }}}
 
 
-"""" Easy Motion:
+" Easy Motion: {{{
 " NOTE: omaps are used when using 'c' and 'd' operators
 "nmap <leader> <Plug>(easymotion-prefix)
 omap <leader> <Plug>(easymotion-prefix)
@@ -795,8 +812,9 @@ omap <leader>s <Plug>(easymotion-s2)
 vmap <leader>s <Plug>(easymotion-s2)
 omap <leader>s <Plug>(easymotion-s2)
 let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
+" }}}
 
-"""" W3m:
+" W3m: {{{
 if s:has_exec('w3m')
   " Bind w3m to an easy key and add http so it doesn't search.
   nnoremap <leader>w3 :W3m http://
@@ -807,10 +825,10 @@ if s:has_exec('w3m')
   " Shift j/k scrolls down/up
   autocmd FileType w3m nnoremap <buffer><S-j> <C-e>
   autocmd FileType w3m nnoremap <buffer><S-k> <C-y>
-
 endif
+" }}}
 
-"""" FZF:
+" FZF: {{{
 let g:fzf_command_prefix="Fzf"
 if s:has_exec('fzf')
   nmap <leader>p :FZF<CR>
@@ -823,31 +841,31 @@ if s:has_exec('fzf')
       " \ printf('ctags -f - --sort=no --excmd=number --language-force=%s %s', &filetype, expand('%:S')),
       " \ printf('ctags -f - --sort=no --excmd=number %s', expand('%:S'))], {})
 endif
+" }}}
 
-"""" Vimux:
+" Vimux: {{{
 if s:has_exec('tmux')
   map <leader>vp :VimuxPromptCommand<CR>
   map <leader>vr :VimuxRunLastCommand<CR>
   map <leader>vo :VimuxInspectRunner<CR>
   map <leader>vc :VimuxCloseRunner<CR>
 endif
+" }}}
 
-"""" PreserveNoEOL:
+" PreserveNoEOL:
 let g:PreserveNoEOL=1
 
-"""" PIV:
+" PIV: {{{
 " Don't let it map, because it causes ',' to hava a delay
 let g:PIVCreateDefaultMappings = 0
 " AutoPHPFolding really hits performance, making cursor movement and switching bufers laggy
 let g:DisableAutoPHPFolding = 1
+" }}}
 
-"""" Polyglot:
-" let g:polyglot_disabled = ['php']
-
-"""" TComment:
+" TComment:
 let g:tcommentGuessFileType_php = "php"
 
-"""" JCommenter:
+" JCommenter: {{{
 " Set author config
 augroup JCommenterSettings
   autocmd!
@@ -859,21 +877,23 @@ augroup JCommenterSettings
   autocmd FileType java nmap <leader>c] :call SearchInvalidComment(0)<cr>
   autocmd FileType java nmap <leader>c[ :call SearchInvalidComment(1)<cr>
 augroup END
+" }}}
 
-"""" VimJSDoc:
+" VimJSDoc: {{{
 let g:jsdoc_allow_input_prompt=1
 let g:jsdoc_additional_descriptions=1
 let g:jsdoc_default_mapping=0
-"
+
 augroup VIMJSDOC
   autocmd!
   autocmd FileType javascript nmap <leader>cj :JsDoc<CR>
 augroup END
+" }}}
 
-"""" SyntaxAttr:
+" SyntaxAttr:
 nmap <leader>a :call SyntaxAttr()<CR>
 
-"""" VimPandoc:
+" VimPandoc: {{{
 let g:pandoc#keyboard#use_default_mappings = 0
 if s:has_exec('pandoc')
   augroup PandocBinds
@@ -882,8 +902,9 @@ if s:has_exec('pandoc')
     autocmd FileType pandoc nmap <buffer>gb <Plug>(pandoc-keyboard-links-back)
   augroup END
 endif
+" }}}
 
-"""" VimPandocSyntax:
+" VimPandocSyntax: {{{
 if !s:has_exec('pandoc')
   augroup pandoc_syntax
     autocmd!
@@ -891,17 +912,19 @@ if !s:has_exec('pandoc')
     autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
 augroup END
 endif
+" }}}
 
-"""" VimOperatorSurround:
+" VimOperatorSurround: {{{
 " operator mappings
 map <silent>sa <Plug>(operator-surround-append)
 map <silent>sd <Plug>(operator-surround-delete)
 map <silent>sc <Plug>(operator-surround-replace)
+" }}}
 
-"""" VimOperatorReplace:
+" VimOperatorReplace:
 map <silent><leader>re <Plug>(operator-replace)
 
-"""" TextobjComment:
+" TextobjComment: {{{
 let g:textobj_comment_no_default_key_mappings = 1
 xmap ax <Plug>(textobj-comment-a)
 omap ax <Plug>(textobj-comment-a)
@@ -911,9 +934,15 @@ xmap aX <Plug>(textobj-comment-big-a)
 omap aX <Plug>(textobj-comment-big-a)
 xmap iX <Plug>(textobj-comment-big-i)
 omap iX <Plug>(textobj-comment-big-i)
+" }}}
 
+" Custom operator comment (UNUSED) {{{
 " Using vim-operator-user (With NERDCommenter)
 " http://relaxedcolumn.blog8.fc2.com/blog-entry-154.html
+" Get SID prefix of vimrc (see :h <SID>)
+" function! s:SID_PREFIX()
+"     return matchstr(expand('<sfile>'), '<SNR>\d\+_')
+" endfunction
 "function! s:setCommentOperator(key, name)
     "call operator#user#define(
     "\   'comment-' . a:name,
@@ -935,12 +964,13 @@ omap iX <Plug>(textobj-comment-big-i)
 
 "call s:setCommentOperator('<leader>cv', 'comment')
 "call s:setCommentOperator('<leader>cx', 'uncomment')
+" }}}
+
+" }}}
 
 
-
-"""""""""""""""""""""""""""""" Chained Keybinds """"""""""""""""""""""""""""""
-"""""""" Insert:
-"""" Enter:
+" Chained Keybinds: {{{
+" Enter: {{{
 " Deoplete:
 if empty($SIMPLE_VIM_PLUGINS)
   if has('nvim')
@@ -971,9 +1001,9 @@ endif
 
 " Endwise:
 exe "imap <silent><CR> ".maparg('<CR>','i')."<Plug>DiscretionaryEnd"
+" }}}
 
-"""" CtrlH:
-
+" CtrlH: {{{
 " Deoplete:
 if empty($SIMPLE_VIM_PLUGINS)
   if has('nvim')
@@ -991,8 +1021,9 @@ if !mapcheck('<c-h>', 'i')
 endif
 " AutoPairs:
 exe "imap <silent><C-h> ".maparg('<C-h>', 'i')."<C-r>=AutoPairsDelete()<CR>"
+" }}}
 
-"""" Backspace:
+" Backspace: {{{
 " Deoplete:
 if empty($SIMPLE_VIM_PLUGINS)
   if has('nvim')
@@ -1010,3 +1041,5 @@ if !mapcheck('<BS>', 'i')
 endif
 " AutoPairs:
 exe "imap <silent><BS> ".maparg('<BS>', 'i')."<C-r>=AutoPairsDelete()<CR>"
+" }}}
+" }}}
