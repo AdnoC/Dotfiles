@@ -385,7 +385,7 @@ endif
 nnoremap <leader>w :%s/\s\+$//<CR>:let @/=''<CR>
 " Indentation {{{
 " Use smart indenting when starting a new line
-set smartindent
+set autoindent
 " Number of spaces to use for auto-indent ('>>' or '<<)
 set shiftwidth=2
 " Number of spaces (chars, not <SPACE>) a tab in a file counts for
