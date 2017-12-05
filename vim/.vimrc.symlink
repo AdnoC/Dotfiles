@@ -229,8 +229,8 @@ endfunction
 nnoremap <leader>rs :exe "resize " . (winheight(0) * 2 * 5/6)<CR>
 
 if &diff
-  nmap <leader>. :diffget RE<CR>
-  nmap <leader>m :diffget LO<CR>
+  nnoremap dp :diffput<CR>
+  nnoremap do :diffget<CR>
 endif
 
 """" Meta files (backup, swap) {
