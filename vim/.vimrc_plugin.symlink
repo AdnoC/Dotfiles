@@ -79,7 +79,10 @@ if empty(glob(expand(g:vimDirectory . '/autoload/plug.vim')))
       UpdateRemotePlugins
     endif
   endfunction
-  autocmd VimEnter * call InstallMyPlugs()
+  augroup PluginInstallation
+    autocmd!
+    autocmd VimEnter * call InstallMyPlugs()
+  augroup END
 endif
 " }
 
@@ -454,7 +457,10 @@ endif
 "   \ 'passive_filetypes': ['java'] }
 " Bind a button to check syntax when in passive mode
 if g:syntax_plugin == s:syntax_syntastic
-  autocmd FileType java nnoremap <leader>cc :SyntasticCheck<CR>
+  augroup JavaSyntastic
+    autocmd!
+    autocmd FileType java nnoremap <leader>cc :SyntasticCheck<CR>
+  augroup END
 endif
 " Better :sign interface symbols
 let g:syntastic_error_symbol = '✗'
@@ -642,8 +648,11 @@ let g:BufKillCreateMappings=0
 nmap gch <Plug>(characterize)
 
 " Goyo: {
-autocmd User GoyoEnter Limelight
-autocmd User GoyoLeave Limelight!
+augroup GoyoLimelight
+  autocmd!
+  autocmd User GoyoEnter Limelight
+  autocmd User GoyoLeave Limelight!
+augroup END
 " }
 
 " Limelight:
@@ -697,7 +706,10 @@ if empty($SIMPLE_VIM_PLUGINS)
   " Also don't need to know the formatting. Just leave it empty
   let g:airline_section_x=''
   " Automatically refresh airline when changing colorschemes. This fixes the arrows.
-  autocmd VimEnter * autocmd ColorScheme * AirlineRefresh
+  augroup RefreshAirline
+    autocmd!
+    autocmd VimEnter * autocmd ColorScheme * AirlineRefresh
+  augroup END
 endif
 " }
 
@@ -790,13 +802,16 @@ nnoremap <leader>ig :IndentLinesToggle<CR>
 if s:has_exec('w3m')
   " Bind w3m to an easy key and add http so it doesn't search.
   nnoremap <leader>w3 :W3m http://
-  autocmd FileType w3m setlocal colorcolumn=
-  autocmd FileType w3m setlocal scrolloff=3
-  autocmd FileType w3m nnoremap <buffer>q :W3mClose<CR>
-  autocmd FileType w3m nnoremap <buffer>o :W3mAddressBar<CR>
-  " Shift j/k scrolls down/up
-  autocmd FileType w3m nnoremap <buffer><S-j> <C-e>
-  autocmd FileType w3m nnoremap <buffer><S-k> <C-y>
+  augroup W3mStuff
+    autocmd!
+    autocmd FileType w3m setlocal colorcolumn=
+    autocmd FileType w3m setlocal scrolloff=3
+    autocmd FileType w3m nnoremap <buffer>q :W3mClose<CR>
+    autocmd FileType w3m nnoremap <buffer>o :W3mAddressBar<CR>
+    " Shift j/k scrolls down/up
+    autocmd FileType w3m nnoremap <buffer><S-j> <C-e>
+    autocmd FileType w3m nnoremap <buffer><S-k> <C-y>
+  augroup END
 endif
 " }
 
@@ -806,12 +821,15 @@ if s:has_exec('fzf')
   nmap <leader>p :FZF<CR>
   nmap <leader>b :FzfBuffers<CR>
   nmap <leader>t :FzfBTags<CR>
-  autocmd FileType javascript command! -buffer -bang -nargs=* FzfBTags
-    \ call fzf#vim#buffer_tags(<q-args>,
-    \ [printf('jsctags %s -f', expand('%:S'))],
-    \ <bang>0 ? {} : copy(get(g:, 'fzf_layout', g:fzf#vim#default_layout)))
-      " \ printf('ctags -f - --sort=no --excmd=number --language-force=%s %s', &filetype, expand('%:S')),
-      " \ printf('ctags -f - --sort=no --excmd=number %s', expand('%:S'))], {})
+  augroup JavascriptFZF
+    autocmd!
+    autocmd FileType javascript command! -buffer -bang -nargs=* FzfBTags
+      \ call fzf#vim#buffer_tags(<q-args>,
+      \ [printf('jsctags %s -f', expand('%:S'))],
+      \ <bang>0 ? {} : copy(get(g:, 'fzf_layout', g:fzf#vim#default_layout)))
+        " \ printf('ctags -f - --sort=no --excmd=number --language-force=%s %s', &filetype, expand('%:S')),
+        " \ printf('ctags -f - --sort=no --excmd=number %s', expand('%:S'))], {})
+  augroup END
 endif
 " }
 
