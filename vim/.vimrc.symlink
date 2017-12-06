@@ -387,13 +387,16 @@ set ttyfast
 
 " When switching buffers, preserve window view.(Vim tip 1375)
 if v:version >= 700
-  au BufLeave * if !&diff |
-        \ let b:winview = winsaveview() |
-        \ endif
-  au BufEnter * if exists('b:winview') && !&diff |
-        \ call winrestview(b:winview) |
-        \ unlet! b:winview |
-        \ endif
+  augroup PreserveWindowView
+    autocmd!
+    autocmd BufLeave * if !&diff |
+               \ let b:winview = winsaveview() |
+               \ endif
+    autocmd BufEnter * if exists('b:winview') && !&diff |
+               \ call winrestview(b:winview) |
+               \ unlet! b:winview |
+               \ endif
+  augroup END
 endif
 " }
 
