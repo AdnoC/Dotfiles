@@ -443,8 +443,8 @@ set foldlevel=99
 " }
 
 " Reselect visual block after indent/outdent
-vnoremap < <gv
-vnoremap > >gv
+xnoremap < <gv
+xnoremap > >gv
 " Re-hardwrap paragraph
 nnoremap <leader>q gqip
 " }
