@@ -18,7 +18,12 @@ let $MYVIMRCPLUGIN=expand('<sfile>')
 " Check whether there is an executable with a given name
 " If we are using standalone plugins we automatically return false
 function! s:has_exec(prog_name) abort
-  return empty($STANDALONE_VIM_PLUGINS) && executable(a:prog_name)
+  let use_execs = empty($STANDALONE_VIM_PLUGINS)
+  if a:prog_name == 'git'
+    let use_execs = 1
+  endif
+
+  return use_execs && executable(a:prog_name)
 endfunction
 
 
@@ -101,10 +106,11 @@ Plug 'vim-scripts/TeTrIs.vim'
 Plug 'johngrib/vim-game-code-break', { 'on': 'VimGameCodeBreak' }
 " }
 " Git: {
+" Commands for using git nicely in Vim
+" Always load
+" NOTE: fugitive makes vim very laggy sometimes
+Plug 'tpope/vim-fugitive'
 if s:has_exec('git')
-  " Commands for using git nicely in Vim
-  " NOTE: fugitive makes vim very laggy sometimes
-  Plug 'tpope/vim-fugitive'
   " Commit browser. Switch to original (junegunn/gv.vim) after it merges help PR
   Plug 'sudavid4/gv.vim', { 'on': 'GV' }
   " Show git changes in gutter
