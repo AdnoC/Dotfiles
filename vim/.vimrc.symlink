@@ -367,9 +367,15 @@ set showmatch
 set list
 " Set hidden chars to show (Show tabs and trailing spaces)
 if &encoding == "utf-8"
-  exe "set listchars=eol:\u00ac,nbsp:\u001f,conceal:\u2315,tab:\u2595\u2014,precedes:\u2026,extends:\u2026"
-  " What to display when a line is wrapped
-  exe "set showbreak=\u21b3"
+  if empty($SIMPLE_VIM_PLUGINS)
+    exe "set listchars=eol:\u00ac,nbsp:\u001f,conceal:\u2315,tab:\u2595\u2014,precedes:\u2026,extends:\u2026"
+    " What to display when a line is wrapped
+    exe "set showbreak=\u21b3"
+  else
+    exe "set listchars=eol:\u00ac"
+    exe "set listchars+=nbsp:\u001f"
+    set listchars+=trail:-,tab:>-,extends:>,precedes:<,conceal:+
+  endif
 else
   set listchars=eol:$,trail:-,tab:>-,extends:>,precedes:<,conceal:+
 endif
