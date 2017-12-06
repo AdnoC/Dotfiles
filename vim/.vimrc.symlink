@@ -260,7 +260,7 @@ set encoding=utf-8
 " Looks {
 
 " Refresh busted syntax highlighting (this happens too often)
-map <F12> :syntax sync fromstart<CR>
+nnoremap <F12> :syntax sync fromstart<CR>
 
 " Cursor {
 if has('win32unix') || !empty($IN_WSL) " Cygwin only
