@@ -1,5 +1,9 @@
 " Vim preferneces file
 
+let $STANDALONE_VIM_PLUGINS=1
+let $SIMPLE_VIM_PLUGINS=1
+let $NO_VIM_GUICOLORS=1
+
 if !empty($NO_VIM_PLUGINS)
   let $STANDALONE_VIM_PLUGINS=1
   let $SIMPLE_VIM_PLUGINS=1
