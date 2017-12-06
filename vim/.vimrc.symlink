@@ -93,9 +93,9 @@ endif
 " }
 
 " Latex {
+let g:tex_flavor = "latex"
 augroup LatexSettings
   autocmd!
-  autocmd FileType plaintex set ft=tex | syntax enable
   autocmd FileType tex  if ! isdirectory('.LatexOutput') |
         \ exec "!mkdir .LatexOutput" |
         \ endif
