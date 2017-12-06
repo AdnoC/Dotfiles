@@ -406,7 +406,10 @@ endfunction
 if VimPlugInitialized == 0
   echo "Intalling Vimballs"
   " Intall vimballs (UseVimball needs to be called after startup, therefore au)
-  autocmd VimEnter * call InstallVimballs()
+  augroup VimballInstall
+    autocmd!
+    autocmd VimEnter * call InstallVimballs()
+  augroup END
 endif
 
 " Plugin Settings: {
