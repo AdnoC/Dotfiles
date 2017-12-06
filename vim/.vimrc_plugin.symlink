@@ -835,10 +835,10 @@ endif
 
 " Vimux: {
 if s:has_exec('tmux')
-  map <leader>vp :VimuxPromptCommand<CR>
-  map <leader>vr :VimuxRunLastCommand<CR>
-  map <leader>vo :VimuxInspectRunner<CR>
-  map <leader>vc :VimuxCloseRunner<CR>
+  noremap <leader>vp :VimuxPromptCommand<CR>
+  noremap <leader>vr :VimuxRunLastCommand<CR>
+  noremap <leader>vo :VimuxInspectRunner<CR>
+  noremap <leader>vc :VimuxCloseRunner<CR>
 endif
 " }
 
