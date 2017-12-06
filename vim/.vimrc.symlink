@@ -561,7 +561,7 @@ function! ViewTexCharList() abort
   silent! setlocal noswapfile
   nnoremap <buffer>q :q<CR>
   " Go to the first line of the file
-  :0
+  0
   " Search for (and therefore go to) the variable in which the list is stored
   /texMathList
   nohl

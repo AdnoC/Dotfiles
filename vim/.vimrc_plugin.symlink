@@ -397,7 +397,7 @@ function! InstallVimballs() abort
     " Source the buffer
     source %
     " Then close the buffer
-    bd
+    bwipe
   endfor
 endfunction
 " }
