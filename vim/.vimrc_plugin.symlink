@@ -709,7 +709,11 @@ endif
 " Search the word under the cursor with `git grep`.
 " Result locations are put into quickfix.
 " https://statico.github.io/vim3.html
-nmap <leader>gk :Ggrep! "\b<cword>\b" <CR>
+if s:has_exec('git')
+  nmap <leader>gk :Ggrep! "\b<cword>\b" <CR>
+  " View staged changes
+  command Greview :Git! diff --staged
+endif
 " }
 
 " Vim GitGutter: {
