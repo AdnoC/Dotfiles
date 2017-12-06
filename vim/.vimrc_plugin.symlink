@@ -46,20 +46,6 @@ if empty(glob(expand(g:vimDirectory . '/autoload/plug.vim')))
   if executable("curl")
     silent exec '!curl -fLo ' . shellescape(expand(g:vimDirectory."/autoload/plug.vim")) .
         \ ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  elseif executable("wget")
-    " wget can't make folders on its own, so we need to make .vim/autoload for it
-    if executable("mkdir")
-      silent exec '!mkdir -p ' . shellescape(expand(g:vimDirectory."/autoload/"))
-    endif
-    silent exec '!wget -q -O ' . shellescape(expand(g:vimDirectory."/autoload/plug.vim")) .
-        \ '  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  " If we are on Windows we can use Powershell to download it
-  elseif executable("powershell")
-    silent exec '!if not exist ' . shellescape(expand(g:vimDirectory."/autoload")) . ' mkdir ' .
-      \ shellescape(expand(g:vimDirectory."/autoload/"))
-    silent exec '!powershell "(new-object System.Net.WebClient).DownloadFile(''https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'',''' .
-      \ shellescape(expand(g:vimDirectory."/autoload/plug.vim")) . ''')"'
-
   " If all else fails we can just use git.
   elseif executable("git")
     silent exec '!git clone -q --depth=1 git@github.com:junegunn/vim-plug.git ' . shellescape(expand(g:vimDirectory."/temp"))
