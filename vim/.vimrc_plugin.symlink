@@ -348,7 +348,6 @@ Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 " }
 " Movement: {
-Plug 'Lokaltog/vim-easymotion'
 " Plug 'wikitopian/hardmode'
 Plug 'rhysd/vim-operator-surround'
 " Lets you replace text with something from a register (like pasting from register)
@@ -794,31 +793,6 @@ nnoremap <leader>gu :UndotreeToggle<CR>
 let g:indentLine_enabled=0
 " The default bind, just here so I remember
 nnoremap <leader>ig :IndentLinesToggle<CR>
-" }
-
-" Easy Motion: {
-" NOTE: omaps are used when using 'c' and 'd' operators
-"nmap <leader> <Plug>(easymotion-prefix)
-omap <leader> <Plug>(easymotion-prefix)
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
-" Make some easymotion binds
-nmap <leader>l <Plug>(easymotion-lineforward)
-omap <leader>l <Plug>(easymotion-lineforward)
-nmap <leader>h <Plug>(easymotion-linebackward)
-omap <leader>h <Plug>(easymotion-linebackward)
-nmap <leader>j <Plug>(easymotion-j)
-omap <leader>j <Plug>(easymotion-j)
-vmap <leader>j <Plug>(easymotion-j)
-omap <leader>j <Plug>(easymotion-j)
-nmap <leader>k <Plug>(easymotion-k)
-omap <leader>k <Plug>(easymotion-k)
-vmap <leader>k <Plug>(easymotion-k)
-omap <leader>k <Plug>(easymotion-k)
-nmap <leader>s <Plug>(easymotion-s2)
-omap <leader>s <Plug>(easymotion-s2)
-vmap <leader>s <Plug>(easymotion-s2)
-omap <leader>s <Plug>(easymotion-s2)
-let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 " }
 
 " W3m: {
