@@ -8,8 +8,6 @@ endif
 
 " Initial {
 " Remap leader. Needs to be done before any mappings involving the leader.
-nnoremap <SPACE> <Nop>
-onoremap <SPACE> <Nop>
 let mapleader="\<Space>"
 
 
