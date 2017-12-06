@@ -346,8 +346,6 @@ endif
 Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
 " Removes distractions
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
-" Adds distractions
-Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle' }
 " }
 " Movement: {
 Plug 'Lokaltog/vim-easymotion'
@@ -776,18 +774,6 @@ let g:gutentags_ctags_exclude = ['node_modules']
 let g:solarized_termcolors=256
 let g:solarized_termtrans=1
 let g:solarized_visibility='high'
-" }
-
-" Rainbow: {
-let g:rainbow_active = 1
-let g:rainbow_conf = {
-\   'guifgs': ['#6c71c4', '#d33682', '#dc322f', '#cb4b16', '#b58900', '#859900', '#2aa198', '#268bd2'],
-\   'ctermfgs': ['13', '5', '1', '9', '3', '2', '6', '4'],
-\   'operators': '_,_',
-\   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
-\   'separately': {
-\   }
-\}
 " }
 
 " Tagbar: {
