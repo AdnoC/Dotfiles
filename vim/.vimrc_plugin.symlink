@@ -533,6 +533,10 @@ let g:deoplete#ignore_sources = {}
 " let g:deoplete#ignore_sources.javascript = ["flow", "omni", "ternjs"]
 let g:deoplete#ignore_sources.javascript = ["omni", "flow"]
 let g:deoplete#ignore_sources.go = ["buffer", "syntax"]
+if g:autocomplete_plugin == s:autocomplete_deoplete
+  call deoplete#custom#source('_', 'converters',
+        \ ['converter_remove_paren'])
+endif
 " }
 
 " Neocomplete: {
