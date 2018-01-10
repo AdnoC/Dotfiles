@@ -423,6 +423,8 @@ set cinoptions+=:0
 set cinoptions+=Ls
 " Align new lines in open parenthesis with the first item in the parenthesis
 set cinoptions+=(0
+" Align parenthesis like brackets
+set cinoptions+=m1
 " }
 
 " The maximum width of a line of text. Lines that go longer will be broken
