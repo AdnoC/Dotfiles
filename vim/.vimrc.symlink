@@ -409,7 +409,7 @@ set autoindent
 " Number of spaces to use for auto-indent ('>>' or '<<)
 set shiftwidth=2
 " Number of spaces (chars, not <SPACE>) a tab in a file counts for
-set tabstop=2
+set softtabstop=2
 " Use an appropriate number of spaces instead of tabs when typing <Tab>
 set expandtab
 " At start of line, <Tab> inserts shiftwidth spaces, <Bs> deletes indentation
