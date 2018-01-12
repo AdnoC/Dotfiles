@@ -2,7 +2,13 @@
 
 # Place neovim config in the right place
 mkdir -p "${XDG_CONFIG_HOME:=~/.config}/nvim"
-link_file "$DOTFILES_ROOT"/vim/symlink..vimrc "$XDG_CONFIG_HOME"/nvim/init.vim
-link_file "$DOTFILES_ROOT"/vim/symlink..vimrc_plugin "$XDG_CONFIG_HOME"/nvim/.vimrc_plugin
 
-link_file "$DOTFILES_ROOT"/vim/.vim/symlink.vimball "$XDG_CONFIG_HOME"/vimball
+for src in $(find "$DOTFILES_ROOT"/vim -name 'symlink.*'); do
+  relDest="$(symlinkRelPath "$src")"
+  if [[ $relDest == .vim/* ]]; then
+    relDest="${relDest#.vim/}"
+  fi
+  dst="$XDG_CONFIG_HOME/$relDest"
+
+  link_file "$src" "$dst"
+done
