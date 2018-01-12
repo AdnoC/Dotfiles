@@ -96,8 +96,7 @@ function! CharacterRequiresUrlEncoding(character)
     return 1
 
 endfunction
-let g:OmniSharp_selector_ui = 'fzf'
-augroup CSStuff
+augroup UnityStuff
   autocmd!
   let s:unity_search_url = 'https://docs.unity3d.com/ScriptReference/30_search.html?q='
   function! SearchUnity() abort
@@ -108,8 +107,6 @@ augroup CSStuff
   au FileType cs set noexpandtab
   au FileType cs set shiftwidth=4
   au FileType cs set tabstop=4
-  autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<CR>
-  autocmd FileType cs nnoremap K :OmniSharpDocumentation<CR>
   autocmd FileType cs nnoremap <leader>k :call SearchUnity()<CR>
 augroup END
 

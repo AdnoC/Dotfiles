@@ -335,9 +335,17 @@ endif
 " }
 
 " Autocomplete: {
+" Omnisharp: {
 if empty($SIMPLE_VIM_PLUGINS) && s:has_exec('msbuild')
   Plug 'OmniSharp/Omnisharp-vim', { 'do': 'msbuild' }
+  let g:OmniSharp_selector_ui = 'fzf'
+  augroup CSharpIDEBinds
+    autocmd!
+    autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<CR>
+    autocmd FileType cs nnoremap K :OmniSharpDocumentation<CR>
+  augroup END
 endif
+" }
 " YouCompleteMe only works on Linux/Mac and if vim is version > 7.3.584
 " Use supertab if YCM won't work
 if !empty($STANDALONE_VIM_PLUGINS)
