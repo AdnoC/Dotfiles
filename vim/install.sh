@@ -100,13 +100,6 @@ if [ "$(echo "$(vim --version | grep -o '7\.[0-9]') 7.4" | awk -f ~/dotfiles/scr
   fi
 fi
 
-if [ ! -d ~/.vim/vimball ]; then
-  if [ ! -d ~/.vim ]; then
-    mkdir ~/.vim
-  fi
-  link_file "$DOTFILES_ROOT"/vim/vimball.sym ~/.vim/vimball
-fi
-
 SYNTAX_TARGET="${HOME}/.vim/syntax"
 mkdir -p "$SYNTAX_TARGET"
 SYNTAX_ROOT="$DOTFILES_ROOT"/vim/syntax
