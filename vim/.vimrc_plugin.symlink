@@ -442,14 +442,16 @@ elseif (has('lua') || has('nvim'))
 
 " DeopleteGo: {
   if s:has_exec('gocode')
-    Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go'}
-    augroup DeoGoMore
-      autocmd!
-      autocmd FileType go call deoplete#custom#set('go', 'rank', 9999)
-    augroup END
-    let g:deoplete#sources#go#align_class = 1
-    if has('win32')
-      let g:deoplete#sources#go#gocode_binary = expand($GOPATH.'/bin/gocode.exe')
+    if g:autocomplete_plugin == s:autocomplete_deoplete
+      Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go'}
+      augroup DeoGoMore
+        autocmd!
+        autocmd FileType go call deoplete#custom#set('go', 'rank', 9999)
+      augroup END
+      let g:deoplete#sources#go#align_class = 1
+      if has('win32')
+        let g:deoplete#sources#go#gocode_binary = expand($GOPATH.'/bin/gocode.exe')
+      endif
     endif
   elseif VimPlugInitialized == 0
     echo 'Cannot find gocode, not installing go completion'
@@ -457,11 +459,15 @@ elseif (has('lua') || has('nvim'))
 " }
 
   if s:has_exec('msbuild')
-    Plug 'dimixar/deoplete-omnisharp'
+    if g:autocomplete_plugin == s:autocomplete_deoplete
+      Plug 'dimixar/deoplete-omnisharp'
+    endif
   endif
 
   if s:has_exec('python')
-    Plug 'zchee/deoplete-jedi', { 'for': 'python'}
+    if g:autocomplete_plugin == s:autocomplete_deoplete
+      Plug 'zchee/deoplete-jedi', { 'for': 'python'}
+    endif
   endif
 
   " Vim autocomplete. Uncomment when you have something for it.
