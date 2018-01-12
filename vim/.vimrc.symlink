@@ -51,6 +51,18 @@ augroup UserFileTypeDefs
 augroup END
 " }
 
+" TextMarkdown {
+" Lightweight format for note taking
+augroup TextMarkdown
+  autocmd!
+  au BufRead,BufFilePre,BufNewFile *.txtmd set filetype=txt
+  au BufRead,BufFilePre,BufNewFile *.txtmd setlocal foldenable
+  au BufRead,BufFilePre,BufNewFile *.txtmd setlocal foldmethod=marker
+  au BufRead,BufFilePre,BufNewFile *.txtmd let @o=" {{{"
+  au BufRead,BufFilePre,BufNewFile *.txtmd let @c="<!--- }}} --->" . expand("\n")
+augroup END
+" }
+
 " Help (Vim) {
 augroup HelpSettings
   autocmd!
