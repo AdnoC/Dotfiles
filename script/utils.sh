@@ -1,10 +1,17 @@
-if [ -n "$DOTFILES_ROOT" ]; then
-  cd "$(dirname "$0")/.."
-  DOTFILES_ROOT=$(pwd)
+#!/usr/bin/env bash
+calledScript="$_"
+
+if [ -z "$DOTFILES_ROOT" ]; then
+  if [ "$calledScript" != "$0" ]; then
+    calledScript="${BASH_SOURCE[0]}"
+  fi
+
+  cd "$(dirname "$calledScript")/.."
+  export DOTFILES_ROOT=$(pwd)
 fi
 
-if [ -n "$logFile" ]; then
-  logFile="$(pwd)"/bootstrap_log
+if [ -z "$logFile" ]; then
+  export logFile="$(pwd)"/bootstrap_log
   touch "$logFile"
 fi
 
