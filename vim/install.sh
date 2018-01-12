@@ -99,10 +99,3 @@ if [ "$(echo "$(vim --version | grep -o '7\.[0-9]') 7.4" | awk -f ~/dotfiles/scr
     sudo apt-get -y install vim
   fi
 fi
-
-SYNTAX_TARGET="${HOME}/.vim/syntax"
-mkdir -p "$SYNTAX_TARGET"
-SYNTAX_ROOT="$DOTFILES_ROOT"/vim/syntax
-
-unset SYNTAX_TARGET
-unset SYNTAX_ROOT
