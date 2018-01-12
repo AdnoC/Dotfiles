@@ -51,6 +51,70 @@ augroup UserFileTypeDefs
 augroup END
 " }
 
+" CSharp {
+" URL encode a string. ie. Percent-encode characters as necessary.
+function! UrlEncode(string)
+
+    let result = ""
+
+    let characters = split(a:string, '.\zs')
+    for character in characters
+        if character == " "
+            let result = result . "+"
+        elseif CharacterRequiresUrlEncoding(character)
+            let i = 0
+            while i < strlen(character)
+                let byte = strpart(character, i, 1)
+                let decimal = char2nr(byte)
+                let result = result . "%" . printf("%02x", decimal)
+                let i += 1
+            endwhile
+        else
+            let result = result . character
+        endif
+    endfor
+
+    return result
+
+endfunction
+
+" Returns 1 if the given character should be percent-encoded in a URL encoded
+" string.
+function! CharacterRequiresUrlEncoding(character)
+
+    let ascii_code = char2nr(a:character)
+    if ascii_code >= 48 && ascii_code <= 57
+        return 0
+    elseif ascii_code >= 65 && ascii_code <= 90
+        return 0
+    elseif ascii_code >= 97 && ascii_code <= 122
+        return 0
+    elseif a:character == "-" || a:character == "_" || a:character == "." || a:character == "~"
+        return 0
+    endif
+
+    return 1
+
+endfunction
+let g:OmniSharp_selector_ui = 'fzf'
+augroup CSStuff
+  autocmd!
+  let s:unity_search_url = 'https://docs.unity3d.com/ScriptReference/30_search.html?q='
+  function! SearchUnity() abort
+    let new_search_url = s:unity_search_url . UrlEncode(expand('<cword>'))
+    exec '!start ' . new_search_url
+  endfunction
+
+  au FileType cs set noexpandtab
+  au FileType cs set shiftwidth=4
+  au FileType cs set tabstop=4
+  autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<CR>
+  autocmd FileType cs nnoremap K :OmniSharpDocumentation<CR>
+  autocmd FileType cs nnoremap <leader>k :call SearchUnity()<CR>
+augroup END
+
+" }
+
 " TextMarkdown {
 " Lightweight format for note taking
 augroup TextMarkdown
