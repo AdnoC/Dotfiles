@@ -5,6 +5,10 @@ cat .ssh/id_rsa.pub | ssh b@B 'cat >> .ssh/authorized_keys'
 if [[ -v VARIABLE_NAME ]]; then
   # DO THING
 fi
+# Check if bash variable is not empty string
+if [ -n $VARIABLE_NAME ]; then; fi;
+# Check if bash variable is empty string
+if [ -z $VARIABLE_NAME ]; then; fi;
 
 # Quiet down pylint about no config file
 touch ~/.pylintrc

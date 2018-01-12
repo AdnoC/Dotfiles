@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 if ! hasCommand "vim"; then
   if isLinux; then
     sudo apt-get -y install vim
@@ -22,12 +24,6 @@ if ! hasCommand "nvim"; then
     sudo update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
     sudo update-alternatives --config editor
   fi
-fi
-
-# Place neovim config in the right place
-mkdir -p "${XDG_CONFIG_HOME:=~/.config}/nvim"
-if ! [ -f "$XDG_CONFIG_HOME/nvim/init.vim" ]; then
-  ln -s "$DOTFILES_ROOT/vim/.vimrc.symlink" "$XDG_CONFIG_HOME/nvim/init.vim"
 fi
 
 # If we don't have ctags or the ctags we have isn't exuberant, install exuberant
