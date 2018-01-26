@@ -180,52 +180,6 @@ augroup LatexSettings
 augroup END
 " }
 
-" Pandoc {
-" Workaround for lack of timer_create in WSL
-if !empty($IN_WSL)
-  let s:pandocCmd="pandoc\\ +RTS\\ -V0\\ -RTS"
-  let s:pandocPDFCmd="pandoc +RTS -V0 -RTS"
-else
-  let s:pandocCmd="pandoc"
-  let s:pandocPDFCmd="pandoc"
-endif
-
-function! ViewPandoc() abort
-  " Pass the html output to w3m
-  exec "!cat " . expand('%:h') . expand('/') . ".PandocOutput" .
-        \ expand('/') . expand('%:r') . ".html \| w3m -T text/html"
-endfunction
-
-function! PandocMakePDF() abort
-  exec "!" . s:pandocPDFCmd . " --highlight-style=pygments -s --output=\"" .
-        \ expand('%:h') . expand('/') . ".PandocOutput" . expand('/') .
-        \ expand('%:r') . ".pdf\" %"
-endfunction
-
-augroup PandocSettings
-  autocmd!
-  autocmd FileType pandoc  if ! isdirectory('.PandocOutput') |
-        \ exec "!mkdir .PandocOutput" |
-        \ endif
-
-  autocmd FileType pandoc exec "setlocal makeprg=" . s:pandocCmd .
-        \ "\\ --highlight-style=pygments\\ -s\\ --output=\\\"" .
-        \ expand('%:h') . expand('/') . ".PandocOutput" . expand('/') .
-        \ expand('%:r') . ".html\\\"\\ %"
-
-  autocmd FileType pandoc command! -nargs=0 -buffer ViewPandoc call ViewPandoc()
-  autocmd FileType pandoc command! -nargs=0 -buffer PandocMakePDF call PandocMakePDF()
-
-  " Turn spellcheck off because we are going to be using words that aren't in the dictionary
-  autocmd FileType pandoc setlocal nospell
-  " Use 4 spaces per tab since thats the magic number for pandoc
-  autocmd FileType pandoc setlocal shiftwidth=4
-  " Don't add '*' or '#' after newline
-  autocmd FileType pandoc setlocal formatoptions-=r
-  autocmd FileType pandoc setlocal formatoptions-=o
-augroup END
-" }
-
 " Msc {
 
 augroup MscFileTypeSettings
