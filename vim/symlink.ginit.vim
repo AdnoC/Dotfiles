@@ -162,6 +162,7 @@ if exists('g:GuiLoaded')
   set clipboard=unnamed
   colorscheme solarized8
   Guifont! DejaVu Sans Mono for Powerline:h10
-  call s:set_size()
+  let SetSize = function('s:set_size')
+  call timer_start(500, SetSize)
 endif
 
