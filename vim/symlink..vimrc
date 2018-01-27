@@ -31,6 +31,17 @@ let g:vimDirectory=g:vimDirectory
 
 let g:vimrcDirectory=expand(expand("<sfile>:p:h") . "/")
 
+
+" Check whether there is an executable with a given name
+" If we are using standalone plugins we automatically return false
+function! HasExec(prog_name) abort
+  let use_execs = empty($STANDALONE_VIM_PLUGINS)
+  if a:prog_name == 'git'
+    let use_execs = 1
+  endif
+
+  return use_execs && executable(a:prog_name)
+endfunction
 let g:USE_PLUGINS=0
 if empty($NO_VIM_PLUGINS) && filereadable(g:vimrcDirectory . ".vimrc_plugin")
   exec "so " . g:vimrcDirectory . ".vimrc_plugin"
@@ -143,24 +154,6 @@ if has('nvim')
     autocmd!
     autocmd TermOpen */*fzf* tnoremap <buffer><c-k> <UP>
     autocmd TermOpen */*fzf* tnoremap <buffer><c-j> <DOWN>
-  augroup END
-endif
-" }
-
-" Rust {
-augroup RustDoc
-  autocmd!
-  autocmd FileType rustdoc nnoremap <buffer>q :bd<CR>
-augroup END
-" }
-
-" Java {
-if executable('ant')
-  augroup JavaMakeSettings
-    autocmd!
-    autocmd FileType java setlocal makeprg=ant\ -find\ 'build.xml'
-    autocmd FileType java compiler ant
-    autocmd FileType java setlocal shellpipe=2>&1\ \|\ tee
   augroup END
 endif
 " }

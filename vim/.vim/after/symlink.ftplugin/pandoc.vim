@@ -35,6 +35,11 @@ exec "setlocal makeprg=" . s:pandocCmd .
 command! -nargs=0 -buffer ViewPandoc call ViewPandoc()
 command! -nargs=0 -buffer PandocMakePDF call PandocMakePDF()
 
+if HasExec('pandoc') && empty($SIMPLE_VIM_PLUGINS)
+  nmap <buffer>go <Plug>(pandoc-keyboard-links-open)
+  nmap <buffer>gb <Plug>(pandoc-keyboard-links-back)
+endif
+
 " Turn spellcheck off because we are going to be using words that aren't in the dictionary
 setlocal nospell
 " Use 4 spaces per tab since thats the magic number for pandoc

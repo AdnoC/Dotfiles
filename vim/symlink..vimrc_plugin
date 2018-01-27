@@ -14,19 +14,6 @@
 let g:USE_PLUGINS=1
 let $MYVIMRCPLUGIN=expand('<sfile>')
 
-
-" Check whether there is an executable with a given name
-" If we are using standalone plugins we automatically return false
-function! s:has_exec(prog_name) abort
-  let use_execs = empty($STANDALONE_VIM_PLUGINS)
-  if a:prog_name == 'git'
-    let use_execs = 1
-  endif
-
-  return use_execs && executable(a:prog_name)
-endfunction
-
-
 " Plugin Alternatives: {
 " Used in checking which of several alternatives is used
 let s:syntax_syntastic = 'syntastic'
@@ -66,10 +53,10 @@ if empty(glob(expand(g:vimDirectory . '/autoload/plug.vim')))
 
   if has('nvim')
     " Install python client
-    if s:has_exec('pip')
+    if HasExec('pip')
       silent exec '!pip install neovim'
     endif
-    if s:has_exec('pip3')
+    if HasExec('pip3')
       silent exec '!pip3 install neovim'
     endif
   endif
@@ -103,13 +90,13 @@ Plug 'tpope/vim-fugitive'
 " Search the word under the cursor with `git grep`.
 " Result locations are put into quickfix.
 " https://statico.github.io/vim3.html
-if s:has_exec('git')
+if HasExec('git')
   nmap <leader>gk :Ggrep! "\b<cword>\b" <CR>
   " View staged changes
   command Greview :Git! diff --staged
 endif
 " }
-if s:has_exec('git')
+if HasExec('git')
   " Commit browser. Switch to original (junegunn/gv.vim) after it merges help PR
   Plug 'sudavid4/gv.vim', { 'on': 'GV' }
   " Show git changes in gutter
@@ -134,11 +121,6 @@ endif
 Plug 'jiangmiao/auto-pairs'
 let s:autoPairsMapCh=0
 let s:autoPairsMapBS=0
-augroup VimrcRustAutopairs
-  autocmd!
-  autocmd FileType rust let g:AutoPairs = {'(':')', '[':']', '{':'}',
-        \ '"':'"', '`':'`'}
-augroup END
 " }
 Plug 'Konfekt/FastFold'
 " Syntax: {
@@ -154,14 +136,14 @@ function! InstallGoBins(info) abort
   endif
 endfunction
 " VimGo: {
-if s:has_exec('go') && empty($SIMPLE_VIM_PLUGINS)
+if HasExec('go') && empty($SIMPLE_VIM_PLUGINS)
   Plug 'fatih/vim-go', { 'do': function('InstallGoBins')}
   if !exists('g:neocomplete#sources#omni#input_patterns')
     let g:neocomplete#sources#omni#input_patterns = {}
   endif
   let g:neocomplete#sources#omni#input_patterns.go =
     \ '\h\w*\|[^. \t]\.\w*'
-  if s:has_exec("goimports")
+  if HasExec("goimports")
     let g:go_fmt_command = "goimports"
     if has("win32")
       let g:go_fmt_command = "goimports.exe"
@@ -175,19 +157,14 @@ Plug 'rust-lang/rust.vim'
 " Some more concealchars for tex
 Plug 'KeitaNakamura/tex-conceal.vim'
 " VimPandoc: {
-if s:has_exec('pandoc') && empty($SIMPLE_VIM_PLUGINS)
+if HasExec('pandoc') && empty($SIMPLE_VIM_PLUGINS)
   Plug 'vim-pandoc/vim-pandoc'
   let g:pandoc#keyboard#use_default_mappings = 0
-    augroup PandocBinds
-      autocmd!
-      autocmd FileType pandoc nmap <buffer>go <Plug>(pandoc-keyboard-links-open)
-      autocmd FileType pandoc nmap <buffer>gb <Plug>(pandoc-keyboard-links-back)
-    augroup END
-  endif
+endif
 " }
 " VimPandocSyntax: {
 Plug 'vim-pandoc/vim-pandoc-syntax'
-if !s:has_exec('pandoc')
+if !HasExec('pandoc')
   augroup PandocSyntaxFT
     autocmd!
     autocmd BufNewFile,BufFilePre,BufRead *.pdc set filetype=pandoc
@@ -195,7 +172,7 @@ if !s:has_exec('pandoc')
 augroup END
 endif
 " }
-if s:has_exec('python') && empty($SIMPLE_VIM_PLUGINS)
+if HasExec('python') && empty($SIMPLE_VIM_PLUGINS)
   Plug 'davidhalter/jedi-vim'
 endif
 Plug 'vim-scripts/csv.vim', {'for': 'csv'}
@@ -206,17 +183,6 @@ Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
 " Helpers for creating comments
 " JCommenter: {
 Plug 'AdnoC/jcommenter.vim', { 'for': 'java'}
-" Set author config
-augroup JCommenterSettings
-  autocmd!
-  autocmd FileType java let g:jcommenter_class_author='Adam Cutler'
-  autocmd FileType java let g:jcommenter_file_author='Adam Cutler'
-  autocmd FileType java let g:jcommenter_method_description_space = 1
-  " Create a bind to generate comments
-  autocmd FileType java nmap <leader>cj :call JCommentWriter()<CR>
-  autocmd FileType java nmap <leader>c] :call SearchInvalidComment(0)<cr>
-  autocmd FileType java nmap <leader>c[ :call SearchInvalidComment(1)<cr>
-augroup END
 " }
 " VimJSDoc: {
 Plug 'heavenshell/vim-jsdoc', { 'for': 'javascript'}
@@ -336,7 +302,7 @@ endif
 
 " Autocomplete: {
 " Omnisharp: {
-if empty($SIMPLE_VIM_PLUGINS) && s:has_exec('msbuild')
+if empty($SIMPLE_VIM_PLUGINS) && HasExec('msbuild')
   Plug 'OmniSharp/Omnisharp-vim', { 'do': 'msbuild' }
   let g:OmniSharp_selector_ui = 'fzf'
   augroup CSharpIDEBinds
@@ -381,7 +347,7 @@ elseif (has('lua') || has('nvim'))
     " }
   endif
 
-  if s:has_exec('clang')
+  if HasExec('clang')
     " NOTE: deoplete-clang needs to point to clang's dynamic library, not just
     " where it can find the library
     " if (g:autocomplete_plugin == s:autocomplete_deoplete &&
@@ -409,7 +375,7 @@ elseif (has('lua') || has('nvim'))
     echo 'Cannot find clang, not installing clang completion'
   endif
 
-  if s:has_exec('ternjs')
+  if HasExec('ternjs')
     if g:autocomplete_plugin == s:autocomplete_deoplete
       " DeopleteTernjs: {
       Plug 'carlitux/deoplete-ternjs', { 'for': 'javascript'}
@@ -442,14 +408,14 @@ elseif (has('lua') || has('nvim'))
     echo 'Cannot find tern, not installing javascript completion'
   endif
 
-  if s:has_exec('flow')
+  if HasExec('flow')
     if g:autocomplete_plugin == s:autocomplete_deoplete
       Plug 'steelsojka/deoplete-flow', { 'for': 'javascript'}
     endif
   endif
 
 " DeopleteGo: {
-  if s:has_exec('gocode')
+  if HasExec('gocode')
     if g:autocomplete_plugin == s:autocomplete_deoplete
       Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go'}
       augroup DeoGoMore
@@ -466,13 +432,13 @@ elseif (has('lua') || has('nvim'))
   endif
 " }
 
-  if s:has_exec('msbuild')
+  if HasExec('msbuild')
     if g:autocomplete_plugin == s:autocomplete_deoplete
       Plug 'dimixar/deoplete-omnisharp'
     endif
   endif
 
-  if s:has_exec('python')
+  if HasExec('python')
     if g:autocomplete_plugin == s:autocomplete_deoplete
       Plug 'zchee/deoplete-jedi', { 'for': 'python'}
     endif
@@ -502,7 +468,7 @@ let g:echodoc_enable_at_startup = 1
 
 " VimRacer: {
 if empty($SIMPLE_VIM_PLUGINS)
-  if s:has_exec('racer')
+  if HasExec('racer')
     Plug 'racer-rust/vim-racer'
     let g:racer_experimental_completer = 1
     augroup RacerBinds
@@ -520,7 +486,7 @@ if empty($SIMPLE_VIM_PLUGINS)
          autocmd FileType rust call deoplete#custom#set('racer', 'rank', 9999)
        augroup END
     endif
-  elseif (VimPlugInitialized == 0 && s:has_exec('cargo'))
+  elseif (VimPlugInitialized == 0 && HasExec('cargo'))
     silent exec '!cargo install racer'
   endif
 endif
@@ -594,14 +560,14 @@ Plug 'tommcdo/vim-lion'
 Plug 'kana/vim-operator-user'
 Plug 'kana/vim-textobj-user'
 " Gutentags: {
-if s:has_exec('ctags')
+if HasExec('ctags')
   " Auto-generate tag files
   Plug 'ludovicchabant/vim-gutentags'
   nnoremap <leader>gt :GutentagsUpdate<CR>
   let g:gutentags_ctags_exclude = ['node_modules']
 endif
 " }
-if s:has_exec('cscope')
+if HasExec('cscope')
   Plug 'chazy/cscope_maps'
 endif
 " }
@@ -678,7 +644,7 @@ if empty($SIMPLE_VIM_PLUGINS)
 
   " Only show git stats that are non-zero
   let g:airline#extensions#hunks#non_zero_only=1
-  if s:has_exec('tmux')
+  if HasExec('tmux')
     " Don't load tmuxline unless I decide to. It adds 1000ms to startuptime
     let g:airline#extensions#tmuxline#enabled=0
   endif
@@ -734,14 +700,14 @@ Plug 'k-takata/matchit.vim'
 
 " Tagbar: {
 " Ctags are a dependancy of tagbar
-if s:has_exec('ctags')
+if HasExec('ctags')
   Plug 'majutsushi/tagbar'
   " Bind a button to open the tagbar
   nnoremap <leader>cb :TagbarToggle<CR>
   let g:tagbar_autoclose=1
   let g:tagbar_autofocus=1
 
-  if s:has_exec('php') && !has('win32')
+  if HasExec('php') && !has('win32')
     " Plug 'vim-php/phpctags'
     Plug 'vim-php/tagbar-phpctags.vim', { 'do': 'make'}
   endif
@@ -753,7 +719,7 @@ endif
 " }
 
 " Tmux: {
-if s:has_exec('tmux')
+if HasExec('tmux')
   " Lets you use <C-hjkl> to move between both tmux and vim panes.
   " VimTmuxNavigator: {
   Plug 'christoomey/vim-tmux-navigator'
@@ -777,7 +743,7 @@ else
 endif
 " }
 " W3M: {
-if s:has_exec('w3m')
+if HasExec('w3m')
   Plug 'yuratomo/w3m.vim'
   " Bind w3m to an easy key and add http so it doesn't search.
   nnoremap <leader>w3 :W3m http://
@@ -864,7 +830,7 @@ endif
 " Vim Airline: {
 if empty($SIMPLE_VIM_PLUGINS)
   " No need for tagbar if we don't have ctags. Also don't call functions if the plugin isn't installed.
-  if s:has_exec('ctags') && VimPlugInitialized == 1
+  if HasExec('ctags') && VimPlugInitialized == 1
     " No need to show filetype in the status bar, the ctags section is enough
     " autocmd User AirlineAfterInit let g:airline_section_y = airline#section#create(['tagbar'])
     let g:airline_section_y = airline#section#create(['tagbar'])
