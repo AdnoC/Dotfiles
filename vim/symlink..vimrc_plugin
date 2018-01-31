@@ -18,10 +18,10 @@ let $MYVIMRCPLUGIN=expand('<sfile>')
 " Used in checking which of several alternatives is used
 let s:syntax_syntastic = 'syntastic'
 let s:syntax_neomake = 'neomake'
-let s:autocomplete_ycm = 'ycm'
-let s:autocomplete_neocomplete = 'neocomplete'
-let s:autocomplete_deoplete = 'deoplete'
-let s:autocomplete_supertab = 'supertab'
+let g:autocomplete_ycm = 'ycm'
+let g:autocomplete_neocomplete = 'neocomplete'
+let g:autocomplete_deoplete = 'deoplete'
+let g:autocomplete_supertab = 'supertab'
 " }
 
 """" Plugin Manager: (Vim-Plug)
@@ -315,12 +315,12 @@ endif
 " YouCompleteMe only works on Linux/Mac and if vim is version > 7.3.584
 " Use supertab if YCM won't work
 if !empty($STANDALONE_VIM_PLUGINS)
-  let g:autocomplete_plugin = s:autocomplete_supertab
+  let g:autocomplete_plugin = g:autocomplete_supertab
   Plug 'ervandew/supertab'
 elseif (has('lua') || has('nvim'))
   if has('nvim')
     " Deoplete: {
-    let g:autocomplete_plugin = s:autocomplete_deoplete
+    let g:autocomplete_plugin = g:autocomplete_deoplete
     Plug 'Shougo/deoplete.nvim'
     "" Run deoplete.nvim automatically
     let g:deoplete#enable_at_startup = 1
@@ -339,7 +339,7 @@ elseif (has('lua') || has('nvim'))
     " }
   else
     " Neocomplete: {
-    let g:autocomplete_plugin = s:autocomplete_neocomplete
+    let g:autocomplete_plugin = g:autocomplete_neocomplete
     Plug 'Shougo/neocomplete.vim'
     let g:neocomplete#enable_at_startup = 1
     let g:neocomplete#auto_complete_start_length=1
@@ -350,10 +350,10 @@ elseif (has('lua') || has('nvim'))
   if HasExec('clang')
     " NOTE: deoplete-clang needs to point to clang's dynamic library, not just
     " where it can find the library
-    " if (g:autocomplete_plugin == s:autocomplete_deoplete &&
+    " if (g:autocomplete_plugin == g:autocomplete_deoplete &&
     "       \ !empty($CLANG_INCLUDE_PATH) && !isdirectory($LIBCLANG_PATH))
       " Plug 'zchee/deoplete-clang'
-    if g:autocomplete_plugin == s:autocomplete_deoplete
+    if g:autocomplete_plugin == g:autocomplete_deoplete
       " DeopleteClang: {
       Plug'tweekmonster/deoplete-clang2'
       " let g:deoplete#sources#clang#libclang_path = $LIBCLANG_PATH
@@ -376,7 +376,7 @@ elseif (has('lua') || has('nvim'))
   endif
 
   if HasExec('ternjs')
-    if g:autocomplete_plugin == s:autocomplete_deoplete
+    if g:autocomplete_plugin == g:autocomplete_deoplete
       " DeopleteTernjs: {
       Plug 'carlitux/deoplete-ternjs', { 'for': 'javascript'}
       let g:deoplete#sources#ternjs#tern_bin = 'ternjs'
@@ -409,14 +409,14 @@ elseif (has('lua') || has('nvim'))
   endif
 
   if HasExec('flow')
-    if g:autocomplete_plugin == s:autocomplete_deoplete
+    if g:autocomplete_plugin == g:autocomplete_deoplete
       Plug 'steelsojka/deoplete-flow', { 'for': 'javascript'}
     endif
   endif
 
 " DeopleteGo: {
   if HasExec('gocode')
-    if g:autocomplete_plugin == s:autocomplete_deoplete
+    if g:autocomplete_plugin == g:autocomplete_deoplete
       Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go'}
       augroup DeoGoMore
         autocmd!
@@ -433,13 +433,13 @@ elseif (has('lua') || has('nvim'))
 " }
 
   if HasExec('msbuild')
-    if g:autocomplete_plugin == s:autocomplete_deoplete
+    if g:autocomplete_plugin == g:autocomplete_deoplete
       Plug 'dimixar/deoplete-omnisharp'
     endif
   endif
 
   if HasExec('python')
-    if g:autocomplete_plugin == s:autocomplete_deoplete
+    if g:autocomplete_plugin == g:autocomplete_deoplete
       Plug 'zchee/deoplete-jedi', { 'for': 'python'}
     endif
   endif
@@ -454,7 +454,7 @@ elseif (has('lua') || has('nvim'))
   Plug 'Shougo/neco-syntax'
 
 else
-  let g:autocomplete_plugin = s:autocomplete_ycm
+  let g:autocomplete_plugin = g:autocomplete_ycm
   " If we have a new enough version of cmake, use upsteam
   let g:ycmInstallCommand = "/install.py --clang-completer --tern-completer --go-completer"
   Plug 'Valloric/YouCompleteMe', { 'do': g:ycmInstallCommand}
@@ -471,21 +471,6 @@ if empty($SIMPLE_VIM_PLUGINS)
   if HasExec('racer')
     Plug 'racer-rust/vim-racer'
     let g:racer_experimental_completer = 1
-    augroup RacerBinds
-      autocmd!
-      autocmd FileType rust nmap gd <Plug>(rust-def)
-      autocmd FileType rust nmap gs <Plug>(rust-def-split)
-      autocmd FileType rust nmap gx <Plug>(rust-def-vertical)
-      autocmd FileType rust nmap <leader>gd <Plug>(rust-doc)
-      autocmd FileType rust nmap K <Plug>(rust-doc)
-    augroup END
-
-    if g:autocomplete_plugin == s:autocomplete_deoplete
-       augroup RacerMore
-         autocmd!
-         autocmd FileType rust call deoplete#custom#set('racer', 'rank', 9999)
-       augroup END
-    endif
   elseif (VimPlugInitialized == 0 && HasExec('cargo'))
     silent exec '!cargo install racer'
   endif
@@ -553,6 +538,7 @@ if empty($STANDALONE_VIM_PLUGINS) && empty($SIMPLE_VIM_PLUGINS)
   augroup END
 else
   Plug 'ctrlpvim/ctrlp.vim'
+  nnoremap <leader>p :CtrlP<CR>
 endif
 " Align text
 Plug 'tommcdo/vim-lion'
@@ -636,7 +622,7 @@ if empty($SIMPLE_VIM_PLUGINS)
     let g:airline_theme = 'solarized'
   endif
   " Use fancy fonts
-  if g:autocomplete_plugin == s:autocomplete_ycm && $UPSTREAM_YCM == 0
+  if g:autocomplete_plugin == g:autocomplete_ycm && $UPSTREAM_YCM == 0
     let g:airline_powerline_fonts = 0
   else
     let g:airline_powerline_fonts = 1
@@ -821,7 +807,7 @@ imap <silent><S-TAB> <C-r>=<SID>completion_prev()<CR>
 " }
 
 " Deoplete: {
-if g:autocomplete_plugin == s:autocomplete_deoplete
+if g:autocomplete_plugin == g:autocomplete_deoplete
   call deoplete#custom#source('_', 'converters',
         \ ['converter_remove_paren'])
 endif
