@@ -726,6 +726,14 @@ if has('nvim')
   tnoremap <C-k> <C-\><C-n><C-w>k
   tnoremap <C-l> <C-\><C-n><C-w>l
 
+  if has('win32')
+    augroup WinFzfFix
+      autocmd!
+      autocmd TermOpen *FZF tnoremap <buffer><C-k> <C-k>
+      autocmd TermOpen *FZF tnoremap <buffer><C-j> <C-j>
+    augroup END
+  endif
+
   tnoremap [t <C-\><C-n>:tabprev<CR>
   tnoremap ]t <C-\><C-n>:tabnext<CR>
 endif
