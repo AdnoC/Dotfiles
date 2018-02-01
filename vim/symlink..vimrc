@@ -318,7 +318,7 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
 
     " If using vimdiff, use a colorscheme that is actually readable.
     if &diff
-      colorscheme blue
+      colorscheme industry
     " Otherwise pick the best for the situation
     elseif !g:USE_PLUGINS
       silent! colorscheme desert
