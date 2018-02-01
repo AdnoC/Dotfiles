@@ -794,7 +794,6 @@ if g:syntax_plugin == s:syntax_neomake
     let g:neomake_cpp_clang_maker.args = g:neomake_cpp_clang_maker.args
           \ + ['-std=c++14', '-Wall', '-Werror', '-Wextra', '-pedantic']
   catch
-    echom "Couldn't set cpp maker options"
   endtry
 endif
 " }
@@ -808,8 +807,11 @@ imap <silent><S-TAB> <C-r>=<SID>completion_prev()<CR>
 
 " Deoplete: {
 if g:autocomplete_plugin == g:autocomplete_deoplete
-  call deoplete#custom#source('_', 'converters',
-        \ ['converter_remove_paren'])
+  try
+    call deoplete#custom#source('_', 'converters',
+          \ ['converter_remove_paren'])
+  catch
+  endtry
 endif
 " }
 
@@ -819,7 +821,10 @@ if empty($SIMPLE_VIM_PLUGINS)
   if HasExec('ctags') && VimPlugInitialized == 1
     " No need to show filetype in the status bar, the ctags section is enough
     " autocmd User AirlineAfterInit let g:airline_section_y = airline#section#create(['tagbar'])
-    let g:airline_section_y = airline#section#create(['tagbar'])
+    try
+      let g:airline_section_y = airline#section#create(['tagbar'])
+    catch
+    endtry
   endif
 endif
 " }
