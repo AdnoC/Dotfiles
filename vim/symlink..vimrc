@@ -248,8 +248,19 @@ endfunction
 nnoremap <leader>rs :exe "resize " . (winheight(0) * 2 * 5/6)<CR>
 
 if &diff
-  nnoremap dp :diffput<CR>
-  nnoremap do :diffget<CR>
+  if argc() == 2
+    " Obtain diff from other file
+    nnoremap do :diffget<CR>
+    " Put diff into other file
+    nnoremap dp :diffput<CR>
+  else
+    " If there is more than 2 files on startup we are most likely
+    " called with `git mergetool`.
+    nnoremap do :diffget RE<CR>
+    nnoremap dp :diffget LO<CR>
+    nnoremap dr :diffget RE<CR>
+    nnoremap dl :diffget LO<CR>
+  endif
 endif
 
 """" Meta files (backup, swap) {
@@ -318,7 +329,11 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
 
     " If using vimdiff, use a colorscheme that is actually readable.
     if &diff
-      colorscheme industry
+      try
+        colorscheme PaperColor
+      catch
+        colorscheme industry
+      endtry
     " Otherwise pick the best for the situation
     elseif !g:USE_PLUGINS
       silent! colorscheme desert
