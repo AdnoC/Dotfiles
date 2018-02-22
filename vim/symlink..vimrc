@@ -367,7 +367,7 @@ if exists("&relativenumber")
 endif
 
 " Status line area stuff {
-if ! empty($SIMPLE_VIM_PLUGINS) " If not using Airline
+if empty($SIMPLE_VIM_PLUGINS) " If not using Airline
   " Show on status bar line & column number, relative % in file
   set ruler
   " No need to show the mode, as airline will show it for us

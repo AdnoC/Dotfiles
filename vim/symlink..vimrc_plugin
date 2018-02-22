@@ -22,6 +22,7 @@ let g:autocomplete_ycm = 'ycm'
 let g:autocomplete_neocomplete = 'neocomplete'
 let g:autocomplete_deoplete = 'deoplete'
 let g:autocomplete_supertab = 'supertab'
+let g:autocomplete_ncm = 'ncm'
 " }
 
 """" Plugin Manager: (Vim-Plug)
@@ -287,17 +288,14 @@ nnoremap <leader>ig :IndentLinesToggle<CR>
 " NeoSnippet: {
 if empty($SIMPLE_VIM_PLUGINS)
   Plug 'Shougo/neosnippet.vim'| Plug 'Shougo/neosnippet-snippets'
-  imap <expr><TAB>
-   \ pumvisible() ? "\<C-n>" :
-   \ neosnippet#expandable_or_jumpable() ?
-   \    "\<Plug>(neosnippet_expand_or_jump)" : "<TAB>"
 
-  smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-        \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-  imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-  smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-  xmap <C-k>     <Plug>(neosnippet_expand_target)
+  imap <C-j>     <Plug>(neosnippet_expand_or_jump)
+  smap <C-j>     <Plug>(neosnippet_expand_or_jump)
+  xmap <C-j>     <Plug>(neosnippet_expand_target)
+  " Show list of snippets when nothing has been typed
+  inoremap <silent> <c-u> <c-r>=cm#sources#neosnippet#trigger_or_popup("\<Plug>(neosnippet_expand_or_jump)")<cr>
 endif
+let g:neosnippet#enable_completed_snippet=1
 " }
 
 " Autocomplete: {
@@ -317,6 +315,16 @@ endif
 if !empty($STANDALONE_VIM_PLUGINS)
   let g:autocomplete_plugin = g:autocomplete_supertab
   Plug 'ervandew/supertab'
+elseif has('nvim')
+    let g:autocomplete_plugin = g:autocomplete_ncm
+  Plug 'roxma/nvim-completion-manager'
+  if HasExec('clang')
+    Plug 'roxma/ncm-clang'
+  endif
+  if HasExec('racer')
+    Plug 'roxma/nvim-cm-racer'
+  endif
+
 elseif (has('lua') || has('nvim'))
   if has('nvim')
     " Deoplete: {
@@ -799,10 +807,8 @@ endif
 " }
 
 " General Completion: {
-function! s:completion_prev() abort
-  return pumvisible() ? "\<C-p>" : "\<S-TAB>"
-endfunction
-imap <silent><S-TAB> <C-r>=<SID>completion_prev()<CR>
+inoremap <expr><Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 " }
 
 " Deoplete: {
@@ -878,17 +884,34 @@ let g:DisableAutoPHPFolding = 1
 " This section is for mapping those cases.
 
 " Enter: {
-" Deoplete:
+" Make sure that <CR> at least has itself in the mapping
+if mapcheck('<CR>', 'i') == ""
+    let s:old_enter_arg1 = "\<CR>"
+  inoremap <silent><CR> <CR>
+else
+  " This doesn't work
+  let s:old_enter_arg1 = maparg('<CR>', 'i')
+endif
+
+" Deoplete_or_NCM:
 if empty($SIMPLE_VIM_PLUGINS)
   if has('nvim')
     imap <silent><CR> <C-r>=<SID>my_cr_function()<CR>
 
     " Close the completion popup if it is visible. If it is not, press Enter.
-    function! s:my_cr_function() abort
-      let cr_str = pumvisible() ? "" : "\<CR>"
-      return deoplete#close_popup() . cr_str
-      " return (pumvisible() ? "\<C-y>" : "" ) . "\<Plug>AutoPairsReturn"
-    endfunction
+    if g:autocomplete_plugin == g:autocomplete_deoplete
+      function! s:my_cr_function() abort
+        let cr_str = pumvisible() ? "" : "\<CR>"
+        return deoplete#close_popup() . cr_str
+        " return (pumvisible() ? "\<C-y>" : "" ) . "\<Plug>AutoPairsReturn"
+      endfunction
+    elseif g:autocomplete_plugin == g:autocomplete_ncm
+      function! s:my_cr_function() abort
+        " return pumvisible() ? "\<c-y>\<CR>" : "\<CR>"
+        return pumvisible() ? "\<c-y>" . s:old_enter_arg1 : s:old_enter_arg1
+      endfunction
+
+    endif
 
   " Neocomplete:
   else
@@ -899,11 +922,6 @@ if empty($SIMPLE_VIM_PLUGINS)
       return neocomplete#close_popup() . cr_str
     endfunction
   endif
-endif
-
-" Make sure that <CR> at least has itself in the mapping
-if !mapcheck('<CR>', 'i')
-  imap <silent><CR> <CR>
 endif
 
 " Endwise:
