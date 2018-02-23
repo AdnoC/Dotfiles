@@ -893,28 +893,27 @@ else
   let s:old_enter_arg1 = maparg('<CR>', 'i')
 endif
 
-" Deoplete_or_NCM:
+" Autocompletes:
 if empty($SIMPLE_VIM_PLUGINS)
-  if has('nvim')
+  " Close the completion popup if it is visible. If it is not, press Enter.
+  " Deoplete:
+  if g:autocomplete_plugin == g:autocomplete_deoplete
     imap <silent><CR> <C-r>=<SID>my_cr_function()<CR>
-
-    " Close the completion popup if it is visible. If it is not, press Enter.
-    if g:autocomplete_plugin == g:autocomplete_deoplete
-      function! s:my_cr_function() abort
-        let cr_str = pumvisible() ? "" : "\<CR>"
-        return deoplete#close_popup() . cr_str
-        " return (pumvisible() ? "\<C-y>" : "" ) . "\<Plug>AutoPairsReturn"
-      endfunction
-    elseif g:autocomplete_plugin == g:autocomplete_ncm
-      function! s:my_cr_function() abort
-        " return pumvisible() ? "\<c-y>\<CR>" : "\<CR>"
-        return pumvisible() ? "\<c-y>" . s:old_enter_arg1 : s:old_enter_arg1
-      endfunction
-
-    endif
+    function! s:my_cr_function() abort
+      let cr_str = pumvisible() ? "" : "\<CR>"
+      return deoplete#close_popup() . cr_str
+      " return (pumvisible() ? "\<C-y>" : "" ) . "\<Plug>AutoPairsReturn"
+    endfunction
+  " NCM:
+  elseif g:autocomplete_plugin == g:autocomplete_ncm
+    imap <silent><CR> <C-r>=<SID>my_cr_function()<CR>
+    function! s:my_cr_function() abort
+      " return pumvisible() ? "\<c-y>\<CR>" : "\<CR>"
+      return pumvisible() ? "\<c-y>" . s:old_enter_arg1 : s:old_enter_arg1
+    endfunction
 
   " Neocomplete:
-  else
+  elseif g:autocomplete_plugin == g:autocomplete_neocomplete
     imap <silent><CR> <C-r>=<SID>my_cr_function()<CR>
 
     function! s:my_cr_function() abort
@@ -934,7 +933,7 @@ if empty($SIMPLE_VIM_PLUGINS)
   if has('nvim')
     imap <silent><C-h> <C-r>=deoplete#smart_close_popup()<CR>
 
-  " Neocomplete:
+    " Neocomplete:
   else
     imap <silent><C-h> <C-r>=neocomplete#smart_close_popup()<CR>
   endif
@@ -954,7 +953,7 @@ if empty($SIMPLE_VIM_PLUGINS)
   if has('nvim')
     imap <silent><BS> <C-r>=deoplete#smart_close_popup()<CR>
 
-  " Neocomplete:
+    " Neocomplete:
   else
     imap <silent><BS> <C-r>=neocomplete#smart_close_popup()<CR>
   endif
