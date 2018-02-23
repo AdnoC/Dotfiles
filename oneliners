@@ -12,3 +12,19 @@ if [ -z $VARIABLE_NAME ]; then; fi;
 
 # Quiet down pylint about no config file
 touch ~/.pylintrc
+
+# When adding a new hard drive to a Windows Computer
+Open "File Explorer"
+Right click "This PC" > "Manage"
+Click "Disk Management" in the newly opened "Computer Manager"
+A dialog will pop up saying you need to initialize the disk
+After, right click the unformated disk to make a new volume
+
+# Unity Vim integration
+Edit > Preferences >  External Tools:
+  External Script Editor: Input nvim-qt
+  External Script Editor Args: -- "$(File)" +"call cursor($(Line), 0)" +"cd $(ProjectPath)"
+Edit > Project Settings > Editor Settings:
+  Version Control > Mode: Visible Meta Files
+  Asset Serialization > Mode: Force Text
+  Line Endings For New Scripts > Mode: Unix
