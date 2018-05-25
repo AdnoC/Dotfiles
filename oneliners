@@ -31,3 +31,6 @@ Edit > Project Settings > Editor Settings:
 
 # Calibre: Convert epub to mobi
 ebook-convert filename.epub filename.mobi
+
+# FFMPEG: Convert flac to mp3
+ffmpeg -i filename.flac -q:a 0 filename.mp3
