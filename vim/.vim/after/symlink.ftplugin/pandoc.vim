@@ -40,6 +40,12 @@ if HasExec('pandoc') && empty($SIMPLE_VIM_PLUGINS)
   nmap <buffer>gb <Plug>(pandoc-keyboard-links-back)
 endif
 
+" Needs to be set on phone
+" setlocal ambiwidth=double
+
+" Automatically close math-mode dollar signs
+let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '$':'$'}
+
 " Turn spellcheck off because we are going to be using words that aren't in the dictionary
 setlocal nospell
 " Use 4 spaces per tab since thats the magic number for pandoc
