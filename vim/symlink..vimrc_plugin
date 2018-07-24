@@ -286,16 +286,17 @@ nnoremap <leader>ig :IndentLinesToggle<CR>
 " }
 
 " NeoSnippet: {
-if empty($SIMPLE_VIM_PLUGINS)
-  Plug 'Shougo/neosnippet.vim'| Plug 'Shougo/neosnippet-snippets'
+Plug 'Shougo/neosnippet.vim'| Plug 'Shougo/neosnippet-snippets'
 
-  imap <C-j>     <Plug>(neosnippet_expand_or_jump)
-  smap <C-j>     <Plug>(neosnippet_expand_or_jump)
-  xmap <C-j>     <Plug>(neosnippet_expand_target)
-  " Show list of snippets when nothing has been typed
-  inoremap <silent> <c-u> <c-r>=cm#sources#neosnippet#trigger_or_popup("\<Plug>(neosnippet_expand_or_jump)")<cr>
-endif
+imap <C-j>     <Plug>(neosnippet_expand_or_jump)
+smap <C-j>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-j>     <Plug>(neosnippet_expand_target)
+" Show list of snippets when nothing has been typed
+inoremap <silent> <c-u> <c-r>=cm#sources#neosnippet#trigger_or_popup("\<Plug>(neosnippet_expand_or_jump)")<cr>
 let g:neosnippet#enable_completed_snippet=1
+let g:neosnippet#scope_aliases = {}
+" Use tex and markdown snippets when writing pandoc files
+let g:neosnippet#scope_aliases['pandoc'] = 'tex,markdown'
 " }
 
 " Autocomplete: {
