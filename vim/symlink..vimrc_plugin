@@ -441,9 +441,11 @@ elseif (has('lua') || has('nvim'))
   endif
 " }
 
-  if HasExec('msbuild')
+  " Conditions match that of omnisharp-vim
+  if HasExec('msbuild') && empty($SIMPLE_VIM_PLUGINS)
     if g:autocomplete_plugin == g:autocomplete_deoplete
-      Plug 'dimixar/deoplete-omnisharp'
+      " Plug 'dimixar/deoplete-omnisharp' " This source is broken with newer doepletes
+      Plug 'gautamnaik1994/deoplete-omnisharp'
     endif
   endif
 
@@ -519,7 +521,7 @@ let g:BufKillCreateMappings=0
 " }
 " TComment: {
 Plug 'tomtom/tcomment_vim'
-let g:tcommentGuessFileType_php = "php"
+let g:tcomment#filetype#guess_php = "php"
 " }
 " File Explorer Plugin
 Plug 'jeetsukumaran/vim-filebeagle'
