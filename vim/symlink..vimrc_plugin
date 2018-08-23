@@ -154,7 +154,13 @@ endif
 " }
 " }
 
+" Rust: {
 Plug 'rust-lang/rust.vim'
+let g:rustfmt_autosave = 1
+" While rustfmt requires nightly, use rustup to run it with nightly
+let g:rustfmt_command = "rustup run nightly rustfmt"
+" }
+
 " Some more concealchars for tex
 Plug 'KeitaNakamura/tex-conceal.vim'
 " VimPandoc: {
