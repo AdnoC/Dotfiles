@@ -7,7 +7,7 @@ if HasExec('racer')
   nmap <leader>gd <Plug>(rust-doc)
   nmap K <Plug>(rust-doc)
 
-  if g:autocomplete_plugin == g:autocomplete_deoplete
-    call deoplete#custom#set('racer', 'rank', 9999)
-  endif
+  " if g:autocomplete_plugin == g:autocomplete_deoplete
+  "   call deoplete#custom#set('racer', 'rank', 9999)
+  " endif
 endif
