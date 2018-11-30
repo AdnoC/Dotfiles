@@ -42,6 +42,7 @@ function! HasExec(prog_name) abort
 
   return use_execs && executable(a:prog_name)
 endfunction
+let g:COMPLETEOPT_SET=0
 let g:USE_PLUGINS=0
 if empty($NO_VIM_PLUGINS) && filereadable(g:vimrcDirectory . ".vimrc_plugin")
   exec "so " . g:vimrcDirectory . ".vimrc_plugin"
@@ -531,7 +532,10 @@ set cmdheight=2
 set infercase
 " Specify how keyword completion works
 set complete=.,t
-set completeopt=longest,menu
+if g:COMPLETEOPT_SET == 0
+  set completeopt=longest,menu
+endif
+
 " }
 
 " Functions {

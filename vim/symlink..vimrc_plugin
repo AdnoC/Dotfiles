@@ -14,6 +14,7 @@
 let g:USE_PLUGINS=1
 let $MYVIMRCPLUGIN=expand('<sfile>')
 
+
 " Plugin Alternatives: {
 " Used in checking which of several alternatives is used
 let s:syntax_syntastic = 'syntastic'
@@ -186,6 +187,7 @@ Plug 'vim-scripts/csv.vim', {'for': 'csv'}
 Plug '2072/php-indenting-for-vim'
 " Adds syntax highlighting for some keywords in React. vim-polyglot already provides JSX syntax.
 Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
+Plug 'HerringtonDarkholme/yats.vim'
 
 " Helpers for creating comments
 " JCommenter: {
@@ -324,12 +326,29 @@ if !empty($STANDALONE_VIM_PLUGINS)
   Plug 'ervandew/supertab'
 elseif has('nvim')
     let g:autocomplete_plugin = g:autocomplete_ncm
-  Plug 'roxma/nvim-completion-manager'
+  Plug 'roxma/nvim-yarp' | Plug 'roxma/ncm2'
+
+  augroup EnableNCM
+    autocmd! BufEnter * call ncm2#enable_for_buffer()
+  augroup END
+
+  let g:COMPLETEOPT_SET=1
+  set completeopt=noinsert,menuone,noselect
+  Plug 'ncm2/ncm2-bufword'
+  Plug 'ncm2/ncm2-path'
+
+  Plug 'ncm2/nvim-typescript', {'do': './install.sh'}
+
   if HasExec('clang')
-    Plug 'roxma/ncm-clang'
+    Plug 'ncm2/ncm2-pyclang'
+    " TODO: Clang library path
+
+    augroup ClangGotoDecl
+      autocmd! FileType c,cpp nnoremap <buffer> gd :<c-u>call ncm2_pyclang#goto_declaration()<cr>
+    augroup END
   endif
   if HasExec('racer')
-    Plug 'roxma/nvim-cm-racer'
+    Plug 'roxma/ncm2-racer'
   endif
 
 elseif (has('lua') || has('nvim'))
