@@ -346,6 +346,8 @@ elseif has('nvim')
   " See Chain mapping section for <CR> remap
   " }
 
+  Plug 'ncm2/ncm2-vim' | Plug 'Shougo/neco-vim'
+
   if HasExec('clang')
     Plug 'ncm2/ncm2-pyclang'
     " TODO: Clang library path
