@@ -196,6 +196,7 @@ augroup END
 " Escape Aliases {
 inoremap kj <Esc>
 vnoremap kj <Esc>
+snoremap kj <Esc>
 " }
 
 noremap <leader>tn :tabnew<CR>
