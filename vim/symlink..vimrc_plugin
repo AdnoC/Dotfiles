@@ -293,18 +293,19 @@ let g:indentLine_enabled=0
 nnoremap <leader>ig :IndentLinesToggle<CR>
 " }
 
-" NeoSnippet: {
-Plug 'Shougo/neosnippet.vim'| Plug 'Shougo/neosnippet-snippets'
+" Ultisnips: {
+Plug 'SirVer/ultisnips'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
-imap <C-j>     <Plug>(neosnippet_expand_or_jump)
-smap <C-j>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-j>     <Plug>(neosnippet_expand_target)
-" Show list of snippets when nothing has been typed
-inoremap <silent> <c-u> <c-r>=cm#sources#neosnippet#trigger_or_popup("\<Plug>(neosnippet_expand_or_jump)")<cr>
-let g:neosnippet#enable_completed_snippet=1
-let g:neosnippet#scope_aliases = {}
-" Use tex and markdown snippets when writing pandoc files
-let g:neosnippet#scope_aliases['pandoc'] = 'tex,markdown'
+
+let g:UltiSnipsExpandTrigger = "<c-j>"
+let g:UltiSnipsJumpForwardTrigger = "<c-j>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
+
+let g:UltiSnipsRemoveSelectModeMappings = 0
+" TODO: COnvert for ultisnips
+" " Use tex and markdown snippets when writing pandoc files
+" let g:neosnippet#scope_aliases['pandoc'] = 'tex,markdown'
 " }
 
 " Autocomplete: {
@@ -332,12 +333,18 @@ elseif has('nvim')
     autocmd! BufEnter * call ncm2#enable_for_buffer()
   augroup END
 
+
   let g:COMPLETEOPT_SET=1
   set completeopt=noinsert,menuone,noselect
   Plug 'ncm2/ncm2-bufword'
   Plug 'ncm2/ncm2-path'
 
   Plug 'ncm2/nvim-typescript', {'do': './install.sh'}
+  " Ultisnips Stuff: {
+  Plug 'SirVer/ultisnips' | Plug 'ncm2/ncm2-ultisnips'
+  let g:UltiSnipsExpandTrigger = "<Plug>(ultisnips_expand)"
+  " See Chain mapping section for <CR> remap
+  " }
 
   if HasExec('clang')
     Plug 'ncm2/ncm2-pyclang'
@@ -877,14 +884,14 @@ let g:DisableAutoPHPFolding = 1
 " Using vim-operator-user (With NERDCommenter)
 " http://relaxedcolumn.blog8.fc2.com/blog-entry-154.html
 " Get SID prefix of vimrc (see :h <SID>)
-" function! s:SID_PREFIX() abort
-"     return matchstr(expand('<sfile>'), '<SNR>\d\+_')
-" endfunction
+function! s:SIDPrefix() abort
+    return matchstr(expand('<sfile>'), '<SNR>\d\+_')
+endfunction
 "function! s:setCommentOperator(key, name) abort
     "call operator#user#define(
     "\   'comment-' . a:name,
-    "\   s:SID_PREFIX() . 'doCommentCommand',
-    "\   'call ' . s:SID_PREFIX() . 'setCommentCommand("' . a:name . '")')
+    "\   s:SIDPrefix() . 'doCommentCommand',
+    "\   'call ' . s:SIDPrefix() . 'setCommentCommand("' . a:name . '")')
     "execute 'map' a:key '<Plug>(operator-comment-' . a:name . ')'
 "endfunction
 
@@ -934,12 +941,24 @@ if empty($SIMPLE_VIM_PLUGINS)
     endfunction
   " NCM:
   elseif g:autocomplete_plugin == g:autocomplete_ncm
-    imap <silent><CR> <C-r>=<SID>my_cr_function()<CR>
-    function! s:my_cr_function() abort
-      " return pumvisible() ? "\<c-y>\<CR>" : "\<CR>"
-      return pumvisible() ? "\<c-y>" . s:old_enter_arg1 : s:old_enter_arg1
+    function! s:DoExpandOr2()
+      if ncm2_ultisnips#completed_is_snippet()
+        call feedkeys("\<Plug>(ncm2_ultisnips_expand_completed)", "m")
+      else
+        call feedkeys(s:expand_key_str, 'im')
+      endif
+      return ''
     endfunction
 
+    function! s:DoExpandOr(key_str)
+      if !pumvisible()
+        return a:key_str
+      endif
+      let s:expand_key_str = a:key_str
+      return "\<c-y>\<c-r>=" . s:SIDPrefix() . "DoExpandOr2()\<cr>"
+    endfunction
+
+    autocmd BufNewFile,BufRead * exe "inoremap <silent> <buffer> <expr> <cr> <SID>DoExpandOr(\"" . maparg('<CR>', 'i') . "\")"
   " Neocomplete:
   elseif g:autocomplete_plugin == g:autocomplete_neocomplete
     imap <silent><CR> <C-r>=<SID>my_cr_function()<CR>
