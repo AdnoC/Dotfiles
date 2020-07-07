@@ -619,12 +619,14 @@ Plug 'tommcdo/vim-lion'
 Plug 'kana/vim-operator-user'
 Plug 'kana/vim-textobj-user'
 " Gutentags: {
-if HasExec('ctags')
-  " Auto-generate tag files
-  Plug 'ludovicchabant/vim-gutentags'
-  nnoremap <leader>gt :GutentagsUpdate<CR>
-  let g:gutentags_ctags_exclude = ['node_modules']
-endif
+" if HasExec('ctags')
+"   " Auto-generate tag files
+"   Plug 'ludovicchabant/vim-gutentags'
+"   nnoremap <leader>gt :GutentagsUpdate<CR>
+"   let g:gutentags_ctags_exclude = ['node_modules']
+"   let g:gutentags_exclude_filetypes = ['.cmake']
+"
+" endif
 " }
 if HasExec('cscope')
   Plug 'chazy/cscope_maps'
