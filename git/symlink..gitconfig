@@ -40,11 +40,20 @@
 # Use pull --rebase instead of normal pull
 [pull]
   rebase = true
-[merge]
-	tool = vimdiff
 [push]
 	default = current
 [init]
 	templatedir = ~/dotfiles/gitTemplateDir
 [diff]
 	indentHeuristic = true
+	algorithm = patience
+[merge]
+	tool = vimdiff
+[mergetool]
+	prompt = true
+[mergetool "vimdiff"]
+	cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+[difftool]
+	prompt = false
+[diff]
+	tool = vimdiff
