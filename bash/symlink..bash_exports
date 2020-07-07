@@ -172,6 +172,12 @@ if [ -f /usr/share/source-highlight/src-hilite-lesspipe.sh ]; then
   export LESS=' -R'
 fi
 
+if command -v "rg" >/dev/null 2>&1; then
+  export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!{.git,.svn,node_modules,bower_components}"'
+elif command -v "fd" >/dev/null 2>&1; then
+  export FZF_DEFAULT_COMMAND='fd --type f'
+fi
+
 # In tmux use a new pane for fzf
 export FZF_TMUX=1
 if [ -n "$IN_WSL" ]; then
