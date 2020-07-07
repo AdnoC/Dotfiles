@@ -79,6 +79,12 @@ endif
 " Plugin Declarations: {
 call plug#begin(g:vimDirectoryPart . 'bundle')
 
+let $MYVIMRCLOCALPLUGIN=expand(g:vimDirectoryPart . ".vimrc_plugin.local")
+"""" If there is a local vim configuration file, run it
+if filereadable($MYVIMRCLOCALPLUGIN)
+  exec "so " . $MYVIMRCLOCALPLUGIN
+endif
+
 "Add your plugins here
 " Games: {
 Plug 'vim-scripts/TeTrIs.vim'
