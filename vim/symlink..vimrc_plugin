@@ -554,7 +554,7 @@ endif
 " }
 " Tools: {
 " Nice startup screen
-Plug 'mhinz/vim-startify'
+" Plug 'mhinz/vim-startify'
 " Sources a .lvimrc file to allow for per-project configuration
 " Vim_LocalVimrc: {
 Plug 'embear/vim-localvimrc'
