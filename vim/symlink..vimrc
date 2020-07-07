@@ -1,6 +1,5 @@
 " Vim preferneces file
 
-
 if !empty($NO_VIM_PLUGINS)
   let $STANDALONE_VIM_PLUGINS=1
   let $SIMPLE_VIM_PLUGINS=1
@@ -248,8 +247,9 @@ endfunction
 
 " Resize the current buffer
 nnoremap <leader>rs :exe "resize " . (winheight(0) * 2 * 5/6)<CR>
-
 if &diff
+set diffopt+=algorithm:patience
+set diffopt+=indent-heuristic
   if argc() == 2
     " Obtain diff from other file
     nnoremap do :diffget<CR>
