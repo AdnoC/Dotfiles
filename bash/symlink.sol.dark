@@ -7,7 +7,7 @@ echo -ne   '\e]11;#002B36\a'  # Background   -> base03
 echo -ne   '\e]12;#93A1A1\a'  # Cursor       -> base1
 
 echo -ne  '\e]4;0;#073642\a'  # black        -> Base02
-echo -ne  '\e]4;8;#002B36\a'  # bold black   -> Base03
+# echo -ne  '\e]4;8;#002B36\a'  # bold black   -> Base03
 echo -ne  '\e]4;1;#DC322F\a'  # red          -> red
 echo -ne  '\e]4;9;#CB4B16\a'  # bold red     -> orange
 echo -ne  '\e]4;2;#859900\a'  # green        -> green
