@@ -6,26 +6,31 @@ cp ~/WinUser/AppData/Local/nvim/init.vim win_vimrc/.vimrc
 cp ~/WinUser/AppData/Local/nvim/.vimrc_plugin win_vimrc/.vimrc_plugin
 cp ~/WinUser/AppData/Local/nvim/ginit.vim win_vimrc/ginit.vim 
 
+difftool="vimdiff"
+if command -v nvim >/dev/null 2>&1; then
+  difftool="nvim -d"
+fi
+
 cat <<END >win_vimrc/diff_vimrc.sh 
 #!/bin/sh
 
-vimdiff ~/.vimrc "$PWD/win_vimrc/.vimrc"
+$difftool ~/.vimrc "$PWD/win_vimrc/.vimrc"
 END
 chmod +x win_vimrc/diff_vimrc.sh
 
 cat <<END >win_vimrc/diff_plugin.sh 
 #!/bin/sh
 
-vimdiff ~/.vimrc_plugin "$PWD/win_vimrc/.vimrc_plugin"
+$difftool ~/.vimrc_plugin "$PWD/win_vimrc/.vimrc_plugin"
 END
 chmod +x win_vimrc/diff_plugin.sh
 
 cat <<END >win_vimrc/diff_ginit.sh 
 #!/bin/sh
 
-vimdiff ~/dotfiles/vim/ginit.vim "$PWD/win_vimrc/ginit.vim"
+$difftool ~/dotfiles/vim/symlink.ginit.vim "$PWD/win_vimrc/ginit.vim"
 END
-chmod +x win_vimrc/diff_plugin.sh
+chmod +x win_vimrc/diff_ginit.sh
 
 cat <<END >win_vimrc/summary.sh
 #!/bin/bash

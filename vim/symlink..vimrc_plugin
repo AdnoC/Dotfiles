@@ -187,9 +187,9 @@ if !HasExec('pandoc')
 augroup END
 endif
 " }
-if HasExec('python') && empty($SIMPLE_VIM_PLUGINS)
-  Plug 'davidhalter/jedi-vim'
-endif
+" if HasExec('python') && empty($SIMPLE_VIM_PLUGINS)
+"   Plug 'davidhalter/jedi-vim'
+" endif
 Plug 'vim-scripts/csv.vim', {'for': 'csv'}
 Plug '2072/php-indenting-for-vim'
 " Adds syntax highlighting for some keywords in React. vim-polyglot already provides JSX syntax.

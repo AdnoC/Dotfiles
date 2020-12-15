@@ -157,6 +157,7 @@ endfunction
 
 
 if exists('g:GuiLoaded')
+  GuiPopupmenu 0
   let g:solarized_termtrans=0
   set termguicolors
   set clipboard=unnamed
@@ -164,5 +165,6 @@ if exists('g:GuiLoaded')
   Guifont! DejaVu Sans Mono for Powerline:h10
   let SetSize = function('s:set_size')
   call timer_start(500, SetSize)
+  inoremap <silent> <S-Insert> <C-R>+
 endif
 
