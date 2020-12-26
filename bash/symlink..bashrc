@@ -29,3 +29,5 @@ test -f ~/.fzf.bash && . $_
 if [ -z "$_BP_SOURCED" ]; then
   source ~/.bash_profile
 fi
+
+test -f ~/.bashrc.local && . $_
