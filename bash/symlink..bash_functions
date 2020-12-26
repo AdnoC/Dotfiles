@@ -34,8 +34,7 @@ cp_p () {
   rsync -WavP --human-readable --progress $1 $2
 }
 
-up()
-{
+up() {
     dir=""
     if [ -z "$1" ]; then
         dir=..
@@ -49,11 +48,6 @@ up()
         dir=${PWD%/$1/*}/$1
     fi
     cd "$dir";
-}
-
-upstr()
-{
-    echo "$(up "$1" && pwd)";
 }
 
 #dirsize - finds directory sizes and lists them for the current directory
@@ -74,9 +68,17 @@ psgrep() {
   fi
 }
 
-eject() {
-  sudo umount -f "/Volumes/$@"
-}
+if [[ "$OSTYPE" == darwin* ]]; then
+  eject() {
+    sudo umount -f "/Volumes/$@"
+  }
+
+  # Clear Apple’s System Logs
+  dstore_clean() {
+    find $@ -type f -name .DS_Store -print0 | xargs -0 rm
+  }
+fi
+
 if [ "$OSTYPE" == "cygwin" ]; then
 # Wrapper for Tmux to fix on Cygin
   tmux() {
@@ -94,13 +96,6 @@ if [ "$OSTYPE" == "cygwin" ]; then
 
   open_path() {
     explorer.exe /e,`cygpath -w "$@"`
-  }
-fi
-
-if [ "$(uname)" == "Darwin" ]; then
-  # Clear Apple’s System Logs
-  dstore_clean() {
-    find $@ -type f -name .DS_Store -print0 | xargs -0 rm
   }
 fi
 
