@@ -183,7 +183,7 @@ if !HasExec('pandoc')
   augroup PandocSyntaxFT
     autocmd!
     autocmd BufNewFile,BufFilePre,BufRead *.pdc set filetype=pandoc
-    autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
+    " autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
 augroup END
 endif
 " }
@@ -673,8 +673,15 @@ Plug 'lifepillar/vim-solarized8'
 " Makes the status bar & buffer bar look nice and display useful info
 if empty($SIMPLE_VIM_PLUGINS)
   " Vim Airline: {
-  Plug 'bling/vim-airline'
-  Plug 'vim-airline/vim-airline-themes'
+  if !exists('g:started_by_firenvim')
+    Plug 'bling/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
+    " Automatically refresh airline when changing colorschemes. This fixes the arrows.
+    augroup RefreshAirline
+      autocmd!
+      autocmd VimEnter * autocmd ColorScheme * AirlineRefresh
+    augroup END
+  endif
   if g:syntax_plugin == s:syntax_syntastic
     let g:airline#extensions#syntastic#enabled = 1
   elseif g:syntax_plugin == s:syntax_neomake
@@ -714,11 +721,6 @@ if empty($SIMPLE_VIM_PLUGINS)
   let g:airline_section_c = "%f%m %<%{bufname('#') != bufname('%') ? '('. bufname('#') .')' : ''}"
   " Also don't need to know the formatting. Just leave it empty
   let g:airline_section_x=''
-  " Automatically refresh airline when changing colorschemes. This fixes the arrows.
-  augroup RefreshAirline
-    autocmd!
-    autocmd VimEnter * autocmd ColorScheme * AirlineRefresh
-  augroup END
   " }
 else
   Plug 'bling/vim-bufferline'
@@ -820,6 +822,18 @@ if HasExec('w3m')
   augroup END
 elseif VimPlugInitialized == 0
   echo 'Cannot find W3m. Not installing w3m.vim'
+endif
+" }
+" FireNvim: {
+Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+if exists('g:started_by_firenvim') && g:started_by_firenvim
+
+  augroup Firenvim
+    autocmd!
+    autocmd BufEnter github.com_*.txt setlocal filetype=markdown.pandoc
+    autocmd BufEnter *.txt setlocal laststatus=0 nonumber noruler noshowcmd bg=light tw=0
+    autocmd BufEnter *.txt colorscheme PaperColor
+  augroup END
 endif
 " }
 
