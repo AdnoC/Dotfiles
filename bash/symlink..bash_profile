@@ -1,14 +1,16 @@
 # vim: ft=sh :
-if [[ -v _BP_SOURCED ]] && [ "$_BP_SOURCED" -ge "$SHLVL" ]; then
-  return
-fi
-export _BP_SOURCED=$SHLVL
 set -o vi
 
 # '.' = run     '$_' = the last arg of the previous command
 test -f ~/.bashrc && . $_
 
 test -f ~/.profile && . $_
+
+#Run for non-login shells
+for file in ~/.bash_{exports,functions,aliases}; do
+  test -f $file && . $_
+done
+unset file
 
 export TERM_COLOR='dark'
 
@@ -54,14 +56,4 @@ if [ "$SHLVL" = 1 ]; then
     [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
 fi
 
-# If we kept note of the directory we were at when we last closed the terminal
-# and we're starting in $HOME, go to that directory.
-if [ -s ~/.lastdirectory ] && [ "$(pwd)" == "$HOME" ]; then
-  cd "$(cat ~/.lastdirectory)"
-fi
-
 test -f ~/.bash_profile.local && . $_
-
-# Let me source the profile again manually if I want to
-unset _BRC_SOURCED
-unset _BP_SOURCED
