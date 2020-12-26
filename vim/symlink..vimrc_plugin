@@ -302,6 +302,10 @@ let g:indentLine_enabled=0
 nnoremap <leader>ig :IndentLinesToggle<CR>
 " }
 
+" Context: {
+Plug 'wellle/context.vim'
+" }
+
 " Ultisnips: {
 Plug 'SirVer/ultisnips'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
