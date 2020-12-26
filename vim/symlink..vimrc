@@ -196,9 +196,40 @@ augroup END
 
 " Meta {
 " Escape Aliases {
-inoremap kj <Esc>
+inoremap <expr> j EscapeInsertOrNot()
 vnoremap kj <Esc>
 snoremap kj <Esc>
+
+" Source: https://jdhao.github.io/2020/11/23/neovim_better_mapping_for_leaving_insert_mode/
+function! EscapeInsertOrNot() abort
+  " If j is preceded by k, then remove k and go to normal mode.
+  let line_text = getline('.')
+  let cur_ch_idx = CursorCharIdx()
+  let pre_char = CharAtIdx(line_text, cur_ch_idx-1)
+  echom 'pre_char is:' pre_char
+  if pre_char ==# 'k'
+    return "\b\e"
+  else
+    return 'k'
+  endif
+endfunction
+
+function! CharAtIdx(str, idx) abort
+  " Get char at idx from str. Note that this is based on character index
+  " instead of the byte index.
+  return strcharpart(a:str, a:idx, 1)
+endfunction
+
+function! CursorCharIdx() abort
+  " A more concise way to get character index under cursor.
+  let cursor_byte_idx = col('.')
+  if cursor_byte_idx == 1
+    return 0
+  endif
+
+  let pre_cursor_text = getline('.')[:col('.')-2]
+  return strchars(pre_cursor_text)
+endfunction
 " }
 
 noremap <leader>tn :tabnew<CR>
