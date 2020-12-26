@@ -1,3 +1,6 @@
+scriptencoding utf-8
+" Above line must be first thing in vimrc. Sets encoding used in this file
+
 " Vim preferneces file
 
 if !empty($NO_VIM_PLUGINS)
