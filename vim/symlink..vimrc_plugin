@@ -213,10 +213,12 @@ augroup END
 " }
 
 
-" Add docs for Java on 'J' keybind
-Plug 'davetron5000/javax-xml-javadoc-vim', { 'for': 'java'}
-Plug 'davetron5000/javax-javadoc-vim', { 'for': 'java'}
-Plug 'davetron5000/java-javadoc-vim', { 'for': 'java'}
+if !has('nvim')
+  " Add docs for Java on 'J' keybind
+  Plug 'davetron5000/javax-xml-javadoc-vim', { 'for': 'java'}
+  Plug 'davetron5000/javax-javadoc-vim', { 'for': 'java'}
+  Plug 'davetron5000/java-javadoc-vim', { 'for': 'java'}
+endif
 " }
 if !&diff
   if (has('nvim') || v:version >= 8)
