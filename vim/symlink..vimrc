@@ -210,7 +210,7 @@ function! EscapeInsertOrNot() abort
   if pre_char ==# 'k'
     return "\b\e"
   else
-    return 'k'
+    return 'j'
   endif
 endfunction
 
