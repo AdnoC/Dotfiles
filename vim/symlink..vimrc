@@ -241,6 +241,9 @@ set pastetoggle=<F11>
 " Change vim pwd to dir of file to easily open other files in dir
 nnoremap <leader>cd :cd %:p:h<CR>
 
+" Save swap file annd trigger CursorHold sooner than the default 4 seconds
+set updatetime=100
+
 " Wildmenu {
 " Turn on wild menu (Allow tab use with the command line)
 set wildmenu

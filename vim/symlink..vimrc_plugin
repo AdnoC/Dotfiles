@@ -19,6 +19,7 @@ let $MYVIMRCPLUGIN=expand('<sfile>')
 " Used in checking which of several alternatives is used
 let s:syntax_syntastic = 'syntastic'
 let s:syntax_neomake = 'neomake'
+let s:syntax_treesitter = 'treesitter'
 let g:autocomplete_ycm = 'ycm'
 let g:autocomplete_neocomplete = 'neocomplete'
 let g:autocomplete_deoplete = 'deoplete'
@@ -221,7 +222,12 @@ if !has('nvim')
 endif
 " }
 if !&diff
-  if (has('nvim') || v:version >= 8)
+  if has('nvim')
+    let g:syntax_plugin = s:syntax_treesitter
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+    Plug 'nvim-treesitter/nvim-treesitter-refactor'
+    Plug 'p00f/nvim-ts-rainbow'
+  elseif (has('nvim') || v:version >= 8)
     " Neomake: {
     let g:syntax_plugin = s:syntax_neomake
     Plug 'neomake/neomake'
@@ -303,7 +309,10 @@ nnoremap <leader>ig :IndentLinesToggle<CR>
 " }
 
 " Context: {
-Plug 'wellle/context.vim'
+" Plug 'wellle/context.vim'
+if g:syntax_plugin == s:syntax_treesitter
+  Plug 'romgrk/nvim-treesitter-context'
+endif
 " }
 
 " Ultisnips: {
@@ -878,6 +887,29 @@ endif
 
 " Plugin Settings: (Function calls) {
 
+" Treesitter:
+if g:syntax_plugin == s:syntax_treesitter
+  lua << EOF
+local ok, ts = pcall(require, 'nvim-treesitter.configs')
+if ok then
+  ts.setup {
+    ensure_installed = 'maintained',
+    highlight = { enable = true },
+    rainbow = {
+      enable = true,
+      disable = {'bash'} -- please disable bash until I figure #1 out
+    },
+    indent = { enabled = true },
+    refactor = {
+      highlight_definitions = { enable = true }
+    }
+  }
+end
+EOF
+  set foldmethod=expr
+  set foldexpr=nvim_treesitter#foldexpr()
+endif
+" }
 " Neomake: {
 if g:syntax_plugin == s:syntax_neomake
   try
