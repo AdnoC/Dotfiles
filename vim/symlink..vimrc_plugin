@@ -647,28 +647,32 @@ if HasExec('cscope')
 endif
 " }
 " Text Objects: {
-" Allows for things like 'cs2a([' to change ((*)) to [(*)]
-Plug 'osyo-manga/vim-textobj-multiblock'
-" Allows for text objects to be between any specified char
-Plug 'thinca/vim-textobj-between'
-" Allows for the use of 'b' as a text objext of any [('"<
-Plug 'rhysd/vim-textobj-anyblock'
-" Allows text objects to only exist on one side of the carot
-Plug 'tommcdo/vim-ninja-feet'
-Plug 'coderifous/textobj-word-column.vim'
-Plug 'kana/vim-textobj-indent'
-Plug 'kana/vim-textobj-fold'
-" TextobjComment: {
-Plug 'glts/vim-textobj-comment'
-let g:textobj_comment_no_default_key_mappings = 1
-xmap ax <Plug>(textobj-comment-a)
-omap ax <Plug>(textobj-comment-a)
-xmap ix <Plug>(textobj-comment-i)
-omap ix <Plug>(textobj-comment-i)
-xmap aX <Plug>(textobj-comment-big-a)
-omap aX <Plug>(textobj-comment-big-a)
-xmap iX <Plug>(textobj-comment-big-i)
-omap iX <Plug>(textobj-comment-big-i)
+if g:syntax_plugin == s:syntax_treesitter
+  Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+else
+  " Allows for things like 'cs2a([' to change ((*)) to [(*)]
+  Plug 'osyo-manga/vim-textobj-multiblock'
+  " Allows for text objects to be between any specified char
+  Plug 'thinca/vim-textobj-between'
+  " Allows for the use of 'b' as a text objext of any [('"<
+  Plug 'rhysd/vim-textobj-anyblock'
+  " Allows text objects to only exist on one side of the carot
+  Plug 'tommcdo/vim-ninja-feet'
+  Plug 'coderifous/textobj-word-column.vim'
+  Plug 'kana/vim-textobj-indent'
+  Plug 'kana/vim-textobj-fold'
+  " TextobjComment: {
+  Plug 'glts/vim-textobj-comment'
+  let g:textobj_comment_no_default_key_mappings = 1
+  xmap ax <Plug>(textobj-comment-a)
+  omap ax <Plug>(textobj-comment-a)
+  xmap ix <Plug>(textobj-comment-i)
+  omap ix <Plug>(textobj-comment-i)
+  xmap aX <Plug>(textobj-comment-big-a)
+  omap aX <Plug>(textobj-comment-big-a)
+  xmap iX <Plug>(textobj-comment-big-i)
+  omap iX <Plug>(textobj-comment-big-i)
+endif
 " }
 " }
 " Looks: {
@@ -913,13 +917,31 @@ if ok then
   ts.setup {
     ensure_installed = 'maintained',
     highlight = { enable = true },
-    rainbow = {
-      enable = true,
-      disable = {'bash'} -- please disable bash until I figure #1 out
-    },
     indent = { enabled = true },
     refactor = {
       highlight_definitions = { enable = true }
+    },
+    textobjects = {
+      select = {
+        enable = true,
+        keymaps = {
+          ['af'] = '@function.outer',
+          ['if'] = '@function.inner',
+          ['aC'] = '@class.outer',
+          ['iC'] = '@class.inner',
+          ['ac'] = '@conditional.outer',
+          ['ic'] = '@conditional.inner',
+          ['ae'] = '@block.outer',
+          ['ie'] = '@block.inner',
+          ['al'] = '@loop.outer',
+          ['il'] = '@loop.inner',
+          ['is'] = '@statement.inner',
+          ['as'] = '@statement.outer',
+          ['ad'] = '@comment.outer',
+          ['am'] = '@call.outer',
+          ['im'] = '@call.inner',
+        }
+      }
     }
   }
 end
