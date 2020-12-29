@@ -307,21 +307,6 @@ if g:syntax_plugin == s:syntax_treesitter
 endif
 " }
 
-" Ultisnips: {
-Plug 'SirVer/ultisnips'
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-
-
-let g:UltiSnipsExpandTrigger = "<c-j>"
-let g:UltiSnipsJumpForwardTrigger = "<c-j>"
-let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
-
-let g:UltiSnipsRemoveSelectModeMappings = 0
-" TODO: COnvert for ultisnips
-" " Use tex and markdown snippets when writing pandoc files
-" let g:neosnippet#scope_aliases['pandoc'] = 'tex,markdown'
-" }
-
 " Autocomplete: {
 " Omnisharp: {
 if empty($SIMPLE_VIM_PLUGINS) && HasExec('msbuild')
@@ -343,6 +328,7 @@ elseif has('nvim')
   " Use release branch
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   let g:autocomplete_plugin = g:autocomplete_coc
+  imap <C-l> <Plug>(coc-snippets-expand)
 elseif (has('lua') || has('nvim'))
   if has('nvim')
     " Deoplete: {
@@ -505,6 +491,25 @@ if empty($SIMPLE_VIM_PLUGINS)
 endif
 " }
 " }
+
+" Ultisnips: {
+Plug 'SirVer/ultisnips'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+
+if g:autocomplete_plugin != g:autocomplete_coc
+  let g:UltiSnipsExpandTrigger = "<c-l>"
+else
+  let g:UltiSnipsExpandTrigger = "<Nop>"
+endif
+let g:UltiSnipsJumpForwardTrigger = "<c-j>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
+
+let g:UltiSnipsRemoveSelectModeMappings = 0
+" TODO: Convert for ultisnips
+" " Use tex and markdown snippets when writing pandoc files
+" let g:neosnippet#scope_aliases['pandoc'] = 'tex,markdown'
+" }
+
 
 " }
 " Tools: {
