@@ -108,7 +108,7 @@ endif
 " }
 if HasExec('git')
   " Commit browser. Switch to original (junegunn/gv.vim) after it merges help PR
-  Plug 'sudavid4/gv.vim', { 'on': 'GV' }
+  Plug 'junegunn/gv.vim', { 'on': 'GV' }
   " Show git changes in gutter
   " Vim GitGutter: {
   Plug 'airblade/vim-gitgutter'
