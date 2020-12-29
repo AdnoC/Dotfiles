@@ -198,19 +198,11 @@ Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
 Plug 'HerringtonDarkholme/yats.vim'
 
 " Helpers for creating comments
-" JCommenter: {
-Plug 'AdnoC/jcommenter.vim', { 'for': 'java'}
-" }
-" VimJSDoc: {
-Plug 'heavenshell/vim-jsdoc', { 'for': 'javascript'}
-let g:jsdoc_allow_input_prompt=1
-let g:jsdoc_additional_descriptions=1
-let g:jsdoc_default_mapping=0
-
-augroup VIMJSDOC
-  autocmd!
-  autocmd FileType javascript nmap <leader>cj :JsDoc<CR>
-augroup END
+" VimDoge: {
+Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
+let g:doge_doc_standard_python = "python"
+let g:doge_mapping_comment_jump_forward = "<c-j>"
+let g:doge_mapping_comment_jump_backward = "<c-k>"
 " }
 
 
@@ -351,58 +343,6 @@ elseif has('nvim')
   " Use release branch
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   let g:autocomplete_plugin = g:autocomplete_coc
-
-
-
-
-
-
-  " let g:autocomplete_plugin = g:autocomplete_ncm
-  " Plug 'roxma/nvim-yarp' | Plug 'roxma/ncm2'
-  "
-  " let g:gutentags_dont_load = 1
-  "
-  " augroup EnableNCM
-  "   autocmd! BufEnter * call ncm2#enable_for_buffer()
-  " augroup END
-  "
-  "
-  " let g:COMPLETEOPT_SET=1
-  " set completeopt=noinsert,menuone,noselect
-  " Plug 'ncm2/ncm2-bufword'
-  " Plug 'ncm2/ncm2-path'
-  "
-  " Plug 'ncm2/nvim-typescript', {'do': './install.sh'}
-  " " Ultisnips Stuff: {
-  " Plug 'SirVer/ultisnips' | Plug 'ncm2/ncm2-ultisnips'
-  " let g:UltiSnipsExpandTrigger = "<Plug>(ultisnips_expand)"
-  " " See Chain mapping section for <CR> remap
-  " " }
-  "
-  " Plug 'ncm2/ncm2-vim' | Plug 'Shougo/neco-vim'
-  "
-  " if HasExec('clang')
-  "   Plug 'ncm2/ncm2-pyclang'
-  "   let g:ncm2_pyclang#library_path = $LIBCLANG_PATH
-  "   " TODO: Clang library path
-  "
-  "   augroup ClangGotoDecl
-  "     autocmd! FileType c,cpp nnoremap <buffer> gd :<c-u>call ncm2_pyclang#goto_declaration()<cr>
-  "   augroup END
-  " endif
-  "
-  " if HasExec('racer')
-  "   Plug 'roxma/ncm2-racer'
-  " endif
-  "
-  " if HasExec('java')
-  "   Plug 'artur-shaik/vim-javacomplete2' | Plug 'ObserverOfTime/ncm2-jc2'
-  " endif
-  "
-  " if HasExec('npm')
-  "   Plug 'ncm2/ncm2-tern',  {'do': 'npm install'}
-  " endif
-  "
 elseif (has('lua') || has('nvim'))
   if has('nvim')
     " Deoplete: {
