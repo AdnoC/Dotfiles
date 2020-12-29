@@ -294,8 +294,11 @@ let g:endwise_no_mappings = 1
 Plug 'tpope/vim-endwise'
 " }
 " Indent Lines: {
-Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle'}
-let g:indentLine_enabled=0
+Plug 'Yggdroot/indentLine'
+if has('nvim')
+  Plug 'lukas-reineke/indent-blankline.nvim'
+endif
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 " The default bind, just here so I remember
 nnoremap <leader>ig :IndentLinesToggle<CR>
 " }
