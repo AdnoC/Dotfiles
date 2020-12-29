@@ -780,8 +780,15 @@ Plug 'k-takata/matchit.vim'
 
 
 " Tagbar: {
+if has('nvim')
+  Plug 'liuchengxu/vista.vim'
+  let g:vista_close_on_jump=1
+  let g:vista_default_executive = 'coc'
+  let g:vista_finder_alternative_executives = ['ctags']
+  nnoremap <leader>cb :Vista<CR>
+endif
 " Ctags are a dependancy of tagbar
-if HasExec('ctags')
+if HasExec('ctags') && !has('nvim')
   Plug 'majutsushi/tagbar'
   " Bind a button to open the tagbar
   nnoremap <leader>cb :TagbarToggle<CR>
