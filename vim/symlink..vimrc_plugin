@@ -134,182 +134,6 @@ let s:autoPairsMapBS=0
 " }
 Plug 'Konfekt/FastFold'
 " Syntax: {
-" FileType Specific: (syntax files) {
-" General language pack
-Plug 'sheerun/vim-polyglot'
-" Go: {
-function! InstallGoBins(info) abort
-  if a:info.status == 'installed'
-    GoInstallBinaries
-  elseif a:info.status == 'updated'
-    GoUpdateBinaries
-  endif
-endfunction
-" VimGo: {
-if HasExec('go') && empty($SIMPLE_VIM_PLUGINS)
-  Plug 'fatih/vim-go', { 'do': function('InstallGoBins')}
-  if !exists('g:neocomplete#sources#omni#input_patterns')
-    let g:neocomplete#sources#omni#input_patterns = {}
-  endif
-  let g:neocomplete#sources#omni#input_patterns.go =
-    \ '\h\w*\|[^. \t]\.\w*'
-  if HasExec("goimports")
-    let g:go_fmt_command = "goimports"
-    if has("win32")
-      let g:go_fmt_command = "goimports.exe"
-    endif
-  endif
-endif
-" }
-" }
-
-" Rust: {
-Plug 'rust-lang/rust.vim'
-let g:rustfmt_autosave = 1
-" While rustfmt requires nightly, use rustup to run it with nightly
-let g:rustfmt_command = "rustup run nightly rustfmt"
-" }
-
-" Some more concealchars for tex
-Plug 'KeitaNakamura/tex-conceal.vim'
-" VimPandoc: {
-if HasExec('pandoc') && empty($SIMPLE_VIM_PLUGINS)
-  Plug 'vim-pandoc/vim-pandoc'
-  let g:pandoc#keyboard#use_default_mappings = 0
-endif
-" }
-" VimPandocSyntax: {
-Plug 'vim-pandoc/vim-pandoc-syntax'
-if !HasExec('pandoc')
-  augroup PandocSyntaxFT
-    autocmd!
-    autocmd BufNewFile,BufFilePre,BufRead *.pdc set filetype=pandoc
-    " autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
-augroup END
-endif
-" }
-" if HasExec('python') && empty($SIMPLE_VIM_PLUGINS)
-"   Plug 'davidhalter/jedi-vim'
-" endif
-Plug 'vim-scripts/csv.vim', {'for': 'csv'}
-Plug '2072/php-indenting-for-vim'
-" Adds syntax highlighting for some keywords in React. vim-polyglot already provides JSX syntax.
-Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
-Plug 'HerringtonDarkholme/yats.vim'
-
-" Helpers for creating comments
-" VimDoge: {
-Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
-let g:doge_doc_standard_python = "python"
-let g:doge_mapping_comment_jump_forward = "<c-j>"
-let g:doge_mapping_comment_jump_backward = "<c-k>"
-" }
-
-
-if !has('nvim')
-  " Add docs for Java on 'J' keybind
-  Plug 'davetron5000/javax-xml-javadoc-vim', { 'for': 'java'}
-  Plug 'davetron5000/javax-javadoc-vim', { 'for': 'java'}
-  Plug 'davetron5000/java-javadoc-vim', { 'for': 'java'}
-endif
-" }
-if !&diff
-  if has('nvim')
-    let g:syntax_plugin = s:syntax_treesitter
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
-    Plug 'nvim-treesitter/nvim-treesitter-refactor'
-    Plug 'p00f/nvim-ts-rainbow'
-  elseif (has('nvim') || v:version >= 8)
-    " Neomake: {
-    let g:syntax_plugin = s:syntax_neomake
-    Plug 'neomake/neomake'
-
-    nnoremap <leader><ENTER> :Neomake<CR>
-    " autocmd! BufWritePost * Neomake
-
-    " Use gcc by default
-    let g:neomake_cpp_enabled_makers = ['gcc']
-    " Use different gcc args
-    " Open location list when errors occur
-    " Preserve cursor position
-    let g:neomake_open_list = 2
-    " Highlight lines with errors
-    let g:neomake_highlight_lines=1
-
-    augroup NeomakeErrorSigns
-      au!
-      autocmd ColorScheme *
-            \ hi NeomakeErrorSign ctermfg=124
-    augroup END
-    " }
-  else
-    " Syntastic: {
-    let g:syntax_plugin = s:syntax_syntastic
-    Plug 'scrooloose/syntastic'
-    " Turn it on by default, so far no filetypes where it needs to be off.
-    " let g:syntastic_mode_map = { 'mode': 'active',
-    "   \ 'active_filetypes': [],
-    "   \ 'passive_filetypes': ['java'] }
-    " Bind a button to check syntax when in passive mode
-    augroup JavaSyntastic
-      autocmd!
-      autocmd FileType java nnoremap <leader>cc :SyntasticCheck<CR>
-    augroup END
-    " Better :sign interface symbols
-    let g:syntastic_error_symbol = '✗'
-    let g:syntastic_warning_symbol = '!'
-    " Aggregate errors from multiple checkers
-    let g:syntastic_aggregate_errors = 1
-    " Automatically open location window if there are errors
-    let g:syntastic_auto_loc_list=1
-    " Show current error in command window
-    let g:syntastic_echo_current_error = 1
-    " Populate loclist with errors
-    let g:syntastic_always_populate_loc_list = 1
-    " Enable on open file
-    let g:syntastic_check_on_open = 1
-    " Set location list window height
-    let g:syntastic_loc_list_height = 5
-    " Check header files
-    let g:syntastic_cpp_check_header = 1
-    " Tell syntastic where SDL is located so it stops complaining
-    let g:syntastic_cpp_include_dirs = ['/usr/local/include/SDL2']
-    " Use modern C++ compile options
-    let g:syntastic_cpp_compiler_options = ' -std=c++14'
-    " Shortcuts to prev/next errors
-    let g:syntastic_java_javac_config_file_enabled = 1
-    let g:syntastic_javascript_checkers = ['eslint']
-    let g:syntastic_javascript_jsxhint_exec = 'jsx-jshint-wrapper'
-    " }
-  endif
-else
-  let g:syntax_plugin = ''
-endif
-" Set indent options based on what is used in the file
-" Plug 'tpope/vim-sleuth'
-" Auto-close some structures (i.e. adds 'endfunction' after
-" you type 'function!' in VimL)
-" Endwise: {
-let g:endwise_no_mappings = 1
-Plug 'tpope/vim-endwise'
-" }
-" Indent Lines: {
-Plug 'Yggdroot/indentLine'
-if has('nvim')
-  Plug 'lukas-reineke/indent-blankline.nvim'
-endif
-let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-" The default bind, just here so I remember
-nnoremap <leader>ig :IndentLinesToggle<CR>
-" }
-
-" Context: {
-" Plug 'wellle/context.vim'
-if g:syntax_plugin == s:syntax_treesitter
-  Plug 'romgrk/nvim-treesitter-context'
-endif
-" }
-
 " Autocomplete: {
 " Omnisharp: {
 if empty($SIMPLE_VIM_PLUGINS) && HasExec('msbuild')
@@ -485,7 +309,7 @@ let g:echodoc_enable_at_startup = 1
 
 " VimRacer: {
 if empty($SIMPLE_VIM_PLUGINS)
-  if HasExec('racer')
+  if HasExec('racer') && g:autocomplete_plugin != g:autocomplete_coc
     Plug 'racer-rust/vim-racer'
     let g:racer_experimental_completer = 1
   elseif (VimPlugInitialized == 0 && HasExec('cargo'))
@@ -493,6 +317,184 @@ if empty($SIMPLE_VIM_PLUGINS)
   endif
 endif
 " }
+" }
+
+" FileType Specific: (syntax files) {
+" General language pack
+Plug 'sheerun/vim-polyglot'
+" Go: {
+function! InstallGoBins(info) abort
+  if a:info.status == 'installed'
+    GoInstallBinaries
+  elseif a:info.status == 'updated'
+    GoUpdateBinaries
+  endif
+endfunction
+" VimGo: {
+if HasExec('go') && empty($SIMPLE_VIM_PLUGINS)
+  Plug 'fatih/vim-go', { 'do': function('InstallGoBins')}
+  if !exists('g:neocomplete#sources#omni#input_patterns')
+    let g:neocomplete#sources#omni#input_patterns = {}
+  endif
+  let g:neocomplete#sources#omni#input_patterns.go =
+    \ '\h\w*\|[^. \t]\.\w*'
+  if HasExec("goimports")
+    let g:go_fmt_command = "goimports"
+    if has("win32")
+      let g:go_fmt_command = "goimports.exe"
+    endif
+  endif
+endif
+" }
+" }
+
+" Rust: {
+if g:autocomplete_plugin != g:autocomplete_coc
+  Plug 'rust-lang/rust.vim'
+  let g:rustfmt_autosave = 1
+  " While rustfmt requires nightly, use rustup to run it with nightly
+  let g:rustfmt_command = "rustup run nightly rustfmt"
+endif
+" }
+
+" Some more concealchars for tex
+Plug 'KeitaNakamura/tex-conceal.vim'
+" VimPandoc: {
+if HasExec('pandoc') && empty($SIMPLE_VIM_PLUGINS)
+  Plug 'vim-pandoc/vim-pandoc'
+  let g:pandoc#keyboard#use_default_mappings = 0
+endif
+" }
+" VimPandocSyntax: {
+Plug 'vim-pandoc/vim-pandoc-syntax'
+if !HasExec('pandoc')
+  augroup PandocSyntaxFT
+    autocmd!
+    autocmd BufNewFile,BufFilePre,BufRead *.pdc set filetype=pandoc
+    " autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
+augroup END
+endif
+" }
+" if HasExec('python') && empty($SIMPLE_VIM_PLUGINS)
+"   Plug 'davidhalter/jedi-vim'
+" endif
+Plug 'vim-scripts/csv.vim', {'for': 'csv'}
+Plug '2072/php-indenting-for-vim'
+" Adds syntax highlighting for some keywords in React. vim-polyglot already provides JSX syntax.
+Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
+Plug 'HerringtonDarkholme/yats.vim'
+
+" Helpers for creating comments
+" VimDoge: {
+Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
+let g:doge_doc_standard_python = "python"
+let g:doge_mapping_comment_jump_forward = "<c-j>"
+let g:doge_mapping_comment_jump_backward = "<c-k>"
+" }
+
+
+if !has('nvim')
+  " Add docs for Java on 'J' keybind
+  Plug 'davetron5000/javax-xml-javadoc-vim', { 'for': 'java'}
+  Plug 'davetron5000/javax-javadoc-vim', { 'for': 'java'}
+  Plug 'davetron5000/java-javadoc-vim', { 'for': 'java'}
+endif
+" }
+if !&diff
+  if has('nvim')
+    let g:syntax_plugin = s:syntax_treesitter
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+    Plug 'nvim-treesitter/nvim-treesitter-refactor'
+    Plug 'p00f/nvim-ts-rainbow'
+  elseif (has('nvim') || v:version >= 8)
+    " Neomake: {
+    let g:syntax_plugin = s:syntax_neomake
+    Plug 'neomake/neomake'
+
+    nnoremap <leader><ENTER> :Neomake<CR>
+    " autocmd! BufWritePost * Neomake
+
+    " Use gcc by default
+    let g:neomake_cpp_enabled_makers = ['gcc']
+    " Use different gcc args
+    " Open location list when errors occur
+    " Preserve cursor position
+    let g:neomake_open_list = 2
+    " Highlight lines with errors
+    let g:neomake_highlight_lines=1
+
+    augroup NeomakeErrorSigns
+      au!
+      autocmd ColorScheme *
+            \ hi NeomakeErrorSign ctermfg=124
+    augroup END
+    " }
+  else
+    " Syntastic: {
+    let g:syntax_plugin = s:syntax_syntastic
+    Plug 'scrooloose/syntastic'
+    " Turn it on by default, so far no filetypes where it needs to be off.
+    " let g:syntastic_mode_map = { 'mode': 'active',
+    "   \ 'active_filetypes': [],
+    "   \ 'passive_filetypes': ['java'] }
+    " Bind a button to check syntax when in passive mode
+    augroup JavaSyntastic
+      autocmd!
+      autocmd FileType java nnoremap <leader>cc :SyntasticCheck<CR>
+    augroup END
+    " Better :sign interface symbols
+    let g:syntastic_error_symbol = '✗'
+    let g:syntastic_warning_symbol = '!'
+    " Aggregate errors from multiple checkers
+    let g:syntastic_aggregate_errors = 1
+    " Automatically open location window if there are errors
+    let g:syntastic_auto_loc_list=1
+    " Show current error in command window
+    let g:syntastic_echo_current_error = 1
+    " Populate loclist with errors
+    let g:syntastic_always_populate_loc_list = 1
+    " Enable on open file
+    let g:syntastic_check_on_open = 1
+    " Set location list window height
+    let g:syntastic_loc_list_height = 5
+    " Check header files
+    let g:syntastic_cpp_check_header = 1
+    " Tell syntastic where SDL is located so it stops complaining
+    let g:syntastic_cpp_include_dirs = ['/usr/local/include/SDL2']
+    " Use modern C++ compile options
+    let g:syntastic_cpp_compiler_options = ' -std=c++14'
+    " Shortcuts to prev/next errors
+    let g:syntastic_java_javac_config_file_enabled = 1
+    let g:syntastic_javascript_checkers = ['eslint']
+    let g:syntastic_javascript_jsxhint_exec = 'jsx-jshint-wrapper'
+    " }
+  endif
+else
+  let g:syntax_plugin = ''
+endif
+" Set indent options based on what is used in the file
+" Plug 'tpope/vim-sleuth'
+" Auto-close some structures (i.e. adds 'endfunction' after
+" you type 'function!' in VimL)
+" Endwise: {
+let g:endwise_no_mappings = 1
+Plug 'tpope/vim-endwise'
+" }
+" Indent Lines: {
+Plug 'Yggdroot/indentLine'
+if has('nvim')
+  Plug 'lukas-reineke/indent-blankline.nvim'
+endif
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+" The default bind, just here so I remember
+nnoremap <leader>ig :IndentLinesToggle<CR>
+" }
+
+" Context: {
+" Plug 'wellle/context.vim'
+if g:syntax_plugin == s:syntax_treesitter
+  Plug 'romgrk/nvim-treesitter-context'
+endif
 " }
 
 " Ultisnips: {
