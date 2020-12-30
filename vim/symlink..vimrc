@@ -406,14 +406,11 @@ if exists("&relativenumber")
 endif
 
 " Status line area stuff {
-if empty($SIMPLE_VIM_PLUGINS) " If not using Airline
-  " Show on status bar line & column number, relative % in file
-  set ruler
-  " No need to show the mode, as airline will show it for us
-  set noshowmode
-endif
 " Always show the status line (I use airline, so I want to see it)
 set laststatus=2
+
+" Always show tabline
+set showtabline=2
 "
 " Show the number of changes made when doing substitutions
 set report=0
