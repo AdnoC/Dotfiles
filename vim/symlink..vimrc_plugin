@@ -321,7 +321,13 @@ endif
 
 " FileType Specific: (syntax files) {
 " General language pack
+" Vim Polyglot {
+" Disables have to be declared before the plugin is loaded
+if g:autocomplete_plugin == g:autocomplete_coc
+  let g:polyglot_disabled = ['rust', 'java', 'javascript', 'typescript']
+endif
 Plug 'sheerun/vim-polyglot'
+" }
 " Go: {
 function! InstallGoBins(info) abort
   if a:info.status == 'installed'
