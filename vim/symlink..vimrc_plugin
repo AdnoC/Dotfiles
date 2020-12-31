@@ -653,6 +653,13 @@ Plug 'mengelbrecht/lightline-bufferline'
 Plug 'itchyny/lightline.vim'
 let g:lightline = {}
 let g:lightline.colorscheme = 'solarized'
+let g:lightline.active = {}
+let g:lightline.active.left = [ [ 'mode', 'paste' ],
+      \ [ 'readonly', 'filename', 'modified' ] ]
+let g:lightline.active.right = [ [ 'lineinfo' ],
+      \ [ 'percent' ],
+      \ [ 'fileformat', 'fileencoding', 'filetype' ],
+      \ [ 'relativepath' ]]
 let g:lightline.tabline = {
       \   'left': [ ['buffers'] ],
       \   'right': [ ['close'] ]
@@ -842,7 +849,7 @@ endif
 
 " Plugin Settings: (Function calls) {
 
-" Treesitter:
+" Treesitter: {
 if g:syntax_plugin == s:syntax_treesitter
   lua << EOF
 local ok, ts = pcall(require, 'nvim-treesitter.configs')
