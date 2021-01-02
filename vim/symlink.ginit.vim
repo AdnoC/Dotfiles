@@ -158,7 +158,6 @@ endfunction
 
 if exists('g:GuiLoaded')
   GuiPopupmenu 0
-  set clipboard+=unnamedplus
   let g:solarized_termtrans=0
   inoremap <D-V> <C-r>*
   set termguicolors

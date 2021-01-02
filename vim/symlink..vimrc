@@ -16,22 +16,20 @@ let mapleader="\<Space>"
 
 " Platform specific directories {
 " Vim looks for plugins in vimfiles instead of .vim in Windows
-if has('gui_win32')
-  let g:vimDirectory=expand("$HOME/vimfiles")
-elseif has('nvim')
-  if has('win32')
-    let g:vimDirectory=expand(expand("<sfile>:p:h") . "/")
-  else
-    let g:vimDirectory=expand("$HOME/.config/nvim")
-  endif
+if has('nvim')
+  let g:vim_directory = stdpath('config')
+  let g:data_directory = stdpath('data')
 else
-  let g:vimDirectory=expand("$HOME/.vim")
+  if has('gui_win32')
+    let g:vim_directory = expand("$HOME/vimfiles")
+  else
+    let g:vim_directory = expand("$HOME/.vim")
+  endif
+  let g:data_directory = g:vim_directory
 endif
-let g:vimDirectoryPart=expand(g:vimDirectory . "/")
-let g:vimDirectory=g:vimDirectory
 " }
 
-let g:vimrcDirectory=expand(expand("<sfile>:p:h") . "/")
+let g:vimrc_directory = expand(expand("<sfile>:p:h") . "/")
 
 
 " Check whether there is an executable with a given name
@@ -46,8 +44,8 @@ function! HasExec(prog_name) abort
 endfunction
 let g:COMPLETEOPT_SET=0
 let g:USE_PLUGINS=0
-if empty($NO_VIM_PLUGINS) && filereadable(g:vimrcDirectory . ".vimrc_plugin")
-  exec "so " . g:vimrcDirectory . ".vimrc_plugin"
+if empty($NO_VIM_PLUGINS) && filereadable(g:vimrc_directory . ".vimrc_plugin")
+  exec "so " . g:vimrc_directory . ".vimrc_plugin"
 endif
 " }
 
@@ -305,22 +303,25 @@ endif
 """" Meta files (backup, swap) {
 " Create backup, swap, and undo  folders if they do not exist
 " Centralize backups, swapfiles and undo history
- if ! isdirectory(g:vimDirectoryPart . 'backups')
-  call mkdir(g:vimDirectoryPart . 'backups')
+let backup_dir = expand(g:data_directory . '/backups')
+let undo_dir = expand(g:data_directory . '/undo')
+let swap_dir = expand(g:data_directory . '/swaps')
+if ! isdirectory(backup_dir)
+  call mkdir(backup_dir)
 endif
- if ! isdirectory(g:vimDirectoryPart . 'swaps')
-  call mkdir(g:vimDirectoryPart . 'swaps')
+ if ! isdirectory(swap_dir)
+  call mkdir(swap_dir)
 endif
 if has('persistent_undo')
   " Store undo data in a file for persistence between sessions
-  if ! isdirectory(g:vimDirectoryPart . 'undo')
-    call mkdir(g:vimDirectoryPart . 'undo')
+  if ! isdirectory(undo_dir)
+    call mkdir(undo_dir)
   endif
-  exec "set undodir=" . g:vimDirectoryPart . "undo"
+  exec "set undodir=" . fnameescape(undo_dir)
   set undofile
 endif
-exec "set backupdir=" . g:vimDirectoryPart . "backups"
-exec "set directory=" . g:vimDirectoryPart . "swaps"
+exec "set backupdir=" . fnameescape(backup_dir)
+exec "set directory=\"" . fnameescape(swap_dir)
 " }
 
 " Use utf-8 encoding. Needs to be set before listchars on some systems.
@@ -795,10 +796,10 @@ endif
 " }
 
 " Load Local Prefs {
-let $MYVIMRCLOCAL=expand(g:vimDirectoryPart . ".vimrc.local")
+let $MYVIMRCLOCAL=expand(g:vim_directory . "/.vimrc.local")
 """" If there is a local vim configuration file, run it
-if filereadable(g:vimDirectoryPart . ".vimrc.local")
-  exec "so " . g:vimDirectoryPart . ".vimrc.local"
+if filereadable(g:vim_directory . "/.vimrc.local")
+  exec "so " . g:vim_directory . "/.vimrc.local"
 endif
 " }
 

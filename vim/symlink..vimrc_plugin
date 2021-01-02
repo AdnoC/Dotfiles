@@ -31,15 +31,15 @@ let g:autocomplete_coc = 'coc'
 """" Plugin Manager: (Vim-Plug)
 let VimPlugInitialized=1
 " Download plugin manager {
-if empty(glob(expand(g:vimDirectory . '/autoload/plug.vim')))
+if empty(glob(expand(g:vim_directory . '/autoload/plug.vim')))
   let VimPlugInitialized=0
   " I know that all these could be replaced with just the git one. But I don't want to delete them
   if executable("curl")
-    silent exec '!curl -fLo ' . shellescape(expand(g:vimDirectory."/autoload/plug.vim")) .
+    silent exec '!curl -fLo ' . shellescape(expand(g:vim_directory . "/autoload/plug.vim")) .
         \ ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   " If all else fails we can just use git.
   elseif executable("git")
-    silent exec '!git clone -q --depth=1 git@github.com:junegunn/vim-plug.git ' . shellescape(expand(g:vimDirectory."/temp"))
+    silent exec '!git clone -q --depth=1 git@github.com:junegunn/vim-plug.git ' . shellescape(expand(g:vim_directory . "/temp"))
     if has('gui_win32')
       let s:mv="move "
       let s:rm="del "
@@ -47,9 +47,9 @@ if empty(glob(expand(g:vimDirectory . '/autoload/plug.vim')))
       let s:mv="mv "
       let s:rm="rm -rf "
     endif
-    silent exec '!' . s:mv . shellescape(expand(g:vimDirectory."/temp/plug.vim")) .
-      \ ' ' . shellescape(expand(g:vimDirectory."/autoload/plug.vim"))
-    silent exec '!' . s:rm . shellescape(expand(g:vimDirectory."/temp/"))
+    silent exec '!' . s:mv . shellescape(expand(g:vim_directory . "/temp/plug.vim")) .
+      \ ' ' . shellescape(expand(g:vim_directory . "/autoload/plug.vim"))
+    silent exec '!' . s:rm . shellescape(expand(g:vim_directory . "/temp/"))
   else
     echo "Couldn't find a way to download Vim-Plug. Not sure how you were planning" .
       \ " installing plugins without Git."
@@ -78,9 +78,9 @@ endif
 " }
 
 " Plugin Declarations: {
-call plug#begin(g:vimDirectoryPart . 'bundle')
+call plug#begin(g:vim_directory . '/bundle')
 
-let $MYVIMRCLOCALPLUGIN=expand(g:vimDirectoryPart . ".vimrc_plugin.local")
+let $MYVIMRCLOCALPLUGIN=expand(g:vim_directory . "/.vimrc_plugin.local")
 """" If there is a local vim configuration file, run it
 if filereadable($MYVIMRCLOCALPLUGIN)
   exec "so " . $MYVIMRCLOCALPLUGIN
@@ -826,7 +826,7 @@ call plug#end()
 " Installs all vimballs in the vimball directory
 function! InstallVimballs() abort
   " For each file in the vimball diretcory...
-  for f in split(glob(expand(g:vimDirectory . '/vimball/') . "*"))
+  for f in split(glob(expand(g:vim_directory . '/vimball/') . "*"))
     " Open the file in a new buffer
     exec 'new' f
     " Source the buffer
