@@ -81,6 +81,7 @@ endif
 call plug#begin(g:vim_directory . '/bundle')
 
 let $MYVIMRCLOCALPLUGIN=expand(g:vim_directory . "/.vimrc_plugin.local")
+let $MYVIMRCPLUGINLOCAL=$MYVIMRCLOCALPLUGIN
 """" If there is a local vim configuration file, run it
 if filereadable($MYVIMRCLOCALPLUGIN)
   exec "so " . $MYVIMRCLOCALPLUGIN
@@ -488,6 +489,7 @@ Plug 'tpope/vim-endwise'
 " }
 " Indent Lines: {
 Plug 'Yggdroot/indentLine'
+let g:indentLine_fileTypeExclude = ['markdown']
 if has('nvim')
   Plug 'lukas-reineke/indent-blankline.nvim'
 endif
@@ -562,6 +564,11 @@ Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 " Bind a button to open UntoDree
 nnoremap <leader>gu :UndotreeToggle<CR>
 " }
+" BufSurf {
+Plug 'AdnoC/vim-bufsurf'
+nmap ]b <Plug>(buf-surf-forward)
+nmap [b <Plug>(buf-surf-back)
+" }
 " Fuzzy search for files, buffers, and recent files
 if empty($STANDALONE_VIM_PLUGINS) && empty($SIMPLE_VIM_PLUGINS)
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -603,6 +610,7 @@ if HasExec('cscope')
 endif
 " }
 " Text Objects: {
+Plug 'AdnoC/vim-ninja-feet'
 if g:syntax_plugin == s:syntax_treesitter
   Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 else
@@ -856,7 +864,13 @@ local ok, ts = pcall(require, 'nvim-treesitter.configs')
 if ok then
   ts.setup {
     ensure_installed = 'maintained',
-    highlight = { enable = true },
+    rainbow = {
+      enable = false,
+      disable = { 'bash' }
+    },
+    highlight = {
+      enable = false
+    },
     indent = { enabled = true },
     refactor = {
       highlight_definitions = { enable = true }
