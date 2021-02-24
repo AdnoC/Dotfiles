@@ -7,7 +7,7 @@
   ci = commit -v
   ca = commit --amend
   st = status
-  pd = pull origin develop
+  pd = !git reset --hard HEAD && git checkout develop && git pull origin develop
 # Set a file's permissions to include executable
   setexec = update-index --chmod=+x
 [apply]
