@@ -357,7 +357,11 @@ if (&t_Co > 2 || has("gui_running") || $TERM =~ '-256color') && has("syntax")
     elseif has('win32') && !has('gui_running')
       silent! colorscheme elflord
     elseif empty($NO_VIM_GUICOLORS) && has("termguicolors")
+      if has('nvim')
+        silent! colorscheme sonokai
+      else
         silent! colorscheme solarized8
+      endif
     else
       " Silent so that it doesn't throw an error if the colorscheme doesn't exist
       silent! colorscheme solarized

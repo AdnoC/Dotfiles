@@ -412,6 +412,7 @@ if !&diff
     let g:syntax_plugin = s:syntax_treesitter
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
     Plug 'nvim-treesitter/nvim-treesitter-refactor'
+    Plug 'nvim-treesitter/playground'
     Plug 'p00f/nvim-ts-rainbow'
   elseif (has('nvim') || v:version >= 8)
     " Neomake: {
@@ -641,17 +642,26 @@ endif
 " }
 " Looks: {
 " Colorschemes
-" A good solarized replacement. Has a grey background unless bash colors are overritten.
-Plug 'romainl/flattened'
-" A light colorscheme. Not sure about it.
-Plug 'NLKNguyen/papercolor-theme'
-" VimColorsSolarized: {
-Plug 'altercation/vim-colors-solarized'
 let g:solarized_termcolors=256
 let g:solarized_termtrans=1
 let g:solarized_visibility='high'
-" }
-Plug 'lifepillar/vim-solarized8'
+if has('nvim')
+  Plug 'sainnhe/sonokai'
+  let g:sonokai_style = 'andromeda'
+  let g:sonokai_enable_italic = 1
+  let g:sonokai_disable_italic_comment = 1
+  Plug 'ishan9299/nvim-solarized-lua'
+else
+  " VimColorsSolarized: {
+  Plug 'altercation/vim-colors-solarized'
+  " }
+  Plug 'lifepillar/vim-solarized8'
+endif
+
+" A good solarized replacement. Has a grey background unless bash colors are overritten.
+" Plug 'romainl/flattened'
+" A light colorscheme. Not sure about it.
+Plug 'NLKNguyen/papercolor-theme'
 " Makes the status bar & buffer bar look nice and display useful info
 " Lightline Bufferline: {
 Plug 'mengelbrecht/lightline-bufferline'
@@ -660,7 +670,7 @@ Plug 'mengelbrecht/lightline-bufferline'
 " Lightline: {
 Plug 'itchyny/lightline.vim'
 let g:lightline = {}
-let g:lightline.colorscheme = 'solarized'
+let g:lightline.colorscheme = 'sonokai'
 let g:lightline.active = {}
 let g:lightline.active.left = [ [ 'mode', 'paste' ],
       \ [ 'readonly', 'filename', 'modified' ] ]
@@ -858,6 +868,7 @@ endif
 " Plugin Settings: (Function calls) {
 
 " Treesitter: {
+nnoremap <leader>s :TSHighlightCapturesUnderCursor<CR>
 if g:syntax_plugin == s:syntax_treesitter
   lua << EOF
 local ok, ts = pcall(require, 'nvim-treesitter.configs')
@@ -869,11 +880,12 @@ if ok then
       disable = { 'bash' }
     },
     highlight = {
-      enable = false
+      enable = true,
+      additional_vim_regex_highlighting = false,
     },
     indent = { enabled = true },
     refactor = {
-      highlight_definitions = { enable = true }
+      highlight_definitions = { enable = false }
     },
     textobjects = {
       select = {
