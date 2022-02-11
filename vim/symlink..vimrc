@@ -52,7 +52,11 @@ endfunction
 let g:COMPLETEOPT_SET=0
 let g:USE_PLUGINS=0
 if empty($NO_VIM_PLUGINS) && filereadable(g:vimrc_directory . ".vimrc_plugin")
-  exec "so " . g:vimrc_directory . ".vimrc_plugin"
+  if has('nvim')
+    lua require('plugins')
+  else
+    exec "so " . g:vimrc_directory . ".vimrc_plugin"
+  endif
 endif
 " }
 
@@ -422,7 +426,11 @@ set list
 " Set hidden chars to show (Show tabs and trailing spaces)
 if &encoding == "utf-8"
   if empty($SIMPLE_VIM_PLUGINS)
-    exe "set listchars=eol:\u00ac,nbsp:\u001f,conceal:\u2315,tab:\u2595\u2014,precedes:\u2026,extends:\u2026"
+    if has('nvim')
+      lua vim.opt.listchars = { eol = '¬', tab = '▕—', trail = '✚', extends = '◀', precedes = '▶', }
+    else
+      exe "set listchars=eol:\u00ac,nbsp:\u001f,conceal:\u2315,tab:\u2595\u2014,precedes:\u2026,extends:\u2026"
+    endif
     " What to display when a line is wrapped
     exe "set showbreak=\u21b3"
   else

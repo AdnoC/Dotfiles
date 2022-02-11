@@ -1,6 +1,6 @@
 let b:AutoPairs = {'(':')', '[':']', '{':'}', '"':'"', '`':'`'}
 
-if HasExec('racer') && g:autocomplete_plugin != g:autocomplete_coc
+if !has('nvim') && HasExec('racer')
   nmap <buffer>gd <Plug>(rust-def)
   nmap <buffer>gs <Plug>(rust-def-split)
   nmap <buffer>gx <Plug>(rust-def-vertical)
