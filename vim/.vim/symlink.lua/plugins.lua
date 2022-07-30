@@ -1,4 +1,5 @@
 vim.g.USE_PLUGINS = 1
+local is_win = package.config:sub(1,1) == '\\'
 local fn = vim.fn
 local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
@@ -19,6 +20,11 @@ require('packer').startup(function(use)
   use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
   use 'L3MON4D3/LuaSnip' -- Snippets plugin
   use 'rafamadriz/friendly-snippets' -- Snippets source
+  if not is_win then
+    use "https://git.sr.ht/~whynothugo/lsp_lines.nvim" -- show diagnostics on their own lines
+  else
+    use 'Maan2003/lsp_lines.nvim'
+  end
 
   use {
     'nvim-treesitter/nvim-treesitter',
@@ -58,6 +64,7 @@ require('packer').startup(function(use)
 
   use 'AdnoC/vim-bufsurf' -- MRU buffer navigation per-tab
   use 'sainnhe/sonokai' -- Colorscheme
+  use "zakharykaplan/nvim-retrail" -- Highlight trailing whitespace
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
@@ -128,6 +135,12 @@ lsp_installer.on_server_ready(function(server)
 end)
 
 require"fidget".setup {}
+
+require"lsp_lines".setup {}
+-- Disable virtual_text since it's redundant due to lsp_lines.
+vim.diagnostic.config {
+  virtual_text = false,
+}
 
 -- nvim-cmp setup
 
@@ -204,7 +217,7 @@ cmp.setup {
 
 -- treesitter setup
 require 'nvim-treesitter.configs'.setup {
-  ensure_installed = 'maintained',
+  auto_install = true,
   rainbow = {
     enable = true,
     disable = { 'bash' }
@@ -261,7 +274,7 @@ vim.g.fzf_command_prefix = 'Fzf'
 vim.api.nvim_set_keymap('n', '<leader>p', ':FZF<CR>', remap_opts);
 vim.api.nvim_set_keymap('n', '<leader>b', ':FzfBuffers<CR>', remap_opts);
 
---doge
+-- doge
 vim.g.doge_doc_standard_python = "python"
 vim.g.doge_mapping_comment_jump_forward = "<c-j>"
 vim.g.doge_mapping_comment_jump_backward = "<c-k>"
@@ -279,3 +292,6 @@ vim.g.BufKillCreateMappings=0
 vim.g.sonokai_style = 'andromeda'
 vim.g.sonokai_enable_italic = 1
 vim.g.sonokai_disable_italic_comment = 1
+
+-- retrail
+require"retrail".setup {}

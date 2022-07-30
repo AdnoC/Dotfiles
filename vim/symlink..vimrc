@@ -33,10 +33,14 @@ let g:vimrc_directory = expand(expand("<sfile>:p:h") . "/")
 
 " Ensure we are using system python instead of virtualenv python
 " https://www.reddit.com/r/neovim/comments/s3i0ez/how_to_avoid_having_to_install_neovim_in_every/
-if exists("$VIRTUAL_ENV")
-    let g:python3_host_prog=substitute(system("which -a python3 | head -n2 | tail -n1"), "\n", '', 'g')
+if !has('win32')
+  if exists("$VIRTUAL_ENV")
+      let g:python3_host_prog=substitute(system("which -a python3 | head -n2 | tail -n1"), "\n", '', 'g')
+  else
+      let g:python3_host_prog=substitute(system("which python3"), "\n", '', 'g')
+  endif
 else
-    let g:python3_host_prog=substitute(system("which python3"), "\n", '', 'g')
+  let g:python3_host_prog='python'
 endif
 
 " Check whether there is an executable with a given name

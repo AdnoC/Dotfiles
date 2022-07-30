@@ -5,6 +5,8 @@ mkdir -p win_vimrc
 cp ~/WinUser/AppData/Local/nvim/init.vim win_vimrc/.vimrc
 cp ~/WinUser/AppData/Local/nvim/.vimrc_plugin win_vimrc/.vimrc_plugin
 cp ~/WinUser/AppData/Local/nvim/ginit.vim win_vimrc/ginit.vim 
+mkdir -p win_vimrc/lua
+cp ~/WinUser/AppData/Local/nvim/lua/* win_vimrc/lua/
 
 difftool="vimdiff"
 if command -v nvim >/dev/null 2>&1; then
